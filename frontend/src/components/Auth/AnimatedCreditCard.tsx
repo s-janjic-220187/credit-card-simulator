@@ -49,11 +49,6 @@ const AnimatedCreditCard: React.FC<AnimatedCreditCardProps> = ({ className = '' 
           
           {/* Brand Name */}
           <div className="card-brand">SJ-CCMS</div>
-          
-          {/* Floating elements */}
-          <div className="floating-element floating-1"></div>
-          <div className="floating-element floating-2"></div>
-          <div className="floating-element floating-3"></div>
         </div>
       </div>
     </div>

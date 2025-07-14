@@ -1,4 +1,4 @@
-/* Animated Credit Card Styles */
+/* Simplified Animated Credit Card Styles */
 .animated-card-container {
   perspective: 1000px;
   display: flex;
@@ -12,7 +12,7 @@
   height: 220px;
   position: relative;
   transform-style: preserve-3d;
-  animation: cardFloat 6s ease-in-out infinite;
+  animation: subtleFloat 8s ease-in-out infinite;
 }
 
 .card-front {
@@ -21,15 +21,15 @@
   position: relative;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   transform-style: preserve-3d;
-  transition: all 0.6s ease;
+  transition: all 0.4s ease;
 }
 
 .card-front:hover {
-  transform: rotateY(-10deg) rotateX(5deg);
-  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+  transform: rotateY(-5deg) rotateX(2deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .card-background {
@@ -38,9 +38,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  opacity: 0.9;
-  animation: gradientShift 8s ease-in-out infinite;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 1;
 }
 
 /* EMV Chip */
@@ -63,7 +62,6 @@
   height: 2px;
   background: #888;
   border-radius: 1px;
-  animation: chipPulse 3s ease-in-out infinite;
 }
 
 /* Card Logo (Mastercard-style) */
@@ -79,7 +77,7 @@
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .logo-circle:first-child {
@@ -104,18 +102,11 @@
   font-weight: bold;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  animation: numberGlow 4s ease-in-out infinite;
 }
 
 .number-group {
   position: relative;
-  animation: numberFloat 3s ease-in-out infinite;
 }
-
-.number-group:nth-child(1) { animation-delay: 0s; }
-.number-group:nth-child(2) { animation-delay: 0.2s; }
-.number-group:nth-child(3) { animation-delay: 0.4s; }
-.number-group:nth-child(4) { animation-delay: 0.6s; }
 
 /* Card Holder */
 .card-holder {
@@ -138,7 +129,6 @@
   font-weight: bold;
   letter-spacing: 1.5px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  animation: nameShimmer 5s ease-in-out infinite;
 }
 
 /* Expiry Date */
@@ -175,122 +165,25 @@
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   letter-spacing: 2px;
-  animation: brandPulse 4s ease-in-out infinite;
+  animation: subtleGlow 6s ease-in-out infinite;
 }
 
-/* Floating Elements */
-.floating-element {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  animation: float 6s ease-in-out infinite;
-}
-
-.floating-1 {
-  width: 60px;
-  height: 60px;
-  top: 20px;
-  left: 100px;
-  animation-delay: 0s;
-}
-
-.floating-2 {
-  width: 40px;
-  height: 40px;
-  top: 140px;
-  right: 60px;
-  animation-delay: 2s;
-}
-
-.floating-3 {
-  width: 30px;
-  height: 30px;
-  top: 80px;
-  right: 150px;
-  animation-delay: 4s;
-}
-
-/* Animations */
-@keyframes cardFloat {
-  0%, 100% {
-    transform: translateY(0px) rotateZ(0deg);
-  }
-  50% {
-    transform: translateY(-10px) rotateZ(1deg);
-  }
-}
-
-@keyframes gradientShift {
-  0%, 100% {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  }
-  25% {
-    background: linear-gradient(135deg, #764ba2 0%, #f093fb 50%, #667eea 100%);
-  }
-  50% {
-    background: linear-gradient(135deg, #f093fb 0%, #667eea 50%, #764ba2 100%);
-  }
-  75% {
-    background: linear-gradient(135deg, #667eea 0%, #f093fb 50%, #764ba2 100%);
-  }
-}
-
-@keyframes chipPulse {
-  0%, 100% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 1;
-    background: #aaa;
-  }
-}
-
-@keyframes numberGlow {
-  0%, 100% {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  50% {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 255, 255, 0.5);
-  }
-}
-
-@keyframes numberFloat {
+/* Simplified Animations */
+@keyframes subtleFloat {
   0%, 100% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
   }
 }
 
-@keyframes nameShimmer {
+@keyframes subtleGlow {
   0%, 100% {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  }
-  50% {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 8px rgba(255, 255, 255, 0.4);
-  }
-}
-
-@keyframes brandPulse {
-  0%, 100% {
-    transform: scale(1);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   }
   50% {
-    transform: scale(1.05);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.6);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-    opacity: 0.1;
-  }
-  50% {
-    transform: translateY(-20px) scale(1.1);
-    opacity: 0.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 0 8px rgba(255, 255, 255, 0.3);
   }
 }
 
@@ -314,5 +207,49 @@
   .logo-circle {
     width: 20px;
     height: 20px;
+  }
+  
+  .card-holder-name {
+    font-size: 12px;
+  }
+  
+  .card-brand {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .credit-card {
+    width: 280px;
+    height: 176px;
+  }
+  
+  .card-number {
+    font-size: 14px;
+    gap: 8px;
+    top: 100px;
+  }
+  
+  .chip {
+    top: 50px;
+    left: 25px;
+    width: 32px;
+    height: 22px;
+  }
+  
+  .card-holder {
+    bottom: 40px;
+    left: 25px;
+  }
+  
+  .card-expiry {
+    bottom: 40px;
+    right: 70px;
+  }
+  
+  .card-brand {
+    bottom: 12px;
+    right: 25px;
+    font-size: 12px;
   }
 }
