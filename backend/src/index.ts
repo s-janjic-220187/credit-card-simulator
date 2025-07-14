@@ -124,6 +124,36 @@ app.post('/admin/seed', async (_req, res) => {
   }
 });
 
+// Manual seed trigger endpoint
+app.post('/admin/seed', async (_req, res) => {
+  try {
+    const { exec } = require('child_process');
+    
+    await new Promise((resolve, reject) => {
+      exec('node seed.js', (error: any, stdout: string, _stderr: string) => {
+        if (error) {
+          console.log('Seed error:', error.message);
+          reject(error);
+        } else {
+          console.log('Seed output:', stdout);
+          resolve(stdout);
+        }
+      });
+    });
+    
+    res.json({
+      success: true,
+      message: 'Seed completed successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Seed failed',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 app.get('/health', async (_req, res) => {
   const healthData = {
     status: 'OK', 
