@@ -137,6 +137,13 @@ If you get login errors:
    curl https://backend-ccs-production.up.railway.app/health
    ```
 
+#### API Connection Issues (405 Method Not Allowed)
+If you get API errors like "405 Method Not Allowed":
+
+1. **Check browser console** for API URL being used
+2. **Verify frontend is calling backend domain** (should be `backend-ccs-production.up.railway.app`)
+3. **Clear browser cache** and reload the page
+
 #### Database Issues
 - Railway's PostgreSQL may reset between deployments
 - User data is not persistent across redeploys
