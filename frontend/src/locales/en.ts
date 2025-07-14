@@ -83,6 +83,19 @@ export const en = {
     tooLong: 'Too long',
   },
 
+  // Authentication
+  auth: {
+    welcomeBack: 'Welcome Back',
+    signInPrompt: 'Sign in to your account',
+    loginButton: 'Sign In',
+    signingIn: 'Signing In...',
+    createAccount: 'Create one',
+    demoLogin: '🚀 Use Demo Account',
+    loadingDemo: 'Loading Demo...',
+    orSeparator: 'or',
+    noAccount: "Don't have an account? ",
+  },
+
   // Navigation Component
   navigation: {
     brand: 'SJ-CCMS',
