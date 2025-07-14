@@ -1,0 +1,82 @@
+/* Static Logo Styles */
+.static-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+}
+
+.logo-content {
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+.brand-name {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.brand-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin: 0.5rem 0 0 0;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .logo-content {
+    padding: 1.5rem 2rem;
+  }
+  
+  .brand-name {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+  
+  .brand-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-content {
+    padding: 1.25rem 1.5rem;
+  }
+  
+  .brand-name {
+    font-size: 1.75rem;
+    letter-spacing: 1.5px;
+  }
+  
+  .brand-subtitle {
+    font-size: 0.8rem;
+  }
+}

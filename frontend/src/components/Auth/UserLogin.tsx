@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useUserActions } from '../../contexts/UserContext';
 import api from '../../services/api';
-import AnimatedCreditCard from './AnimatedCreditCard';
+import StaticLogo from './StaticLogo';
 
 interface UserLoginProps {
   onShowCreateUser: () => void;
@@ -62,9 +62,9 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-      {/* Animated Credit Card */}
+      {/* Static Logo */}
       <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-4">
-        <AnimatedCreditCard />
+        <StaticLogo />
       </div>
       
       <div className="p-6">
