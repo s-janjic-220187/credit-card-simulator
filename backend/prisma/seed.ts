@@ -41,7 +41,62 @@ async function main() {
 
   console.log('👤 Created test user:', user.email);
 
-  // Create a credit card for the user
+  // Create demo user for frontend demo login
+  const demoHashedPassword = await bcrypt.hash('demo123', 10);
+  
+  const demoUser = await prisma.user.upsert({
+    where: { email: 'demo@example.com' },
+    update: {},
+    create: {
+      username: 'demouser',
+      email: 'demo@example.com',
+      password: demoHashedPassword,
+      role: 'USER',
+      profile: {
+        create: {
+          firstName: 'Demo',
+          lastName: 'User',
+          dateOfBirth: new Date('1985-06-15'),
+          phoneNumber: '+1-555-DEMO',
+          address: '456 Demo Street',
+          city: 'Demo City',
+          state: 'NY',
+          zipCode: '10001',
+          country: 'US',
+          annualIncome: 60000,
+          creditScore: 680,
+          employmentStatus: 'Employed'
+        }
+      }
+    },
+    include: {
+      profile: true
+    }
+  });
+
+  console.log('👤 Created demo user:', demoUser.email);
+
+  // Create a credit card for the demo user
+  const demoCreditCard = await prisma.creditCard.create({
+    data: {
+      userId: demoUser.id,
+      cardNumber: '4111111111111111',
+      cardholderName: 'Demo User',
+      expiryMonth: 12,
+      expiryYear: 2028,
+      cvv: '456',
+      creditLimit: 3000,
+      currentBalance: 0,
+      availableCredit: 3000,
+      apr: 19.99,
+      status: 'ACTIVE',
+      cycleStartDate: 1
+    }
+  });
+
+  console.log('💳 Created demo credit card for demo user');
+
+  // Create a credit card for the test user
   const creditCard = await prisma.creditCard.create({
     data: {
       userId: user.id,
@@ -68,6 +123,7 @@ async function main() {
         creditCardId: creditCard.id,
         type: 'PURCHASE',
         amount: 125.50,
+        totalAmount: 125.50,
         description: 'Grocery shopping at SuperMart',
         category: 'GROCERIES',
         merchantName: 'SuperMart',
@@ -77,6 +133,7 @@ async function main() {
         creditCardId: creditCard.id,
         type: 'PURCHASE',
         amount: 45.00,
+        totalAmount: 45.00,
         description: 'Gas station fill-up',
         category: 'GAS',
         merchantName: 'Shell Gas Station',
@@ -86,6 +143,7 @@ async function main() {
         creditCardId: creditCard.id,
         type: 'PURCHASE',
         amount: 89.99,
+        totalAmount: 89.99,
         description: 'Online shopping - Amazon',
         category: 'SHOPPING',
         merchantName: 'Amazon',
@@ -112,7 +170,7 @@ async function main() {
 main()
   .catch((e) => {
     console.error('❌ Error seeding database:', e);
-    process.exit(1);
+    throw e;
   })
   .finally(async () => {
     await prisma.$disconnect();

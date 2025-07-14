@@ -29,6 +29,14 @@ fi
 echo "🔄 Running database migrations..."
 if npx prisma migrate deploy; then
     echo "✅ Database migrations completed"
+    
+    # Run database seeding
+    echo "🌱 Seeding database with demo data..."
+    if npm run db:seed; then
+        echo "✅ Database seeding completed"
+    else
+        echo "⚠️ Database seeding failed, continuing anyway..."
+    fi
 else
     echo "⚠️ Database migrations failed, attempting to continue..."
 fi
