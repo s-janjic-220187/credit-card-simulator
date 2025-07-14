@@ -110,13 +110,26 @@ api.interceptors.response.use(
 export const checkApiHealth = async () => {
   try {
     console.log('🔍 Testing API connectivity...');
+    
+    // Create a separate axios instance for health checks (without /api prefix)
+    const baseURL = getApiBaseUrl().replace('/api', ''); // Remove /api suffix
+    const healthApi = axios.create({
+      baseURL,
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
     // First try /health, then /ping as fallback
     let response;
     try {
-      response = await api.get('/health');
+      console.log(`🔍 Trying health check at: ${baseURL}/health`);
+      response = await healthApi.get('/health');
     } catch (healthError) {
       console.log('Health endpoint failed, trying ping...');
-      response = await api.get('/ping');
+      console.log(`🔍 Trying ping at: ${baseURL}/ping`);
+      response = await healthApi.get('/ping');
     }
     console.log('✅ API Health Check successful:', response.data);
     return { success: true, data: response.data };

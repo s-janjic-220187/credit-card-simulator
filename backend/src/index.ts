@@ -50,24 +50,42 @@ const connectDB = async () => {
 // Middleware
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if(!origin) return callback(null, true);
+    console.log('🔍 CORS check for origin:', origin);
     
-    // In production, use environment variable for CORS origin
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if(!origin) {
+      console.log('✅ Allowing request with no origin');
+      return callback(null, true);
+    }
+    
+    // In production, be more permissive for Railway deployments
     if (process.env.NODE_ENV === 'production') {
+      // Allow Railway frontend domains
+      if (origin.includes('frontend-ccs-production.up.railway.app') || 
+          origin.includes('.up.railway.app') || 
+          origin.includes('railway.app')) {
+        console.log('✅ Allowing Railway domain:', origin);
+        return callback(null, true);
+      }
+      
+      // Also check environment variable for additional origins
       const allowedOrigins = process.env.CORS_ORIGIN?.split(',') || [];
       if (allowedOrigins.includes(origin)) {
+        console.log('✅ Allowing configured origin:', origin);
         return callback(null, true);
-      } else {
-        return callback(new Error('Not allowed by CORS'));
       }
+      
+      console.log('❌ Blocking origin:', origin);
+      return callback(new Error('Not allowed by CORS'));
     }
     
     // In development, allow localhost with any port
     if (process.env.NODE_ENV !== 'production' && /^http:\/\/localhost(:[0-9]+)?$/.test(origin)) {
+      console.log('✅ Allowing localhost origin:', origin);
       return callback(null, true);
     }
 
+    console.log('❌ Blocking origin:', origin);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true
