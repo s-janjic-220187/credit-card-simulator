@@ -48,8 +48,10 @@ export class UserController {
   static async loginUser(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
+      console.log('🔍 Login attempt for email:', email);
 
       if (!email || !password) {
+        console.log('❌ Missing email or password');
         res.status(400).json({
           success: false,
           message: 'Email and password are required'
@@ -57,8 +59,10 @@ export class UserController {
         return;
       }
 
+      console.log('🔍 Looking for user with email:', email);
       const user = await UserService.findUserByEmail(email);
       if (!user) {
+        console.log('❌ User not found for email:', email);
         res.status(401).json({
           success: false,
           message: 'Invalid email or password'
@@ -66,8 +70,13 @@ export class UserController {
         return;
       }
 
+      console.log('✅ User found:', user.id, user.email);
+      console.log('🔍 Comparing passwords...');
       const isValidPassword = await UserService.comparePassword(password, user.password);
+      console.log('🔍 Password valid:', isValidPassword);
+      
       if (!isValidPassword) {
+        console.log('❌ Invalid password for user:', email);
         res.status(401).json({
           success: false,
           message: 'Invalid email or password'
@@ -78,6 +87,7 @@ export class UserController {
       // Remove password from response
       const { password: _, ...userResponse } = user;
 
+      console.log('✅ Login successful for user:', email);
       res.status(200).json({
         success: true,
         message: 'Login successful',

@@ -16,75 +16,19 @@
 
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
-
-interface User {
-  id: string;
-  email: string;
-  username: string;
-  role: string;
-  isActive: boolean;
-  createdAt: string;
-  profile?: {
-    firstName?: string;
-    lastName?: string;
-    creditScore?: number;
-  };
-  creditCards: CreditCard[];
-}
-
-interface CreditCard {
-  id: string;
-  cardNumber: string;
-  cardholderName: string;
-  creditLimit: number;
-  currentBalance: number;
-  status: string;
-  issueDate: string;
-}
-
-interface Transaction {
-  id: string;
-  amount: number;
-  totalAmount: number;
-  description: string;
-  date: string;
-  creditCard: {
-    cardNumber: string;
-    user: {
-      email: string;
-      profile?: {
-        firstName?: string;
-        lastName?: string;
-      };
-    };
-  };
-}
-
-interface SystemStats {
-  users: {
-    total: number;
-    recentlyCreated: number;
-  };
-  cards: {
-    total: number;
-  };
-  transactions: {
-    total: number;
-    totalValue: number;
-  };
-}
+import adminService, { AdminUser, AdminCreditCard, AdminTransaction, AdminStats } from '../../services/adminService';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [users, setUsers] = useState<User[]>([]);
-  const [creditCards, setCreditCards] = useState<CreditCard[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [stats, setStats] = useState<SystemStats | null>(null);
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [creditCards, setCreditCards] = useState<AdminCreditCard[]>([]);
+  const [transactions, setTransactions] = useState<AdminTransaction[]>([]);
+  const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [editingCard, setEditingCard] = useState<CreditCard | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+  const [editingCard, setEditingCard] = useState<AdminCreditCard | null>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -95,31 +39,28 @@ const AdminDashboard: React.FC = () => {
       setLoading(true);
       setError('');
 
-      const [usersRes, cardsRes, transactionsRes, statsRes] = await Promise.all([
-        fetch('/api/admin/users'),
-        fetch('/api/admin/credit-cards'),
-        fetch('/api/admin/transactions?limit=20'),
-        fetch('/api/admin/stats')
+      console.log('📊 Loading dashboard data using admin service...');
+      
+      const [users, creditCards, transactions, stats] = await Promise.all([
+        adminService.getAllUsers(),
+        adminService.getAllCreditCards(),
+        adminService.getRecentTransactions(20),
+        adminService.getSystemStats()
       ]);
 
-      if (!usersRes.ok || !cardsRes.ok || !transactionsRes.ok || !statsRes.ok) {
-        throw new Error('Failed to load admin data');
-      }
+      console.log('✅ Dashboard data loaded successfully');
+      console.log('Users:', users.length);
+      console.log('Credit Cards:', creditCards.length);
+      console.log('Transactions:', transactions.length);
+      console.log('Stats:', stats);
 
-      const [usersData, cardsData, transactionsData, statsData] = await Promise.all([
-        usersRes.json(),
-        cardsRes.json(),
-        transactionsRes.json(),
-        statsRes.json()
-      ]);
-
-      setUsers(usersData.data || []);
-      setCreditCards(cardsData.data || []);
-      setTransactions(transactionsData.data || []);
-      setStats(statsData.data || null);
+      setUsers(users);
+      setCreditCards(creditCards);
+      setTransactions(transactions);
+      setStats(stats);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');
-      console.error('Dashboard load error:', err);
+      console.error('❌ Dashboard load error:', err);
     } finally {
       setLoading(false);
     }
@@ -146,7 +87,7 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleUpdateCreditCard = async (cardId: string, updatedData: Partial<CreditCard>) => {
+  const handleUpdateCreditCard = async (cardId: string, updatedData: Partial<AdminCreditCard>) => {
     try {
       const response = await fetch(`/api/admin/credit-cards/${cardId}`, {
         method: 'PUT',
@@ -277,14 +218,13 @@ const AdminDashboard: React.FC = () => {
                   <div key={transaction.id} className="activity-item">
                     <div className="activity-details">
                       <strong>{transaction.description}</strong>
-                      <div className="activity-meta">
-                        {transaction.creditCard.user.profile?.firstName} {transaction.creditCard.user.profile?.lastName} - 
-                        {maskCardNumber(transaction.creditCard.cardNumber)} - 
+                      <div className="activity-meta">                        {transaction.creditCard?.user.profile?.firstName || 'Unknown'} {transaction.creditCard?.user.profile?.lastName || 'User'} -
+                        {transaction.creditCard?.cardNumber ? maskCardNumber(transaction.creditCard.cardNumber) : 'Unknown Card'} -
                         {formatDate(transaction.date)}
                       </div>
                     </div>
                     <div className="activity-amount">
-                      {formatCurrency(transaction.totalAmount)}
+                      {formatCurrency(transaction.totalAmount || transaction.amount)}
                     </div>
                   </div>
                 ))}
@@ -321,7 +261,7 @@ const AdminDashboard: React.FC = () => {
                   </div>
                   <div>{user.email}</div>
                   <div>{user.profile?.creditScore || 'N/A'}</div>
-                  <div>{user.creditCards.length}</div>
+                  <div>{user.creditCards?.length || 0}</div>
                   <div className={`status ${user.isActive ? 'active' : 'inactive'}`}>
                     {user.isActive ? 'Active' : 'Inactive'}
                   </div>
@@ -408,12 +348,12 @@ const AdminDashboard: React.FC = () => {
                   <div>{formatDate(transaction.date)}</div>
                   <div>{transaction.description}</div>
                   <div>
-                    {transaction.creditCard.user.profile?.firstName} {transaction.creditCard.user.profile?.lastName}
-                    <div className="user-email">{transaction.creditCard.user.email}</div>
+                    {transaction.creditCard?.user.profile?.firstName || 'Unknown'} {transaction.creditCard?.user.profile?.lastName || 'User'}
+                    <div className="user-email">{transaction.creditCard?.user.email || 'Unknown Email'}</div>
                   </div>
-                  <div>{maskCardNumber(transaction.creditCard.cardNumber)}</div>
+                  <div>{transaction.creditCard?.cardNumber ? maskCardNumber(transaction.creditCard.cardNumber) : 'Unknown Card'}</div>
                   <div className="transaction-amount">
-                    {formatCurrency(transaction.totalAmount)}
+                    {formatCurrency(transaction.totalAmount || transaction.amount)}
                   </div>
                 </div>
               ))}
@@ -448,8 +388,8 @@ const AdminDashboard: React.FC = () => {
                   <p><strong>Credit Score:</strong> {selectedUser.profile?.creditScore || 'N/A'}</p>
                 </div>
                 <div className="detail-section">
-                  <h3>Credit Cards ({selectedUser.creditCards.length})</h3>
-                  {selectedUser.creditCards.map(card => (
+                  <h3>Credit Cards ({selectedUser.creditCards?.length || 0})</h3>
+                  {selectedUser.creditCards?.map(card => (
                     <div key={card.id} className="card-summary">
                       <p><strong>{maskCardNumber(card.cardNumber)}</strong></p>
                       <p>Limit: {formatCurrency(card.creditLimit)}</p>
