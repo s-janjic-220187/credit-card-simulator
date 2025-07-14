@@ -15,6 +15,9 @@ import { AdminController } from '../controllers/AdminController';
 
 const router = Router();
 
+// Create initial admin user (public endpoint for setup)
+router.post('/create-admin', AdminController.createInitialAdmin);
+
 // Middleware to check admin role (placeholder - implement proper auth check)
 const requireAdmin = (_req: any, _res: any, next: any) => {
   // TODO: Implement proper admin authentication middleware

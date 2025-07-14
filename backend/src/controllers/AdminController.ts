@@ -21,6 +21,78 @@ const prisma = new PrismaClient();
 
 export class AdminController {
   /**
+   * Create initial admin user (for setup purposes)
+   */
+  static async createInitialAdmin(_req: Request, res: Response): Promise<void> {
+    try {
+      const bcrypt = require('bcryptjs');
+      
+      // Check if admin already exists
+      const existingAdmin = await prisma.user.findUnique({
+        where: { email: 'admin@admin.com' }
+      });
+      
+      if (existingAdmin) {
+        res.json({
+          success: true,
+          message: 'Admin user already exists',
+          data: { 
+            email: existingAdmin.email,
+            role: existingAdmin.role 
+          }
+        });
+        return;
+      }
+      
+      // Create admin user
+      const hashedPassword = await bcrypt.hash('admin', 10);
+      
+      const adminUser = await prisma.user.create({
+        data: {
+          username: 'admin',
+          email: 'admin@admin.com',
+          password: hashedPassword,
+          role: 'ADMIN',
+          profile: {
+            create: {
+              firstName: 'Admin',
+              lastName: 'User',
+              phoneNumber: '+1-555-ADMIN',
+              address: '789 Admin Boulevard',
+              city: 'Admin City',
+              state: 'CA',
+              zipCode: '90210',
+              country: 'US',
+              annualIncome: 100000,
+              creditScore: 800,
+              employmentStatus: 'EMPLOYED'
+            }
+          }
+        },
+        include: {
+          profile: true
+        }
+      });
+      
+      // Remove password from response
+      const { password: _, ...userResponse } = adminUser;
+      
+      res.status(201).json({
+        success: true,
+        message: 'Admin user created successfully',
+        data: userResponse
+      });
+    } catch (error) {
+      console.error('Error creating admin user:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to create admin user',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
    * Get all users with their profiles and cards
    */
   static async getAllUsers(_req: Request, res: Response): Promise<void> {
