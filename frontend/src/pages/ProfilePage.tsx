@@ -1,3 +1,22 @@
+/**
+ * ProfilePage Component
+ * 
+ * Main user profile management page that handles:
+ * - Profile creation for new users
+ * - Profile editing for existing users
+ * - Integration with ProfileForm and ProfileDashboard components
+ * - Error handling and loading states
+ * 
+ * Features:
+ * - React Query for data fetching and caching
+ * - Form validation and error handling
+ * - Responsive design with loading indicators
+ * - Toast notifications for user feedback
+ * 
+ * @author Credit Card Simulator Team
+ * @version 1.0.0
+ */
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import toast from 'react-hot-toast';

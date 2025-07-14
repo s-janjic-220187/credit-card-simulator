@@ -1,3 +1,31 @@
+/**
+ * Navigation Component
+ * 
+ * Main navigation bar for the Credit Card Billing Simulator application.
+ * Provides access to all major features and tools.
+ * 
+ * Features:
+ * - Responsive dropdown menu for calculators and tools
+ * - Active route highlighting
+ * - Organized menu structure with categories
+ * - Professional styling with hover effects
+ * 
+ * Menu Structure:
+ * - Dashboard: Main overview and statistics
+ * - Billing Cycles: Billing cycle management
+ * - Calculators: Financial calculation tools
+ *   - Basic Calculators: Interest, Payment Strategy, Fee Simulator, Financial Health
+ *   - Visualizations: Charts and interactive visualizations
+ * - Card Builder: Create and manage credit card profiles
+ * - Statements: View and generate billing statements
+ * - Education: Educational content and tutorials
+ * - Scenarios: Interactive learning scenarios
+ * - Profile: User profile management
+ * 
+ * @author Credit Card Simulator Team
+ * @version 1.0.0
+ */
+
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 

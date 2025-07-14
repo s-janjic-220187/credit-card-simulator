@@ -1,252 +1,282 @@
 # 💳 Credit Card Billing Cycle Simulator
 
-A full-stack web application that simulates credit card billing cycles, interest, fees, and statement generation.  
-Designed as a **profile-driven calculator**, this tool allows users to create multiple credit card profiles and observe how billing cycles, charges, and fees are calculated in various scenarios.
+> **A comprehensive educational platform for understanding credit card billing mechanics, interest calculations, and financial literacy.**
 
-## 🎯 Project Overview
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://prisma.io/)
 
-This application provides comprehensive credit card billing simulation with:
+## 🎯 Project Vision
 
-- **Billing Cycle Management**: Simulate monthly cycles with customizable dates
-- **Interest Calculations**: APR-based daily interest computation
-- **Fee Simulation**: Late fees, overlimit fees, foreign transaction fees
-- **Statement Generation**: Detailed monthly statements with all charges
-- **Profile-Based Testing**: Create multiple credit card profiles to compare scenarios
-- **Educational Tool**: Understanding credit card mechanics and costs
+Transform credit card education through interactive simulation and visualization. This platform helps users understand:
+- **Billing cycles** and statement generation
+- **Interest calculations** and compounding effects  
+- **Payment strategies** and their long-term impact
+- **Fee structures** and how to avoid them
+- **Credit utilization** and score implications
+- **Financial decision-making** through scenarios
 
-## Project Structure
+## 🏗️ Architecture Overview
 
 ```
-credit-card-simulator/
-├── backend/                 # Node.js/Express API with PostgreSQL
-│   ├── src/
-│   │   ├── controllers/     # Billing cycle and statement controllers
-│   │   ├── models/         # Credit card profile and billing models
-│   │   ├── routes/         # API routes for simulation
-│   │   ├── services/       # Billing calculation business logic
-│   │   ├── lib/           # Prisma client and utilities
-│   │   └── index.ts        # Entry point
-│   ├── prisma/            # Database schema and migrations
-│   │   ├── schema.prisma  # Credit card billing data model
-│   │   └── seed.ts        # Sample billing scenarios
-│   ├── .env               # Environment variables
-│   ├── tsconfig.json      # TypeScript configuration
-│   └── package.json       # Dependencies
+├── 🎨 Frontend (React + TypeScript)
+│   ├── Interactive calculators and visualizations
+│   ├── Educational dashboards and tutorials
+│   ├── Scenario-based learning modules
+│   └── Responsive UI with Tailwind CSS
 │
-├── frontend/               # React/Vite application with Tailwind CSS
-│   ├── public/            # Static assets
-│   ├── src/
-│   │   ├── components/    # Billing UI components
-│   │   │   ├── BillingCycle/   # Cycle management components
-│   │   │   ├── CreditCard/     # Card profile components
-│   │   │   ├── Statement/      # Statement generation
-│   │   │   ├── Calculators/    # Interest and fee calculators
-│   │   │   ├── Visualization/  # Interactive charts and data visualization
-│   │   │   └── Education/      # Educational content and modules
-│   │   ├── pages/         # Main application pages
-│   │   ├── services/      # API calls for billing simulation
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── utils/         # Billing calculation utilities
-│   │   └── main.tsx       # Entry point
-│   ├── .env              # Environment variables
-│   ├── tsconfig.json     # TypeScript configuration
-│   └── package.json      # Dependencies
+├── 🔧 Backend (Node.js + Express + TypeScript)
+│   ├── RESTful API with comprehensive endpoints
+│   ├── Real-time calculation engines
+│   ├── User profile and progress management
+│   └── Statement and notification services
 │
-├── .gitignore            # Git ignore file
-├── PROFILE_SETUP.md      # Setup documentation
-├── MIGRATION_SUMMARY.md  # Migration details
-└── README.md             # This file
+└── 🗄️ Database (PostgreSQL + Prisma)
+    ├── User profiles and financial data
+    ├── Credit card and transaction records
+    ├── Billing cycles and statement history
+    └── Learning progress and achievements
 ```
 
-## Getting Started
+## ✨ Core Features
+
+### 📊 **Calculation Tools**
+- **Interest Calculator**: Real-time APR calculations with payment scenarios
+- **Payment Strategy Analyzer**: Compare minimum vs. accelerated payment plans
+- **Fee Structure Simulator**: Understand late fees, overlimit charges, and penalties
+- **Financial Health Calculator**: Comprehensive credit health assessment
+
+### 📈 **Data Visualizations**
+- **Payment Impact Visualizer**: Interactive charts showing payment strategy outcomes
+- **Interest Growth Charts**: Visual representation of debt accumulation over time
+- **Fee Analysis Dashboard**: Breakdown of all potential credit card costs
+- **Utilization Tracking**: Credit usage patterns and recommendations
+
+### 🎓 **Educational Components**
+- **Scenario Learning**: Interactive decision trees with real-world situations
+- **Educational Dashboard**: Step-by-step guides and best practices
+- **Achievement System**: Gamified learning with progress tracking
+- **Credit Score Calculator**: Understanding factors that impact your score
+
+### 🔄 **Simulation Engine**
+- **Billing Cycle Management**: Automated monthly cycle processing
+- **Transaction Processing**: Categorized spending with merchant details
+- **Statement Generation**: PDF-ready billing statements
+- **Notification System**: Payment reminders and financial tips
+
+## 🚀 Quick Start
 
 ### Prerequisites
-
-- Node.js (v18 or higher)
-- npm or yarn
-- PostgreSQL (v12 or higher)
+- **Node.js** (v18 or higher)
+- **PostgreSQL** (v13 or higher)
+- **npm** or **yarn**
 
 ### Installation
 
-1. Clone the repository
-2. Install backend dependencies:
+1. **Clone the repository**
    ```bash
-   cd backend
-   npm install
+   git clone https://github.com/yourusername/credit-card-simulator.git
+   cd credit-card-simulator
    ```
-3. Install frontend dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
-4. Set up PostgreSQL database:
 
+2. **Backend Setup**
    ```bash
    cd backend
+   npm install
+   cp .env.example .env
+   # Configure your database URL in .env
+   npx prisma generate
    npx prisma db push
    npx prisma db seed
    ```
 
-   npm install
-
-   ```
-
-   ```
-
-5. Install frontend dependencies:
+3. **Frontend Setup**
    ```bash
    cd frontend
    npm install
+   cp .env.example .env
+   # Configure API URL in .env
    ```
 
-### Running the Application
-
-1. Start the backend server:
-
+4. **Start Development Servers**
    ```bash
-   cd backend
-   npm run dev
+   # Terminal 1 - Backend
+   cd backend && npm run dev
+   
+   # Terminal 2 - Frontend  
+   cd frontend && npm run dev
    ```
 
-2. Start the frontend development server:
-   ```bash
-   cd frontend
-   npm run dev
-   ```
+5. **Access the Application**
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:3000
+   - API Documentation: http://localhost:3000/api/docs
 
-The backend will run on `http://localhost:3000` and the frontend on `http://localhost:5175`.
+## 📱 User Journey
 
-## 🌟 Features
+### 1. **Profile Setup**
+- Personal information and financial background
+- Credit score and income details
+- Financial goals and preferences
 
-### Core Billing Simulation
+### 2. **Credit Card Configuration**
+- Create custom credit card profiles
+- Set credit limits, APR, and fee structures
+- Configure billing cycles and payment dates
 
-- **Multiple Credit Card Profiles**: Create and manage different card types with varying terms
-- **Billing Cycle Management**: Simulate monthly cycles with customizable statement dates
-- **Interest Calculations**: Daily interest computation based on APR and balance
-- **Fee Structure**: Late fees, overlimit fees, foreign transaction fees, annual fees
-- **Statement Generation**: Detailed monthly statements with all charges and payments
-- **Balance Tracking**: Current balance, available credit, minimum payment calculations
+### 3. **Transaction Simulation**
+- Add purchases across various categories
+- Process payments and see immediate impacts
+- Track spending patterns and trends
 
-### Advanced Calculators
+### 4. **Analysis & Learning**
+- Use calculators to explore different scenarios
+- Visualize long-term impacts of financial decisions
+- Complete interactive learning modules
+- Track progress and earn achievements
 
-- **Interest Calculator**: APR, daily, and monthly interest rate calculations with educational breakdowns
-- **Payment Strategy Analyzer**: Compare minimum, custom, and aggressive payment strategies
-- **Fee Structure Simulator**: Analyze and compare fee structures across different usage scenarios
-- **Financial Health Score Calculator**: Comprehensive assessment of financial wellness across four key areas
+## 🛠️ Development
 
-### Interactive Learning
+### Project Structure
+```
+credit-card-simulator/
+├── backend/                 # Node.js API server
+│   ├── prisma/             # Database schema and migrations
+│   ├── src/
+│   │   ├── controllers/    # API route handlers
+│   │   ├── services/       # Business logic
+│   │   ├── models/         # Data models
+│   │   ├── routes/         # Express routes
+│   │   └── types/          # TypeScript definitions
+│   └── package.json
+│
+├── frontend/               # React application
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   │   ├── Calculators/
+│   │   │   ├── Visualizations/
+│   │   │   ├── Education/
+│   │   │   └── Learning/
+│   │   ├── pages/          # Route components
+│   │   ├── services/       # API clients
+│   │   └── types/          # TypeScript definitions
+│   └── package.json
+│
+└── docs/                   # Documentation
+```
 
-- **Scenario-Based Learning**: Practice real-world financial decision making through interactive scenarios
-- **Educational Dashboard**: Comprehensive learning modules, tips, and strategies for financial literacy
-- **Real-World Challenges**: Emergency debt management, credit building, balance transfer strategies
-- **Risk-Free Practice**: Learn from mistakes without real financial consequences
+### Available Scripts
 
-### Data Visualization Suite
+**Backend:**
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run db:generate` - Generate Prisma client
+- `npm run db:push` - Push schema to database
+- `npm run db:seed` - Seed database with sample data
 
-- **Interest Growth Charts**: Interactive visualizations showing how interest compounds over time
-- **Payment Impact Visualizer**: Dramatic comparisons of different payment strategies with savings calculations
-- **Fee Analysis Dashboard**: Comprehensive fee structure analysis with pie charts and breakdowns
-- **Scenario Comparison Tools**: Side-by-side analysis of multiple payment approaches and outcomes
-- **Real-time Chart Updates**: Dynamic visualizations that respond to user input changes
-- **Educational Insights**: Built-in tips and explanations for each visualization
+**Frontend:**
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-### Profile-Driven Calculator
+### VS Code Setup
+This project includes a configured VS Code workspace with:
+- TypeScript extensions and settings
+- ESLint and Prettier configuration
+- Debugging configurations
+- Recommended extensions
+- Integrated terminal tasks
 
-- **Card Terms Configuration**: APR, credit limit, fees, billing cycle dates
-- **Transaction Simulation**: Add purchases, payments, cash advances
-- **Time-Based Simulation**: Fast-forward through multiple billing cycles
-- **Real-time Calculations**: Instant updates to balances and interest
+## 🧪 Testing
 
-## Technologies Used
+```bash
+# Backend tests
+cd backend && npm test
 
-### Backend
+# Frontend tests  
+cd frontend && npm test
 
-- Node.js & Express.js
-- TypeScript
-- PostgreSQL with Prisma ORM
-- Billing calculation engine
-- Statement generation service
-- Interest computation algorithms
+# End-to-end tests
+npm run test:e2e
+```
 
-### Frontend
+## 📊 Database Schema
 
-- React 18 with TypeScript
-- Vite build tool
-- Tailwind CSS for styling
-- React Query for state management
-- React Router for navigation
-- Recharts for data visualizations
-- React Hook Form for form management
+The application uses PostgreSQL with the following core entities:
+- **Users**: Profile and authentication data
+- **CreditCards**: Card details and configurations
+- **Transactions**: Purchase and payment records
+- **BillingCycles**: Monthly billing periods
+- **Statements**: Generated billing statements
+- **Notifications**: User alerts and reminders
 
-## 📊 API Endpoints
+See [Database Documentation](./docs/database.md) for detailed schema information.
 
-### Credit Card Profiles
+## 🔧 Configuration
 
-- `POST /api/credit-cards` - Create new credit card profile
-- `GET /api/credit-cards/:userId` - Get user's credit card profiles
-- `PUT /api/credit-cards/:cardId` - Update credit card profile
-- `DELETE /api/credit-cards/:cardId` - Delete credit card profile
+### Environment Variables
 
-### Billing Simulation
+**Backend (.env):**
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/credit_card_simulator"
+NODE_ENV=development
+PORT=3000
+JWT_SECRET=your-jwt-secret
+CORS_ORIGIN=http://localhost:5173
+```
 
-- `POST /api/billing/cycle/:cardId` - Generate billing cycle
-- `GET /api/billing/cycle/:cardId/:cycleId` - Get specific billing cycle
-- `POST /api/billing/transaction/:cardId` - Add transaction to current cycle
-- `GET /api/billing/statement/:cardId/:cycleId` - Generate statement
+**Frontend (.env):**
+```env
+VITE_API_URL=http://localhost:3000/api
+VITE_APP_NAME="Credit Card Simulator"
+VITE_APP_VERSION=1.0.0
+```
 
-### Calculations
+## 📈 Performance
 
-- `GET /api/calculations/interest/:cardId` - Calculate current interest
-- `GET /api/calculations/fees/:cardId` - Calculate applicable fees
-- `GET /api/calculations/minimum-payment/:cardId` - Calculate minimum payment
-- `GET /api/calculations/payoff/:cardId` - Calculate payoff scenarios
+- **Frontend**: Optimized React components with code splitting
+- **Backend**: Efficient database queries with Prisma
+- **Caching**: Redis integration for session management
+- **Monitoring**: Application performance metrics
 
-### User Profiles
+## 🔒 Security
 
-- `POST /api/profile` - Create user profile
-- `GET /api/profile/me` - Get current user's profile
-- `PUT /api/profile/:userId` - Update user profile
+- JWT-based authentication
+- Input validation and sanitization
+- SQL injection prevention with Prisma
+- CORS configuration
+- Environment variable protection
 
-## 🎓 Educational Use Cases
-
-This simulator is designed for:
-
-- **Personal Finance Education**: Understanding credit card mechanics and building financial literacy
-- **Financial Planning**: Testing payment strategies and financial decisions before implementation
-- **Academic Use**: Teaching financial literacy concepts through interactive scenarios and visualizations
-- **Professional Training**: Credit counseling, financial advisory scenarios, and decision-making practice
-- **Comparison Shopping**: Evaluating different credit card offers and fee structures
-- **Risk-Free Learning**: Practice financial decision-making without real financial consequences
-- **Financial Health Assessment**: Comprehensive evaluation of personal financial wellness
-
-## 🚀 Recent Enhancements
-
-- ✅ Scenario-based learning with interactive decision trees
-- ✅ Financial health score calculator with comprehensive assessment
-- ✅ Advanced data visualizations with payment impact analysis
-- ✅ Enhanced educational content with 20+ learning modules
-- ✅ Interactive fee analysis and comparison tools
-- ✅ Real-world financial scenarios and challenges
-
-## 🔮 Future Enhancements
-
-- Credit score impact simulation
-- Rewards program calculations
-- Balance transfer scenarios
-- Debt consolidation analysis
-- Mobile app version
-- API integrations with real financial data
-- Advanced scenario builder
-- Gamification features
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/billing-enhancement`
-3. Make your changes
-4. Add tests for billing calculations
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+See [Contributing Guide](./CONTRIBUTING.md) for detailed guidelines.
 
-MIT License - Educational and personal use encouraged
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Educational Focus**: Inspired by the need for better financial literacy tools
+- **Open Source**: Built with amazing open-source technologies
+- **Community**: Thanks to all contributors and educators
+
+## 📞 Support
+
+- **Documentation**: [View Docs](./docs/)
+- **Issues**: [GitHub Issues](https://github.com/yourusername/credit-card-simulator/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/credit-card-simulator/discussions)
+
+---
+
+**⭐ If this project helps you understand credit cards better, please consider giving it a star!**
