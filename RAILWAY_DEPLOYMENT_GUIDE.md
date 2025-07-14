@@ -124,9 +124,11 @@ Your Credit Card Simulator is now live and fully operational on Railway. Both Ge
 ### 🔧 Troubleshooting
 
 #### "Invalid email or password" Error
+
 If you get login errors:
 
 1. **Run the setup commands** to create users:
+
    ```bash
    curl -X POST https://backend-ccs-production.up.railway.app/api/demo/create
    curl -X POST https://backend-ccs-production.up.railway.app/api/admin/create-admin
@@ -138,6 +140,7 @@ If you get login errors:
    ```
 
 #### API Connection Issues (405 Method Not Allowed)
+
 If you get API errors like "405 Method Not Allowed":
 
 1. **Check browser console** for API URL being used
@@ -145,6 +148,7 @@ If you get API errors like "405 Method Not Allowed":
 3. **Clear browser cache** and reload the page
 
 #### Database Issues
+
 - Railway's PostgreSQL may reset between deployments
 - User data is not persistent across redeploys
 - Always recreate demo/admin users after deployment

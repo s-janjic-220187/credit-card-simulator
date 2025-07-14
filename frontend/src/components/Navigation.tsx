@@ -15,7 +15,7 @@
  */
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { useI18n } from '../contexts/I18nContext';
 import LanguageSelector from './Common/LanguageSelector';
@@ -27,6 +27,22 @@ const Navigation = () => {
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const { state } = useUser();
   const { t } = useI18n();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsAccountDropdownOpen(false);
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -42,7 +58,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+    <nav ref={mobileMenuRef} className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
@@ -266,26 +282,47 @@ const Navigation = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
-              className="bg-gray-50 p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+              className="bg-gray-50 p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 transition-colors flex items-center space-x-1"
+              aria-label="Open navigation menu"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
+              <span className="text-xs font-medium">Menu</span>
             </button>
           </div>
         </div>
 
         {/* Mobile Navigation Menu */}
         {isAccountDropdownOpen && (
-          <div className="md:hidden border-t border-gray-200 bg-white">
+          <div className="md:hidden border-t border-gray-200 bg-white shadow-lg max-h-screen overflow-y-auto">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🏠 {t.common.dashboard}</Link>
-              <Link to="/card-builder" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🏦 {t.common.cards}</Link>
-              <Link to="/billing-cycle" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">📅 {t.common.billing}</Link>
-              <Link to="/statement-generator" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">📄 {t.common.statements}</Link>
-              <Link to="/calculators/interest" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🧮 {t.common.tools}</Link>
-              <Link to="/education" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🎓 {t.common.learn}</Link>
-              <Link to="/learning/scenarios" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🎯 {t.common.scenarios}</Link>
+              <Link to="/" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🏠 {t.common.dashboard}</Link>
+              <Link to="/card-builder" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🏦 {t.common.cards}</Link>
+              <Link to="/billing-cycle" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">📅 {t.common.billing}</Link>
+              <Link to="/statement-generator" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">📄 {t.common.statements}</Link>
+              
+              {/* Tools Section */}
+              <div className="py-2 bg-gray-50 rounded-lg mx-2 my-3">
+                <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 pb-2 mb-2">🧮 {t.common.tools}</div>
+                <div className="space-y-1">
+                  {/* Calculators */}
+                  <div className="px-3 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded mx-2">📊 {t.navigation.calculators.title}</div>
+                  <Link to="/calculators/interest" onClick={() => setIsAccountDropdownOpen(false)} className="block px-6 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-md mx-2">💰 {t.navigation.calculators.interestCalculator}</Link>
+                  <Link to="/calculators/payment-strategy" onClick={() => setIsAccountDropdownOpen(false)} className="block px-6 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-md mx-2">📊 {t.navigation.calculators.paymentStrategy}</Link>
+                  <Link to="/calculators/fee-simulator" onClick={() => setIsAccountDropdownOpen(false)} className="block px-6 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-md mx-2">💸 {t.navigation.calculators.feeSimulator}</Link>
+                  <Link to="/calculators/financial-health" onClick={() => setIsAccountDropdownOpen(false)} className="block px-6 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-md mx-2">📈 {t.navigation.calculators.financialHealth}</Link>
+                  
+                  {/* Visualizations */}
+                  <div className="px-3 py-1 text-xs font-medium text-purple-600 bg-purple-50 rounded mx-2 mt-3">📈 {t.navigation.analytics.title}</div>
+                  <Link to="/visualizations/interest-growth" onClick={() => setIsAccountDropdownOpen(false)} className="block px-6 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-md mx-2">📈 {t.navigation.analytics.interestGrowth}</Link>
+                  <Link to="/visualizations/payment-impact" onClick={() => setIsAccountDropdownOpen(false)} className="block px-6 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-md mx-2">🚀 {t.navigation.analytics.paymentImpact}</Link>
+                  <Link to="/visualizations/fee-analysis" onClick={() => setIsAccountDropdownOpen(false)} className="block px-6 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-md mx-2">📊 {t.navigation.analytics.feeAnalysis}</Link>
+                </div>
+              </div>
+              
+              <Link to="/education" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🎓 {t.common.learn}</Link>
+              <Link to="/learning/scenarios" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">🎯 {t.common.scenarios}</Link>
               
               {/* Language Selector in Mobile */}
               <div className="px-3 py-2">
@@ -293,9 +330,9 @@ const Navigation = () => {
               </div>
               
               <div className="border-t border-gray-200 my-2"></div>
-              <Link to="/profile" className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">⚙️ {t.common.profileSettings}</Link>
+              <Link to="/profile" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md">⚙️ {t.common.profileSettings}</Link>
               {state.user?.role === 'ADMIN' && (
-                <Link to="/admin" className="block px-3 py-2 text-purple-700 hover:bg-purple-50 rounded-md font-semibold">🛡️ {t.common.adminDashboard}</Link>
+                <Link to="/admin" onClick={() => setIsAccountDropdownOpen(false)} className="block px-3 py-2 text-purple-700 hover:bg-purple-50 rounded-md font-semibold">🛡️ {t.common.adminDashboard}</Link>
               )}
               <button
                 onClick={handleLogout}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useUserActions } from '../../contexts/UserContext';
 import api from '../../services/api';
+import AnimatedCreditCard from './AnimatedCreditCard';
 
 interface UserLoginProps {
   onShowCreateUser: () => void;
@@ -60,19 +61,25 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
-        <p className="text-gray-600 mt-2">Sign in to your account</p>
+    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      {/* Animated Credit Card */}
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-4">
+        <AnimatedCreditCard />
       </div>
-
-      {error && (
-        <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
+      
+      <div className="p-6">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
+          <p className="text-gray-600 mt-2">Sign in to your account</p>
         </div>
-      )}
 
-      <form onSubmit={handleLogin} className="space-y-4">
+        {error && (
+          <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email
@@ -133,6 +140,7 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };
