@@ -30,7 +30,7 @@ const BillingCycleDashboard: React.FC = () => {
     queryFn: async () => {
       if (!creditCardId) return [];
       
-      const response = await fetch(`/api/billing/cycles/${creditCardId}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/billing/cycles/${creditCardId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch billing cycles');
       }
@@ -62,7 +62,7 @@ const BillingCycleDashboard: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/billing/cycle/${creditCardId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/billing/cycle/${creditCardId}`, {
         method: 'POST',
       });
       if (response.ok) {
@@ -80,7 +80,9 @@ const BillingCycleDashboard: React.FC = () => {
 
   const createDemoData = async () => {
     try {
-      const response = await fetch('/api/demo/create', {
+      console.log('Creating demo data from BillingCycleDashboard...');
+      
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/demo/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,12 +90,14 @@ const BillingCycleDashboard: React.FC = () => {
       });
 
       const data = await response.json();
+      console.log('Demo creation response:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Failed to create demo data');
       }
 
       alert('Demo data created successfully! You can now use the billing cycle features.');
+      console.log('Demo data created successfully');
       // Refresh the page to load the new data
       window.location.reload();
     } catch (error) {

@@ -255,7 +255,7 @@ export const useUserActions = () => {
 
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await fetch(`/api/profile/${state.user.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/profile/${state.user.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

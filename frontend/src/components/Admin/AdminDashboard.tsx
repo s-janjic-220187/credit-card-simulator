@@ -72,14 +72,7 @@ const AdminDashboard: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`/api/admin/users/${userId}`, {
-        method: 'DELETE'
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete user');
-      }
-
+      await adminService.deleteUser(userId);
       setUsers(users.filter(user => user.id !== userId));
       alert('User deleted successfully');
     } catch (err) {
@@ -89,21 +82,9 @@ const AdminDashboard: React.FC = () => {
 
   const handleUpdateCreditCard = async (cardId: string, updatedData: Partial<AdminCreditCard>) => {
     try {
-      const response = await fetch(`/api/admin/credit-cards/${cardId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update credit card');
-      }
-
-      const result = await response.json();
+      const updatedCard = await adminService.updateCreditCard(cardId, updatedData);
       setCreditCards(cards => 
-        cards.map(card => card.id === cardId ? { ...card, ...result.data } : card)
+        cards.map(card => card.id === cardId ? { ...card, ...updatedCard } : card)
       );
       setEditingCard(null);
       alert('Credit card updated successfully');

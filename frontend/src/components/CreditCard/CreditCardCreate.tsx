@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useUser, useUserActions } from '../../contexts/UserContext';
+import { creditCardService } from '../../services/creditCardService';
 
 const CreditCardCreate: React.FC = () => {
   const { state } = useUser();
@@ -30,27 +31,21 @@ const CreditCardCreate: React.FC = () => {
     setError('');
 
     try {
-      const response = await fetch(`/api/${state.user!.id}/cards`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cardholderName: formData.cardholderName,
-          creditLimit: formData.creditLimit,
-          apr: formData.apr,
-          cycleStartDate: formData.cycleStartDate,
-        }),
-      });
+      console.log('🎯 Creating credit card using service...');
+      const cardData = {
+        cardholderName: formData.cardholderName,
+        creditLimit: formData.creditLimit,
+        apr: formData.apr,
+        cycleStartDate: formData.cycleStartDate,
+      };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to create credit card');
-      }
-
-      addCreditCard(data.data);
+      const newCard = await creditCardService.createCreditCard(cardData, state.user!.id);
+      
+      console.log('✅ Credit card created successfully:', newCard);
+      addCreditCard(newCard);
+      goToStep('dashboard');
     } catch (error) {
+      console.error('❌ Failed to create credit card:', error);
       setError(error instanceof Error ? error.message : 'Failed to create credit card');
     } finally {
       setIsLoading(false);
@@ -62,7 +57,10 @@ const CreditCardCreate: React.FC = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/demo/create', {
+      console.log('Creating demo data...');
+      
+      // Use the api service to make the request with proper Railway URL mapping
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/demo/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,14 +68,17 @@ const CreditCardCreate: React.FC = () => {
       });
 
       const data = await response.json();
+      console.log('Demo creation response:', data);
 
       if (!response.ok) {
         throw new Error(data.message || 'Failed to create demo data');
       }
 
       // The demo creates user, profile, and credit card
+      console.log('Demo data created successfully');
       window.location.reload(); // Simple way to refresh with new data
     } catch (error) {
+      console.error('Demo creation error:', error);
       setError(error instanceof Error ? error.message : 'Failed to create demo data');
     } finally {
       setIsLoading(false);
