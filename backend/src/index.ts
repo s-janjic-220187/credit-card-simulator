@@ -106,6 +106,27 @@ app.get('/debug', (_req, res) => {
   });
 });
 
+// Test user lookup endpoint
+app.get('/test-user/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = await prisma.user.findUnique({
+      where: { email }
+    });
+    
+    res.json({
+      found: !!user,
+      email: user?.email,
+      role: user?.role,
+      hasPassword: !!user?.password
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 app.get('/health', async (_req, res) => {
   const healthData = {
     status: 'OK', 
