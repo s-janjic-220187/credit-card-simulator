@@ -238,8 +238,9 @@ const CreditCardDetails: React.FC<CreditCardDetailsProps> = ({ card, isOpen, onC
 
   return (
     <>
+      {/* Main Credit Card Details Modal */}
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
+        <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-700 text-white p-6">
           <div className="flex justify-between items-start">
@@ -484,12 +485,12 @@ const CreditCardDetails: React.FC<CreditCardDetailsProps> = ({ card, isOpen, onC
             </button>
           </div>
         </div>
+        </div>
       </div>
-    </div>
 
-    {/* Card Management Modal */}
-    {isManageModalOpen && (
-      <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      {/* Card Management Modal - Separate high z-index modal */}
+      {isManageModalOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 p-4">
         <div className="w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-lg bg-white">
           {/* Header */}
           <div className="border-b border-gray-200 px-6 py-4">
@@ -735,8 +736,8 @@ const CreditCardDetails: React.FC<CreditCardDetailsProps> = ({ card, isOpen, onC
             ) : null}
           </div>
         </div>
-      </div>
-    )}
+        </div>
+      )}
     </>
   );
 };
