@@ -1,7 +1,10 @@
 # Backend Dockerfile - Multi-stage build
-FROM node:18-alpine AS builder
+FROM node:18-slim AS builder
 
 WORKDIR /app
+
+# Install OpenSSL (required by Prisma)
+RUN apt-get update -y && apt-get install -y openssl
 
 # Copy package files
 COPY package*.json ./
@@ -20,12 +23,12 @@ RUN npx prisma generate
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine AS production
+FROM node:18-slim AS production
 
 WORKDIR /app
 
-# Install bash for startup script
-RUN apk add --no-cache bash
+# Install OpenSSL and bash (required by Prisma and startup script)
+RUN apt-get update -y && apt-get install -y openssl bash && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
 COPY package*.json ./
