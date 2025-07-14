@@ -1,0 +1,397 @@
+.fee-analysis-dashboard {
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: white;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.dashboard-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.controls {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.scenario-controls,
+.timeframe-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scenario-controls label,
+.timeframe-controls label {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.scenario-controls select,
+.timeframe-controls select {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+.total-fees {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.total-fees .label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.total-fees .amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #feca57;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.fee-visualization {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.chart-section,
+.breakdown-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.chart-section h3,
+.breakdown-section h3,
+.scenario-comparison h3,
+.fee-insights h3,
+.fee-structure-editor h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.chart-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.fee-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fee-item {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid transparent;
+}
+
+.fee-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.fee-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.fee-category {
+  font-weight: 500;
+  color: #333;
+}
+
+.fee-amounts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.fee-amount {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.fee-percentage {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.scenario-comparison {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.scenario-comparison h3 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.fee-insights {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.insight-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid #4ecdc4;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.insight-card h4 {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+  color: #4ecdc4;
+}
+
+.insight-card p {
+  line-height: 1.6;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.fee-structure-editor {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.fee-structure-editor h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.fee-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fee-input label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.fee-input input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.fee-input input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Chart customization */
+.recharts-tooltip-wrapper {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.recharts-tooltip-item {
+  color: #333 !important;
+}
+
+.recharts-tooltip-label {
+  color: #333 !important;
+  font-weight: bold !important;
+}
+
+.recharts-default-tooltip {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: #333 !important;
+}
+
+.recharts-legend-wrapper {
+  padding-top: 1rem !important;
+}
+
+.recharts-cartesian-axis-tick-value {
+  font-size: 12px !important;
+  fill: #666 !important;
+}
+
+.recharts-cartesian-grid line {
+  stroke: rgba(102, 126, 234, 0.1) !important;
+}
+
+.recharts-pie-label-text {
+  font-size: 12px !important;
+  fill: #333 !important;
+  font-weight: 500 !important;
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.insight-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.insight-card:nth-child(1) { animation-delay: 0.1s; }
+.insight-card:nth-child(2) { animation-delay: 0.2s; }
+.insight-card:nth-child(3) { animation-delay: 0.3s; }
+.insight-card:nth-child(4) { animation-delay: 0.4s; }
+.insight-card:nth-child(5) { animation-delay: 0.5s; }
+.insight-card:nth-child(6) { animation-delay: 0.6s; }
+
+.fee-item {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.fee-item:nth-child(1) { animation-delay: 0.1s; }
+.fee-item:nth-child(2) { animation-delay: 0.15s; }
+.fee-item:nth-child(3) { animation-delay: 0.2s; }
+.fee-item:nth-child(4) { animation-delay: 0.25s; }
+.fee-item:nth-child(5) { animation-delay: 0.3s; }
+.fee-item:nth-child(6) { animation-delay: 0.35s; }
+.fee-item:nth-child(7) { animation-delay: 0.4s; }
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .fee-analysis-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-header h2 {
+    font-size: 2rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .scenario-controls,
+  .timeframe-controls {
+    width: 100%;
+  }
+
+  .fee-visualization {
+    grid-template-columns: 1fr;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .chart-section,
+  .breakdown-section,
+  .chart-container,
+  .fee-structure-editor {
+    padding: 1rem;
+  }
+
+  .insight-card {
+    padding: 1rem;
+  }
+
+  .controls {
+    padding: 1rem;
+  }
+}

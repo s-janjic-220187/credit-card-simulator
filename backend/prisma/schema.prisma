@@ -1,0 +1,337 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  isActive  Boolean  @default(true)
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  profile    UserProfile?
+  creditCards CreditCard[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  firstName     String
+  lastName      String
+  dateOfBirth   DateTime?
+  phoneNumber   String?
+  address       String?
+  city          String?
+  state         String?
+  zipCode       String?
+  country       String   @default("US")
+  annualIncome  Float?
+  creditScore   Int?
+  employmentStatus String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_profiles")
+}
+
+model CreditCard {
+  id              String         @id @default(cuid())
+  userId          String
+  cardNumber      String         @unique
+  cardholderName  String
+  expiryMonth     Int
+  expiryYear      Int
+  cvv             String
+  creditLimit     Float
+  currentBalance  Float          @default(0)
+  availableCredit Float
+  apr             Float          @default(24.99)
+  status          CardStatus     @default(ACTIVE)
+  issueDate       DateTime       @default(now())
+  cycleStartDate  Int            @default(1) // Day of month (1-28)
+  lastStatementDate DateTime?
+  nextDueDate     DateTime?
+  minimumPayment  Float          @default(0)
+  
+  // Billing cycle specific fields
+  billingCycleLength Int         @default(30) // Days in billing cycle
+  gracePerod        Int         @default(21) // Days from statement to due date
+  lateFeePct        Float       @default(0.00) // Late fee percentage
+  lateFeeFlat       Float       @default(35.00) // Flat late fee amount
+  overlimitFeePct   Float       @default(0.00) // Overlimit fee percentage  
+  overlimitFeeFlat  Float       @default(25.00) // Flat overlimit fee
+  foreignTransFee   Float       @default(0.03) // Foreign transaction fee (3%)
+  annualFee         Float       @default(0.00) // Annual fee
+  cashAdvanceFee    Float       @default(0.05) // Cash advance fee (5%)
+  cashAdvanceApr    Float       @default(29.99) // Cash advance APR
+  balanceTransferFee Float      @default(0.03) // Balance transfer fee (3%)
+  lastTransactionDate DateTime?  // Last transaction date
+  
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  statements   Statement[]
+  payments     Payment[]
+  billingCycles BillingCycle[]
+
+  @@map("credit_cards")
+}
+
+model Transaction {
+  id               String            @id @default(cuid())
+  creditCardId     String
+  type             TransactionType
+  amount           Float
+  fees             Float             @default(0)
+  totalAmount      Float
+  description      String
+  category         TransactionCategory @default(OTHER)
+  merchantCategory String?
+  merchantName     String?
+  location         String?
+  isInternational  Boolean           @default(false)
+  date             DateTime          @default(now())
+  timestamp        DateTime          @default(now())
+  status           TransactionStatus @default(COMPLETED)
+  referenceId      String?           @unique
+  statementId      String?
+  createdAt        DateTime          @default(now())
+
+  // Relations
+  creditCard CreditCard @relation(fields: [creditCardId], references: [id], onDelete: Cascade)
+  statement  Statement? @relation(fields: [statementId], references: [id])
+
+  @@map("transactions")
+}
+
+model Statement {
+  id                String      @id @default(cuid())
+  creditCardId      String
+  billingCycleId    String      @unique
+  statementNumber   String      @unique
+  billingPeriodStart DateTime
+  billingPeriodEnd   DateTime
+  dueDate           DateTime
+  minimumPayment    Float
+  totalBalance      Float
+  previousBalance   Float
+  paymentsCredits   Float       @default(0)
+  purchasesDebits   Float       @default(0)
+  interestCharges   Float       @default(0)
+  feesCharges       Float       @default(0)
+  creditLimit       Float
+  availableCredit   Float
+  apr               Float
+  
+  // Detailed breakdown for educational purposes
+  dailyInterestRate  Float       @default(0)
+  averageDailyBalance Float      @default(0)
+  daysInBillingCycle Int         @default(30)
+  lateFeesApplied    Float       @default(0)
+  overlimitFeesApplied Float     @default(0)
+  foreignTransFeesApplied Float  @default(0)
+  
+  status            StatementStatus @default(CURRENT)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  // Relations
+  creditCard     CreditCard    @relation(fields: [creditCardId], references: [id], onDelete: Cascade)
+  billingCycle   BillingCycle  @relation(fields: [billingCycleId], references: [id], onDelete: Cascade)
+  transactions   Transaction[]
+
+  @@map("statements")
+}
+
+model Payment {
+  id           String        @id @default(cuid())
+  creditCardId String
+  amount       Float
+  paymentDate  DateTime      @default(now())
+  paymentMethod PaymentMethod @default(BANK_TRANSFER)
+  status       PaymentStatus @default(COMPLETED)
+  referenceId  String?       @unique
+  description  String?
+  createdAt    DateTime      @default(now())
+
+  // Relations
+  creditCard CreditCard @relation(fields: [creditCardId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model BillingCycle {
+  id                 String      @id @default(cuid())
+  creditCardId       String
+  cycleNumber        Int         // Sequential cycle number
+  startDate          DateTime    // Cycle start date
+  endDate            DateTime    // Cycle end date
+  dueDate            DateTime    // Payment due date
+  
+  // Balances
+  startingBalance    Float       @default(0)
+  endingBalance      Float       @default(0)
+  averageDailyBalance Float      @default(0)
+  
+  // Charges and payments
+  totalPurchases     Float       @default(0)
+  totalPayments      Float       @default(0)
+  totalCredits       Float       @default(0)
+  interestCharged    Float       @default(0)
+  feesCharged        Float       @default(0)
+  
+  // Payment info
+  minimumPayment     Float       @default(0)
+  actualPayment      Float       @default(0)
+  paymentDate        DateTime?
+  
+  // Status
+  isStatementGenerated Boolean   @default(false)
+  isPaid             Boolean     @default(false)
+  isOverdue          Boolean     @default(false)
+  
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  // Relations
+  creditCard CreditCard @relation(fields: [creditCardId], references: [id], onDelete: Cascade)
+  statement  Statement?
+
+  @@map("billing_cycles")
+}
+
+model Notification {
+  id           String            @id @default(cuid())
+  userId       String
+  type         NotificationType
+  priority     NotificationPriority @default(MEDIUM)
+  title        String
+  message      String
+  metadata     Json              @default("{}")
+  isRead       Boolean           @default(false)
+  isDelivered  Boolean           @default(false)
+  readAt       DateTime?
+  deliveredAt  DateTime?
+  scheduledFor DateTime          @default(now())
+  expiresAt    DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+// Enums
+enum Role {
+  USER
+  ADMIN
+}
+
+enum CardStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+  EXPIRED
+}
+
+enum TransactionType {
+  PURCHASE
+  CASH_ADVANCE
+  BALANCE_TRANSFER
+  PAYMENT
+  FEE
+  INTEREST
+  REFUND
+  LATE_FEE
+  OVERLIMIT_FEE
+  FOREIGN_TRANSACTION_FEE
+  ANNUAL_FEE
+  CASH_ADVANCE_FEE
+  CREDIT
+  ADJUSTMENT
+}
+
+enum TransactionCategory {
+  GROCERIES
+  DINING
+  GAS
+  UTILITIES
+  ENTERTAINMENT
+  SHOPPING
+  TRAVEL
+  HEALTHCARE
+  EDUCATION
+  OTHER
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+  FAILED
+}
+
+enum StatementStatus {
+  CURRENT
+  PAID
+  OVERDUE
+  ARCHIVED
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CHECK
+  ONLINE
+  AUTO_PAY
+  CASH
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum NotificationType {
+  PAYMENT_DUE
+  PAYMENT_OVERDUE
+  HIGH_UTILIZATION
+  CREDIT_LIMIT_EXCEEDED
+  STATEMENT_READY
+  UNUSUAL_ACTIVITY
+  CREDIT_SCORE_CHANGE
+  PROMOTIONAL
+  SECURITY_ALERT
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
