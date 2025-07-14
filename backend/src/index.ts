@@ -127,6 +127,39 @@ app.get('/test-user/:email', async (req, res) => {
   }
 });
 
+// Test login endpoint for debugging
+app.post('/test-login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Step 1: Find user
+    const user = await prisma.user.findUnique({
+      where: { email }
+    });
+    
+    if (!user) {
+      res.json({ step: 'user_not_found', email });
+      return;
+    }
+    
+    // Step 2: Test password comparison
+    const bcrypt = require('bcryptjs');
+    const isValid = await bcrypt.compare(password, user.password);
+    
+    res.json({
+      step: 'password_check',
+      email: user.email,
+      passwordValid: isValid,
+      hashedPassword: user.password.substring(0, 10) + '...'
+    });
+  } catch (error) {
+    res.status(500).json({
+      step: 'error',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 app.get('/health', async (_req, res) => {
   const healthData = {
     status: 'OK', 
