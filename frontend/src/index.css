@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,32 +6,186 @@
 
 @layer base {
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+    overflow-x: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Enhanced typography scales */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  /* Text overflow protection */
+  .text-overflow-safe {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  /* Responsive text scaling */
+  @media (max-width: 640px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
+    html {
+      font-size: 15px;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    html {
+      font-size: 16px;
+    }
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-overflow-safe;
   }
   
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-overflow-safe;
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-lg p-6;
+    @apply bg-white rounded-lg shadow-lg p-6 text-overflow-safe;
   }
   
   .credit-card {
-    @apply bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl p-6 text-white shadow-credit-card;
+    @apply bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl p-6 text-white shadow-credit-card text-overflow-safe;
   }
   
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-overflow-safe;
   }
   
   .label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+    @apply block text-sm font-medium text-gray-700 mb-1 text-overflow-safe;
+  }
+
+  /* Navigation specific styles */
+  .nav-text-responsive {
+    @apply text-overflow-safe;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nav-brand {
+    @apply font-semibold text-gray-900 text-overflow-safe;
+    font-variation-settings: 'wght' 600;
+    letter-spacing: -0.015em;
+  }
+
+  .nav-link {
+    @apply px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 text-overflow-safe;
+    font-variation-settings: 'wght' 500;
+    white-space: nowrap;
+  }
+
+  .nav-link-active {
+    @apply bg-blue-50 text-blue-700 border border-blue-200;
+  }
+
+  .nav-link-inactive {
+    @apply text-gray-700 hover:text-blue-600 hover:bg-gray-50;
+  }
+
+  /* Dropdown menu styles */
+  .dropdown-menu {
+    @apply absolute right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 z-50 text-overflow-safe;
+    min-width: 12rem;
+    max-width: 20rem;
+  }
+
+  .dropdown-item {
+    @apply block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors text-overflow-safe;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Responsive containers */
+  .container-responsive {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Text utilities with overflow protection */
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl text-overflow-safe;
+  }
+
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl text-overflow-safe;
+  }
+
+  .text-responsive-base {
+    @apply text-sm sm:text-base text-overflow-safe;
+  }
+
+  /* Mobile-first navigation utilities */
+  .mobile-nav-item {
+    @apply block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md text-overflow-safe;
+  }
+
+  /* Enhanced focus styles for accessibility */
+  .focus-enhanced {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+  }
+}
+
+@layer utilities {
+  /* Text overflow utilities */
+  .truncate-responsive {
+    @apply truncate;
+    max-width: 100%;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Container query utilities for future-proofing */
+  .container-sm {
+    container-type: inline-size;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Layout utilities */
+  .layout-safe {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
   }
 }

@@ -10,6 +10,7 @@ import creditScoreRoutes from './routes/creditScoreRoutes';
 import notificationRoutes from './routes/notificationRoutes';
 import demoRoutes from './routes/demoRoutes';
 import userRoutes from './routes/userRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -68,6 +69,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/credit-score', creditScoreRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/demo', demoRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 handler
 app.use('*', (_req, res) => {

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Dashboard from './pages/Dashboard';
 import ProfilePage from './pages/ProfilePage';
+import AdminPage from './pages/AdminPage';
 import Navigation from './components/Navigation';
 import BillingCycleDashboard from './components/BillingCycle/BillingCycleDashboard';
 import InterestCalculator from './components/Calculators/InterestCalculator';
@@ -22,6 +23,7 @@ import UserLogin from './components/Auth/UserLogin';
 import UserCreate from './components/Auth/UserCreate';
 import ProfileForm from './components/Profile/ProfileForm';
 import CreditCardCreate from './components/CreditCard/CreditCardCreate';
+import LogoutPage from './pages/LogoutPage';
 import { useState } from 'react';
 
 // Create a client
@@ -112,6 +114,8 @@ const AppCoordinator = () => {
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path="/logout" element={<LogoutPage />} />
                   <Route path="/billing-cycle" element={<BillingCycleDashboard />} />
                   <Route path="/calculators/interest" element={<InterestCalculator />} />
                   <Route path="/calculators/payment-strategy" element={<PaymentStrategyAnalyzer />} />
