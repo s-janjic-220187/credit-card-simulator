@@ -7,6 +7,7 @@ Your Credit Card Simulator application is now successfully deployed on Railway! 
 ### 📋 Quick Setup Steps
 
 1. **Create Demo User** (if needed):
+
    ```bash
    curl -X POST https://backend-ccs-production.up.railway.app/api/demo/create
    ```
@@ -19,12 +20,14 @@ Your Credit Card Simulator application is now successfully deployed on Railway! 
 ### 🔑 Login Credentials
 
 #### Demo User
+
 - **Email**: `demo@example.com`
 - **Password**: `demo123`
 - **Role**: USER
 - **Features**: Full credit card simulation experience
 
-#### Admin User  
+#### Admin User
+
 - **Email**: `admin@admin.com`
 - **Password**: `admin`
 - **Role**: ADMIN
@@ -39,8 +42,9 @@ Your Credit Card Simulator application is now successfully deployed on Railway! 
 ### ✅ Verified Features
 
 #### Backend API ✅
+
 - ✅ Database connection working
-- ✅ User authentication (login/register)  
+- ✅ User authentication (login/register)
 - ✅ Demo user creation and login
 - ✅ Admin user creation and login
 - ✅ Profile management
@@ -48,12 +52,14 @@ Your Credit Card Simulator application is now successfully deployed on Railway! 
 - ✅ Health monitoring endpoints
 
 #### Frontend ✅
+
 - ✅ React application serving
 - ✅ German/English localization
 - ✅ Modern responsive UI
 - ✅ API integration configured
 
 #### Database ✅
+
 - ✅ PostgreSQL running on Railway
 - ✅ Prisma migrations applied
 - ✅ User authentication working
@@ -65,7 +71,7 @@ Your Railway services are configured with:
 
 - **Node.js 18** runtime
 - **PostgreSQL** database
-- **Docker** containerization  
+- **Docker** containerization
 - **Automatic deployments** on git push
 - **Environment variables** properly set
 - **CORS** configured for cross-origin requests

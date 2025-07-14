@@ -16,7 +16,8 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "db:seed": "ts-node prisma/seed.ts",
+    "db:seed": "node seed.js",
+    "db:seed:dev": "ts-node prisma/seed.ts",
     "postinstall": "prisma generate"
   },
   "keywords": [

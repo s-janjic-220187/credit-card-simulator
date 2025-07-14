@@ -32,7 +32,7 @@ if npx prisma migrate deploy; then
     
     # Run database seeding
     echo "🌱 Seeding database with demo data..."
-    if npm run db:seed; then
+    if node seed.js; then
         echo "✅ Database seeding completed"
     else
         echo "⚠️ Database seeding failed, continuing anyway..."

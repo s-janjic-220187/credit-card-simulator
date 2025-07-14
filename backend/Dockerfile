@@ -43,6 +43,9 @@ RUN npx prisma generate
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy seed script for production
+COPY seed.js ./
+
 # Copy startup script
 COPY start.sh ./
 
