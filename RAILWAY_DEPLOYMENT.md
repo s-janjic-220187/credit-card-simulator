@@ -11,6 +11,7 @@ This guide will help you deploy the Credit Card Billing Simulator to Railway.app
 ## 🏗️ Architecture Overview
 
 The application consists of:
+
 - **Frontend**: React + TypeScript + Vite (Nginx served)
 - **Backend**: Node.js + Express + TypeScript + Prisma
 - **Database**: PostgreSQL
@@ -39,6 +40,7 @@ The application consists of:
 ### Step 2: Create Railway Project
 
 1. **Sign up/Login to Railway.app**
+
    - Go to [railway.app](https://railway.app/)
    - Sign up with GitHub (recommended)
 
@@ -51,6 +53,7 @@ The application consists of:
 ### Step 3: Set Up PostgreSQL Database
 
 1. **Add PostgreSQL Service**
+
    - In your Railway project dashboard
    - Click "New" → "Database" → "Add PostgreSQL"
    - Railway will automatically create a PostgreSQL instance
@@ -62,12 +65,14 @@ The application consists of:
 ### Step 4: Deploy Backend Service
 
 1. **Add Backend Service**
+
    - Click "New" → "GitHub Repo"
    - Select your repository
    - Set **Root Directory**: `backend`
    - Railway will detect the Dockerfile automatically
 
 2. **Configure Environment Variables**
+
    - Go to your backend service
    - Click "Variables" tab
    - Add the following variables:
@@ -76,13 +81,14 @@ The application consists of:
    # Required Variables
    NODE_ENV=production
    PORT=3001
-   JWT_SECRET=your_super_secure_jwt_secret_key_min_32_chars
-   
+   JWT_SECRET=4027c42a481a5bca70b8206101806da462c0066fabfeb550741bb1861355abdb
+
    # CORS Configuration (set after frontend deployment)
    CORS_ORIGIN=https://your-frontend-url.railway.app
    ```
 
    **Generate JWT Secret:**
+
    ```bash
    # Run this command to generate a secure JWT secret
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -96,12 +102,14 @@ The application consists of:
 ### Step 5: Deploy Frontend Service
 
 1. **Add Frontend Service**
-   - Click "New" → "GitHub Repo" 
+
+   - Click "New" → "GitHub Repo"
    - Select your repository again
    - Set **Root Directory**: `frontend`
    - Railway will detect the Dockerfile automatically
 
 2. **Configure Environment Variables**
+
    - Go to your frontend service
    - Click "Variables" tab
    - Add the following:
@@ -110,7 +118,7 @@ The application consists of:
    # Required Variables
    NODE_ENV=production
    PORT=80
-   
+
    # Backend API URL (use your actual backend URL)
    VITE_API_BASE_URL=https://your-backend-url.railway.app
    ```
@@ -134,6 +142,7 @@ The application consists of:
 The backend will automatically run database migrations on startup, but you can also run them manually:
 
 1. **Access Backend Terminal** (if needed)
+
    - Go to backend service → "Deploy" tab
    - Click on latest deployment
    - Click "View Logs" to see migration status
@@ -146,6 +155,7 @@ The backend will automatically run database migrations on startup, but you can a
 ## 🔧 Environment Variables Reference
 
 ### Backend Variables
+
 ```bash
 # Core Configuration
 NODE_ENV=production
@@ -160,8 +170,9 @@ CORS_ORIGIN=https://your-frontend-domain.railway.app
 ```
 
 ### Frontend Variables
+
 ```bash
-# Core Configuration  
+# Core Configuration
 NODE_ENV=production
 PORT=80
 
@@ -171,7 +182,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 
 ## 🚨 Important Security Notes
 
-1. **JWT Secret**: Generate a strong, unique secret key (minimum 32 characters)
+1. **JWT Secret**: Generate a strong, unique secret key (minimum 32 characters) 4027c42a481a5bca70b8206101806da462c0066fabfeb550741bb1861355abdb
 2. **CORS Origin**: Always set to your exact frontend domain
 3. **Database**: Railway PostgreSQL is secure by default
 4. **Environment Variables**: Never commit secrets to repository
@@ -181,16 +192,19 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 ### Common Issues
 
 1. **Backend Not Starting**
+
    - Check environment variables are set correctly
    - Verify DATABASE_URL is available
    - Check deployment logs for Prisma migration errors
 
 2. **Frontend Can't Connect to Backend**
+
    - Verify `VITE_API_BASE_URL` is set correctly
    - Check backend CORS configuration
    - Ensure backend service is running
 
 3. **Database Connection Issues**
+
    - Verify PostgreSQL service is running
    - Check DATABASE_URL format
    - Look for Prisma connection errors in logs
@@ -201,10 +215,12 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
    - Review build logs for specific errors
 
 ### Viewing Logs
+
 - Go to service → "Deployments" → Click on deployment → "View Logs"
 - Monitor real-time logs during deployment
 
 ### Redeployment
+
 - Push new commits to trigger automatic redeployment
 - Or manually redeploy from Railway dashboard
 
@@ -213,11 +229,13 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 ### Verify Deployment
 
 1. **Test Frontend**
+
    - Visit your frontend URL
    - Check language selector works (German/English)
    - Navigate through different pages
 
 2. **Test Backend API**
+
    - Visit `https://your-backend-url.railway.app/health` (if health endpoint exists)
    - Test API endpoints through frontend
 
@@ -235,22 +253,26 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 ## 🔄 Updates and Maintenance
 
 ### Updating the Application
+
 1. Push changes to your GitHub repository
 2. Railway will automatically redeploy both services
 3. Database migrations will run automatically
 
 ### Monitoring
+
 - Use Railway's built-in metrics
 - Monitor application logs
 - Set up alerts for downtime (Railway Pro feature)
 
 ### Backup
+
 - Railway handles PostgreSQL backups automatically
 - Consider exporting important data periodically
 
 ## 📞 Support
 
 If you encounter issues:
+
 1. Check Railway documentation: [docs.railway.app](https://docs.railway.app/)
 2. Review application logs in Railway dashboard
 3. Check GitHub repository for the latest updates
@@ -258,10 +280,12 @@ If you encounter issues:
 ## 🎉 Success!
 
 Once deployed, your Credit Card Simulator will be available at:
+
 - **Frontend**: `https://your-frontend-url.railway.app`
 - **Backend API**: `https://your-backend-url.railway.app`
 
 The application includes:
+
 - ✅ German/English localization
 - ✅ Credit card management
 - ✅ Billing cycle simulation
