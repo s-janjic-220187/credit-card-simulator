@@ -76,6 +76,41 @@ async function main() {
 
   console.log('👤 Created demo user:', demoUser.email);
 
+  // Create admin user for administrative access
+  const adminHashedPassword = await bcrypt.hash('admin', 10);
+  
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@admin.com' },
+    update: {},
+    create: {
+      username: 'admin',
+      email: 'admin@admin.com',
+      password: adminHashedPassword,
+      role: 'ADMIN',
+      profile: {
+        create: {
+          firstName: 'Admin',
+          lastName: 'User',
+          dateOfBirth: new Date('1980-01-01'),
+          phoneNumber: '+1-555-ADMIN',
+          address: '789 Admin Boulevard',
+          city: 'Admin City',
+          state: 'CA',
+          zipCode: '90210',
+          country: 'US',
+          annualIncome: 100000,
+          creditScore: 800,
+          employmentStatus: 'Employed'
+        }
+      }
+    },
+    include: {
+      profile: true
+    }
+  });
+
+  console.log('👨‍💼 Created admin user:', adminUser.email);
+
   // Create a credit card for the demo user
   const demoCreditCard = await prisma.creditCard.create({
     data: {
