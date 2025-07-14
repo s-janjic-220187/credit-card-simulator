@@ -217,7 +217,8 @@ app.use((error: any, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({
     success: false,
     message: 'Internal server error',
-    error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    error: error.message, // Always show error message for debugging
+    stack: error.stack?.split('\n').slice(0, 5) // Show first 5 lines of stack
   });
 });
 
