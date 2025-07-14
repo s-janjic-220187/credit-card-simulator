@@ -285,7 +285,22 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 2. Check PostgreSQL service is running
 3. Ensure database migrations ran successfully
 
-#### 4. Build Failures
+#### 4. Prisma Engine Compatibility Issues
+
+**Symptoms**: Backend crashes with errors like:
+- `libssl.so.1.1: No such file or directory`
+- `Error loading shared library`
+- `PrismaClientInitializationError`
+
+**Cause**: Prisma engines incompatible with Alpine Linux (musl libc)
+
+**Solution**:
+1. Use Debian-based Docker images (`node:18-slim` instead of `node:18-alpine`)
+2. Install OpenSSL in Docker container
+3. Specify multiple binary targets in Prisma schema
+4. Already fixed in this repository's Dockerfile
+
+#### 5. Build Failures
 
 **Symptoms**: Deployment fails during build process
 
