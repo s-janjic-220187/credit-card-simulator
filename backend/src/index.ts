@@ -18,19 +18,29 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Database connection test
+// Database connection test with retries
 const connectDB = async () => {
-  try {
-    await prisma.$connect();
-    console.log('✅ Connected to PostgreSQL database');
-  } catch (error) {
-    console.error('❌ Database connection error:', error);
-    process.exit(1);
+  const maxRetries = 10;
+  const retryDelay = 5000; // 5 seconds
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      await prisma.$connect();
+      console.log('✅ Connected to PostgreSQL database');
+      return;
+    } catch (error) {
+      console.error(`❌ Database connection attempt ${attempt}/${maxRetries} failed:`, error);
+      
+      if (attempt === maxRetries) {
+        console.error('❌ Failed to connect to database after all retries');
+        process.exit(1);
+      }
+      
+      console.log(`⏳ Retrying database connection in ${retryDelay/1000} seconds...`);
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
+    }
   }
 };
-
-// Connect to database
-connectDB();
 
 // Middleware
 app.use(cors({
@@ -61,6 +71,15 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.get('/', (_req, res) => {
+  res.json({
+    status: 'ONLINE',
+    service: 'Credit Card Simulator API',
+    timestamp: new Date().toISOString(),
+    message: 'Service is running'
+  });
+});
+
 app.get('/health', async (_req, res) => {
   try {
     // Test database connection
@@ -121,6 +140,16 @@ app.listen(PORT, () => {
   console.log(`📖 Environment: ${process.env.NODE_ENV}`);
   console.log(`🌐 CORS Origin: ${process.env.CORS_ORIGIN}`);
 });
+
+// Initialize database connection asynchronously (non-blocking)
+(async () => {
+  try {
+    await connectDB();
+    console.log('🗄️ Database initialization completed');
+  } catch (error) {
+    console.error('🚨 Database initialization failed, but server is still running:', error);
+  }
+})();
 
 // Export for testing and other modules
 export { prisma };
