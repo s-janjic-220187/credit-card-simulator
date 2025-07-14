@@ -19,6 +19,7 @@ import PaymentImpactVisualizer from './components/Visualization/PaymentImpactVis
 import FeeAnalysisDashboard from './components/Visualization/FeeAnalysisDashboard';
 import ScenarioLearning from './components/Learning/ScenarioLearning';
 import { UserProvider, useUser, useUserActions } from './contexts/UserContext';
+import { I18nProvider } from './contexts/I18nContext';
 import UserLogin from './components/Auth/UserLogin';
 import UserCreate from './components/Auth/UserCreate';
 import ProfileForm from './components/Profile/ProfileForm';
@@ -152,7 +153,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <AppCoordinator />
+        <I18nProvider>
+          <AppCoordinator />
+        </I18nProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </UserProvider>
       <Toaster />
