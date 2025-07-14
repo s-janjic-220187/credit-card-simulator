@@ -2,7 +2,29 @@
 
 > **A comprehensive educational platform for understanding credit card billing mechanics, interest calculations, and financial literacy.**
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&log## 👤 Author
+
+**Srdjan Janjic**  
+📧 Email: srdjan.janjic22@gmail.com  
+🌟 Version: v1.0.0  
+
+---
+
+## 💭 About This Project
+
+- **Educational Focus**: Created to provide better financial literacy tools
+- **Open Source**: Built with amazing open-source technologies  
+- **Learning**: Designed to make credit card concepts accessible and interactive
+
+## 📞 Support
+
+- **Documentation**: [View Docs](./docs/)
+- **Issues**: [GitHub Issues](https://github.com/s-janjic-220187/credit-card-simulator/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/s-janjic-220187/credit-card-simulator/discussions)
+
+---
+
+**⭐ If this project helps you understand credit cards better, please consider giving it a star!**goColor=white)](https://typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org/)
