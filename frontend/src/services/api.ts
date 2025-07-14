@@ -1,7 +1,23 @@
 import axios from 'axios';
 
+// Get API base URL from environment variables or fallback to development
+const getApiBaseUrl = () => {
+  // In production, use environment variable
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  
+  // In development, use proxy
+  if (import.meta.env.DEV) {
+    return '/api';
+  }
+  
+  // Fallback for production builds without env var
+  return `${window.location.origin}/api`;
+};
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: getApiBaseUrl(),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

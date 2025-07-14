@@ -38,8 +38,18 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if(!origin) return callback(null, true);
     
-    // Allow localhost with any port
-    if(/^http:\/\/localhost(:[0-9]+)?$/.test(origin)){
+    // In production, use environment variable for CORS origin
+    if (process.env.NODE_ENV === 'production') {
+      const allowedOrigins = process.env.CORS_ORIGIN?.split(',') || [];
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('Not allowed by CORS'));
+      }
+    }
+    
+    // In development, allow localhost with any port
+    if (process.env.NODE_ENV !== 'production' && /^http:\/\/localhost(:[0-9]+)?$/.test(origin)) {
       return callback(null, true);
     }
 
@@ -51,13 +61,29 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.get('/health', (_req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'Credit Card Simulator API is running',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV
-  });
+app.get('/health', async (_req, res) => {
+  try {
+    // Test database connection
+    await prisma.$queryRaw`SELECT 1`;
+    
+    res.json({ 
+      status: 'OK', 
+      message: 'Credit Card Simulator API is running',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV,
+      database: 'Connected',
+      version: '1.0.0'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'ERROR',
+      message: 'Database connection failed',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV,
+      database: 'Disconnected',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
 });
 
 // API Routes

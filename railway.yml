@@ -1,0 +1,39 @@
+# Railway.app configuration
+version: "2"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env:
+      NODE_ENV: production
+      PORT: 3001
+    variables:
+      DATABASE_URL: ${{Postgres.DATABASE_URL}}
+      JWT_SECRET: ${{JWT_SECRET}}
+      CORS_ORIGIN: ${{CORS_ORIGIN}}
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env:
+      NODE_ENV: production
+      PORT: 80
+    variables:
+      VITE_API_BASE_URL: ${{BACKEND_URL}}
+
+  postgres:
+    image: postgres:15-alpine
+    env:
+      POSTGRES_DB: creditcard_simulator
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${{POSTGRES_PASSWORD}}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
