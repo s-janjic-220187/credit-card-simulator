@@ -6,6 +6,8 @@ Your Credit Card Simulator application is now successfully deployed on Railway! 
 
 ### 📋 Quick Setup Steps
 
+**After each deployment, run these commands to ensure demo data exists:**
+
 1. **Create Demo User** (if needed):
 
    ```bash
@@ -16,6 +18,8 @@ Your Credit Card Simulator application is now successfully deployed on Railway! 
    ```bash
    curl -X POST https://backend-ccs-production.up.railway.app/api/admin/create-admin
    ```
+
+> **Note**: Railway's database may reset between deployments. If you get "Invalid email or password" errors, run the commands above to recreate the users.
 
 ### 🔑 Login Credentials
 
@@ -116,5 +120,26 @@ Your application is fully functional! You can now:
 ## 🎉 Success!
 
 Your Credit Card Simulator is now live and fully operational on Railway. Both German and English localization are working, and users can authenticate and use all features.
+
+### 🔧 Troubleshooting
+
+#### "Invalid email or password" Error
+If you get login errors:
+
+1. **Run the setup commands** to create users:
+   ```bash
+   curl -X POST https://backend-ccs-production.up.railway.app/api/demo/create
+   curl -X POST https://backend-ccs-production.up.railway.app/api/admin/create-admin
+   ```
+
+2. **Check health status**:
+   ```bash
+   curl https://backend-ccs-production.up.railway.app/health
+   ```
+
+#### Database Issues
+- Railway's PostgreSQL may reset between deployments
+- User data is not persistent across redeploys
+- Always recreate demo/admin users after deployment
 
 **Happy coding! 🚀**
