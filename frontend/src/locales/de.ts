@@ -102,6 +102,19 @@ export const de = {
     tooLong: 'Zu lang',
   },
 
+  // Authentication
+  auth: {
+    welcomeBack: 'Willkommen zurück',
+    signInPrompt: 'Melden Sie sich in Ihr Konto an',
+    loginButton: 'Anmelden',
+    signingIn: 'Anmeldung läuft...',
+    createAccount: 'Erstellen',
+    demoLogin: '🚀 Demo-Konto verwenden',
+    loadingDemo: 'Demo wird geladen...',
+    orSeparator: 'oder',
+    noAccount: 'Haben Sie noch kein Konto? ',
+  },
+
   // Navigation Component
   navigation: {
     brand: 'SJ-CCMS',

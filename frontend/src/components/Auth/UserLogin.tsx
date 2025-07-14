@@ -77,8 +77,12 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
         </div>
         
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{t.auth.welcomeBack}</h2>
-          <p className="text-gray-600 mt-2">{t.auth.signInPrompt}</p>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {t.auth?.welcomeBack || 'Welcome Back'}
+          </h2>
+          <p className="text-gray-600 mt-2">
+            {t.auth?.signInPrompt || 'Sign in to your account'}
+          </p>
         </div>
 
         {error && (
@@ -121,13 +125,13 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
           disabled={isLoading}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
         >
-          {isLoading ? t.auth.signingIn : t.auth.loginButton}
+          {isLoading ? (t.auth?.signingIn || 'Signing In...') : (t.auth?.loginButton || 'Sign In')}
         </button>
       </form>
 
       <div className="mt-6 space-y-3">
         <div className="text-center">
-          <span className="text-gray-500 text-sm">{t.auth.orSeparator}</span>
+          <span className="text-gray-500 text-sm">{t.auth?.orSeparator || 'or'}</span>
         </div>
 
         <button
@@ -135,16 +139,16 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
           disabled={isLoading}
           className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
         >
-          {isLoading ? t.auth.loadingDemo : t.auth.demoLogin}
+          {isLoading ? (t.auth?.loadingDemo || 'Loading Demo...') : (t.auth?.demoLogin || '🚀 Use Demo Account')}
         </button>
 
         <div className="text-center">
-          <span className="text-gray-600 text-sm">{t.auth.noAccount}</span>
+          <span className="text-gray-600 text-sm">{t.auth?.noAccount || "Don't have an account? "}</span>
           <button
             onClick={onShowCreateUser}
             className="text-blue-600 hover:text-blue-500 text-sm font-medium"
           >
-            {t.auth.createAccount}
+            {t.auth?.createAccount || 'Create one'}
           </button>
         </div>
       </div>
