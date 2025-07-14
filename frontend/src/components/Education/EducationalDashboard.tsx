@@ -648,7 +648,7 @@ const EducationalDashboard: React.FC = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-xl font-semibold mb-4">🧮 Quick Financial Calculator</h3>
           <p className="text-gray-600 mb-6">
-            Use our interactive calculators to understand interest, payments, and rewards in real-time.
+            Use interactive calculators to understand interest, payments, and rewards in real-time.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="border rounded-lg p-4 text-center">
@@ -690,7 +690,7 @@ const EducationalDashboard: React.FC = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-xl font-semibold mb-4">🎯 Knowledge Quiz</h3>
           <p className="text-gray-600 mb-6">
-            Test your credit card knowledge with our comprehensive quiz covering all topics.
+            Test your credit card knowledge with this comprehensive quiz covering all topics.
           </p>
           <div className="text-center py-8">
             <div className="text-6xl mb-4">🎯</div>

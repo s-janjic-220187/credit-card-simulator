@@ -9,7 +9,7 @@ const Dashboard = () => {
           💳 Credit Card Billing Cycle Simulator
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Master credit card fundamentals with our comprehensive educational platform. 
+          Master credit card fundamentals with this comprehensive educational platform. 
           Learn about billing cycles, interest calculations, payment strategies, and more through interactive tools and simulations.
         </p>
       </div>
@@ -156,7 +156,7 @@ const Dashboard = () => {
             </div>
             <h3 className="font-semibold mb-2">Start with Education</h3>
             <p className="text-gray-600 text-sm">
-              Begin with our Education Center to learn credit card fundamentals and best practices.
+              Begin with the Education Center to learn credit card fundamentals and best practices.
             </p>
           </div>
           <div className="text-center">
@@ -165,7 +165,7 @@ const Dashboard = () => {
             </div>
             <h3 className="font-semibold mb-2">Use Calculators</h3>
             <p className="text-gray-600 text-sm">
-              Experiment with our interactive calculators to understand interest, payments, and fees.
+              Experiment with interactive calculators to understand interest, payments, and fees.
             </p>
           </div>
           <div className="text-center">
@@ -186,7 +186,7 @@ const Dashboard = () => {
           📈 Advanced Data Visualizations
         </h2>
         <p className="text-gray-600 text-center mb-8">
-          Explore our interactive charts and visualizations to better understand credit card behavior and payment strategies.
+          Explore interactive charts and visualizations to better understand credit card behavior and payment strategies.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
@@ -256,6 +256,22 @@ const Dashboard = () => {
         <div className="bg-white rounded-lg shadow-md p-6 text-center">
           <div className="text-3xl font-bold text-red-600 mb-2">∞</div>
           <div className="text-gray-600">Scenarios to Explore</div>
+        </div>
+      </div>
+
+      {/* Footer with Author Information */}
+      <div className="mt-16 pt-8 border-t border-gray-200">
+        <div className="text-center text-gray-600">
+          <p className="mb-2">
+            <span className="font-semibold">Created by:</span> Srdjan Janjic
+          </p>
+          <p className="mb-2">
+            <span className="font-semibold">Contact:</span> srdjan.janjic22@gmail.com
+          </p>
+          <p className="text-sm">
+            <span className="font-semibold">Version:</span> v1.0.0 | 
+            <span className="ml-2">Educational Credit Card Billing Simulator</span>
+          </p>
         </div>
       </div>
     </div>
