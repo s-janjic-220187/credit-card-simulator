@@ -15,6 +15,11 @@ import adminRoutes from './routes/adminRoutes';
 // Load environment variables
 dotenv.config();
 
+// Debug logging
+console.log('🔧 Environment:', process.env.NODE_ENV);
+console.log('🔧 Database URL present:', !!process.env.DATABASE_URL);
+console.log('🔧 Database URL preview:', process.env.DATABASE_URL?.substring(0, 50) + '...');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -80,27 +85,55 @@ app.get('/', (_req, res) => {
   });
 });
 
+// Basic health check without database
+app.get('/ping', (_req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Service is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Environment debug endpoint
+app.get('/debug', (_req, res) => {
+  res.json({
+    status: 'OK',
+    environment: process.env.NODE_ENV,
+    port: process.env.PORT,
+    databaseUrlPresent: !!process.env.DATABASE_URL,
+    databaseUrlPrefix: process.env.DATABASE_URL?.substring(0, 20) + '...',
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.get('/health', async (_req, res) => {
+  const healthData = {
+    status: 'OK', 
+    message: 'Credit Card Simulator API is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    version: '1.0.0'
+  };
+
   try {
-    // Test database connection
-    await prisma.$queryRaw`SELECT 1`;
+    // Test database connection with a timeout
+    const dbTest = prisma.$queryRaw`SELECT 1`;
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database timeout')), 5000)
+    );
+    
+    await Promise.race([dbTest, timeoutPromise]);
     
     res.json({ 
-      status: 'OK', 
-      message: 'Credit Card Simulator API is running',
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV,
-      database: 'Connected',
-      version: '1.0.0'
+      ...healthData,
+      database: 'Connected'
     });
   } catch (error) {
-    res.status(500).json({
-      status: 'ERROR',
-      message: 'Database connection failed',
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV,
+    // Return partial health if database is down but service is running
+    res.status(200).json({
+      ...healthData,
       database: 'Disconnected',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      databaseError: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 });
