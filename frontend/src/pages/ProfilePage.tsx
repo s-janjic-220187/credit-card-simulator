@@ -24,29 +24,41 @@ import { profileService } from '../services/profileService';
 import ProfileForm from '../components/Profile/ProfileForm';
 import ProfileDashboard from '../components/Profile/ProfileDashboard';
 import { CreateUserProfileData, UserProfile } from '../types';
+import { useUser } from '../contexts/UserContext';
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const queryClient = useQueryClient();
+  const { state } = useUser();
+  const { user } = state;
 
   // Fetch profile data
   const { data: profile, isLoading, error } = useQuery({
-    queryKey: ['profile'],
-    queryFn: () => profileService.getProfile(),
+    queryKey: ['profile', user?.id],
+    queryFn: () => {
+      if (!user?.id) {
+        throw new Error('User not found');
+      }
+      return profileService.getProfile(user.id);
+    },
     retry: false,
+    enabled: !!user?.id,
   });
 
   // Create/Update profile mutation
   const profileMutation = useMutation({
     mutationFn: (profileData: CreateUserProfileData) => {
+      if (!user?.id) {
+        throw new Error('User not found');
+      }
       if (profile) {
-        return profileService.updateProfile(profileData);
+        return profileService.updateProfile(profileData, user.id);
       } else {
-        return profileService.createProfile(profileData);
+        return profileService.createProfile(profileData, user.id);
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries({ queryKey: ['profile', user?.id] });
       setIsEditing(false);
       toast.success(profile ? 'Profile updated successfully!' : 'Profile created successfully!');
     },
@@ -73,6 +85,18 @@ const ProfilePage = () => {
     };
     profileMutation.mutate(createData);
   };
+
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-center">
+          <div className="text-gray-400 text-6xl mb-4">🔒</div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Please log in</h3>
+          <p className="text-gray-600">You need to be logged in to access your profile</p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
