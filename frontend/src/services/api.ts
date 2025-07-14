@@ -14,7 +14,12 @@ const getApiBaseUrl = () => {
     return '/api';
   }
   
-  // Fallback for production builds without env var
+  // Fallback for production builds - use the backend Railway URL
+  if (window.location.hostname.includes('railway.app')) {
+    return 'https://backend-ccs-production.up.railway.app/api';
+  }
+  
+  // Final fallback for other deployments
   return `${window.location.origin}/api`;
 };
 
