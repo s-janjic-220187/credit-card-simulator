@@ -4,7 +4,9 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   // In production, use environment variable
   if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    // Ensure the base URL ends with /api
+    return baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
   }
   
   // In development, use proxy

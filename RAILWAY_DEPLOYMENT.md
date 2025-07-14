@@ -120,7 +120,7 @@ The application consists of:
    PORT=80
 
    # Backend API URL (use your actual backend URL from Step 4)
-   # ⚠️ IMPORTANT: Replace with your actual backend URL
+   # ⚠️ IMPORTANT: Replace with your actual backend URL (do NOT include /api at the end)
    VITE_API_BASE_URL=https://backend-ccs-production.up.railway.app
    ```
 
@@ -258,6 +258,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 **Cause**: Frontend is trying to call APIs on its own URL instead of the backend URL
 
 **Solution**:
+
 1. **Check Environment Variables**: Ensure `VITE_API_BASE_URL` is set correctly in your frontend service
 2. **Use Correct Backend URL**: Copy the exact URL from your backend service (e.g., `https://backend-ccs-production.up.railway.app`)
 3. **Redeploy Frontend**: After setting the environment variable, trigger a new deployment:
@@ -265,6 +266,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
    - Click "Deploy Latest Commit" or make a dummy commit to trigger rebuild
 
 **Verification**:
+
 - Open browser developer tools → Network tab
 - Try logging in and verify API calls go to `https://backend-ccs-production.up.railway.app/api/...`
 
@@ -273,6 +275,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 **Symptoms**: Console shows CORS-related errors
 
 **Solution**:
+
 1. Set `CORS_ORIGIN` in backend service to your frontend URL
 2. Redeploy backend service
 
@@ -281,6 +284,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 **Symptoms**: Backend logs show database connection errors
 
 **Solution**:
+
 1. Verify `DATABASE_URL` is correctly set in backend service
 2. Check PostgreSQL service is running
 3. Ensure database migrations ran successfully
@@ -288,6 +292,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 #### 4. Prisma Engine Compatibility Issues
 
 **Symptoms**: Backend crashes with errors like:
+
 - `libssl.so.1.1: No such file or directory`
 - `Error loading shared library`
 - `PrismaClientInitializationError`
@@ -295,6 +300,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 **Cause**: Prisma engines incompatible with Alpine Linux (musl libc)
 
 **Solution**:
+
 1. Use Debian-based Docker images (`node:18-slim` instead of `node:18-alpine`)
 2. Install OpenSSL in Docker container
 3. Specify multiple binary targets in Prisma schema
@@ -305,6 +311,7 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
 **Symptoms**: Deployment fails during build process
 
 **Solution**:
+
 1. Check deployment logs for specific error messages
 2. Ensure all required files are committed to Git
 3. Verify Docker build works locally
