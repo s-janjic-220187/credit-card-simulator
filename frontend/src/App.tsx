@@ -25,7 +25,6 @@ import UserCreate from './components/Auth/UserCreate';
 import ProfileForm from './components/Profile/ProfileForm';
 import CreditCardCreate from './components/CreditCard/CreditCardCreate';
 import LogoutPage from './pages/LogoutPage';
-import ApiDebug from './components/Debug/ApiDebug';
 import { useState } from 'react';
 
 // Create a client
@@ -156,7 +155,6 @@ function App() {
       <UserProvider>
         <I18nProvider>
           <AppCoordinator />
-          <ApiDebug />
         </I18nProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </UserProvider>
