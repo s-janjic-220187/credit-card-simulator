@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useUserActions } from '../../contexts/UserContext';
+import api from '../../services/api';
 
 interface UserCreateProps {
   onShowLogin: () => void;
@@ -35,28 +36,25 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
     }
 
     try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        }),
+      const response = await api.post('/users', {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to create account');
-      }
-
+      // Axios automatically handles status checking, so if we get here, it was successful
       // Use login action to authenticate the new user
       await login(data.data.user.id);
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to create account');
+    } catch (error: any) {
+      let errorMessage = 'Failed to create account';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

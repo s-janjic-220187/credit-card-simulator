@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useUserActions } from '../../contexts/UserContext';
+import api from '../../services/api';
 
 interface UserLoginProps {
   onShowCreateUser: () => void;
@@ -19,35 +20,10 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
 
     try {
       // For demo purposes, we'll use a simple login that finds user by email
-      const response = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await api.post('/users/login', { email, password });
 
-      // Check if response is ok before trying to parse JSON
-      if (!response.ok) {
-        // Try to get error message from response
-        let errorMessage = 'Login failed';
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-        } catch {
-          // If JSON parsing fails, use status text
-          errorMessage = response.statusText || errorMessage;
-        }
-        throw new Error(errorMessage);
-      }
-
-      // Check if response has content before parsing JSON
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Server returned non-JSON response');
-      }
-
-      const data = await response.json();
+      // Axios automatically handles status checking, so if we get here, it was successful
+      const data = response.data;
 
       if (!data || !data.data || !data.data.user) {
         throw new Error('Invalid response format');
@@ -55,9 +31,15 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
 
       // Use the login action from context
       await login(data.data.user.id);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
-      setError(error instanceof Error ? error.message : 'Login failed');
+      let errorMessage = 'Login failed';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

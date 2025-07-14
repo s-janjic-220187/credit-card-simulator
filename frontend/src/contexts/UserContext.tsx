@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import api from '../services/api';
 
 // Types
 export interface User {
@@ -158,28 +159,16 @@ export const useUserActions = () => {
         
         // Use the backend demo API
         console.log('📡 Making API call to /api/users/login');
-        const response = await fetch('/api/users/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: 'demo@example.com',
-            password: 'demo123',
-          }),
+        const response = await api.post('/users/login', {
+          email: 'demo@example.com',
+          password: 'demo123',
         });
 
         console.log('📡 Demo login response status:', response.status);
-        console.log('📡 Demo login response headers:', Object.fromEntries(response.headers.entries()));
+        console.log('📡 Demo login response headers:', response.headers);
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('❌ Demo login failed with status:', response.status);
-          console.error('❌ Demo login error text:', errorText);
-          throw new Error(`Failed to login with demo account: ${response.status} ${errorText}`);
-        }
-
-        const data = await response.json();
+        // Axios automatically throws for non-2xx status codes, so if we get here, it was successful
+        const data = response.data;
         console.log('✅ Demo login successful, data:', data);
         
         if (data.success) {
@@ -196,19 +185,17 @@ export const useUserActions = () => {
           
           // Fetch user's credit cards
           console.log('💳 Fetching credit cards for user:', user.id);
-          const cardsResponse = await fetch(`/api/${user.id}/cards`);
-          console.log('💳 Credit cards response status:', cardsResponse.status);
-          
-          if (cardsResponse.ok) {
-            const cardsData = await cardsResponse.json();
-            console.log('💳 Credit cards response data:', cardsData);
-            if (cardsData.success) {
-              console.log('💳 Setting credit cards:', cardsData.data);
-              dispatch({ type: 'SET_CREDIT_CARDS', payload: cardsData.data });
+          try {
+            const cardsResponse = await api.get(`/${user.id}/cards`);
+            console.log('💳 Credit cards response status:', cardsResponse.status);
+            console.log('💳 Credit cards response data:', cardsResponse.data);
+            if (cardsResponse.data.success) {
+              console.log('💳 Setting credit cards:', cardsResponse.data.data);
+              dispatch({ type: 'SET_CREDIT_CARDS', payload: cardsResponse.data.data });
             } else {
               console.log('💳 Credit cards response not successful');
             }
-          } else {
+          } catch (error) {
             console.log('💳 No credit cards found or error fetching cards');
           }
         } else {
@@ -218,38 +205,36 @@ export const useUserActions = () => {
       } else {
         // For real users, fetch their data
         try {
-          const userResponse = await fetch(`/api/users/${userId}`);
-          if (userResponse.ok) {
-            const userData = await userResponse.json();
-            dispatch({ type: 'SET_USER', payload: userData.data });
-          }
+          const userResponse = await api.get(`/users/${userId}`);
+          dispatch({ type: 'SET_USER', payload: userResponse.data.data });
         } catch (error) {
           console.error('Failed to fetch user data:', error);
         }
 
         try {
-          const profileResponse = await fetch(`/api/profile/${userId}`);
-          if (profileResponse.ok) {
-            const profileData = await profileResponse.json();
-            dispatch({ type: 'SET_PROFILE', payload: profileData.data });
-          }
+          const profileResponse = await api.get(`/profile/${userId}`);
+          dispatch({ type: 'SET_PROFILE', payload: profileResponse.data.data });
         } catch (error) {
           console.log('No profile found for user');
         }
 
         try {
-          const cardsResponse = await fetch(`/api/${userId}/cards`);
-          if (cardsResponse.ok) {
-            const cardsData = await cardsResponse.json();
-            dispatch({ type: 'SET_CREDIT_CARDS', payload: cardsData.data || [] });
-          }
+          const cardsResponse = await api.get(`/${userId}/cards`);
+          dispatch({ type: 'SET_CREDIT_CARDS', payload: cardsResponse.data.data || [] });
         } catch (error) {
           console.log('No credit cards found for user');
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
-      throw error; // Re-throw so the component can handle it
+      // Handle Axios errors specifically
+      if (error.response) {
+        console.error('❌ Demo login failed with status:', error.response.status);
+        console.error('❌ Demo login error data:', error.response.data);
+        throw new Error(`Failed to login with demo account: ${error.response.status} ${error.response.data}`);
+      } else {
+        throw error; // Re-throw other errors
+      }
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
