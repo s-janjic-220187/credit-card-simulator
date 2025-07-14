@@ -84,7 +84,7 @@ The application consists of:
    JWT_SECRET=4027c42a481a5bca70b8206101806da462c0066fabfeb550741bb1861355abdb
 
    # CORS Configuration (set after frontend deployment)
-   CORS_ORIGIN=https://your-frontend-url.railway.app
+   CORS_ORIGIN=https://frontend-ccs-production.up.railway.app
    ```
 
    **Generate JWT Secret:**
@@ -97,7 +97,7 @@ The application consists of:
 3. **Deploy Backend**
    - Railway will automatically build and deploy
    - Check logs for any errors
-   - Note the generated backend URL (e.g., `https://backend-production-xxxx.up.railway.app`)
+   - Note the generated backend URL (e.g., `https://backend-ccs-production.up.railway.app`)
 
 ### Step 5: Deploy Frontend Service
 
@@ -119,9 +119,12 @@ The application consists of:
    NODE_ENV=production
    PORT=80
 
-   # Backend API URL (use your actual backend URL)
-   VITE_API_BASE_URL=https://your-backend-url.railway.app
+   # Backend API URL (use your actual backend URL from Step 4)
+   # ⚠️ IMPORTANT: Replace with your actual backend URL
+   VITE_API_BASE_URL=https://backend-ccs-production.up.railway.app
    ```
+
+   **🔥 CRITICAL**: The `VITE_API_BASE_URL` must be set BEFORE deploying the frontend, as it's needed during build time.
 
 3. **Deploy Frontend**
    - Railway will automatically build and deploy
@@ -133,7 +136,7 @@ The application consists of:
    - Go to backend service → Variables
    - Update `CORS_ORIGIN` with your actual frontend URL:
    ```bash
-   CORS_ORIGIN=https://your-actual-frontend-url.railway.app
+   CORS_ORIGIN=https://frontend-ccs-production.up.railway.app
    ```
    - Redeploy the backend service
 
@@ -243,6 +246,53 @@ VITE_API_BASE_URL=https://your-backend-domain.railway.app
    - Create a test user account
    - Create credit card profiles
    - Verify data persistence
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### 1. Frontend API Calls Failing (405 Method Not Allowed)
+
+**Symptoms**: Frontend shows errors like `POST /api/users/login 405 (Method Not Allowed)`
+
+**Cause**: Frontend is trying to call APIs on its own URL instead of the backend URL
+
+**Solution**:
+1. **Check Environment Variables**: Ensure `VITE_API_BASE_URL` is set correctly in your frontend service
+2. **Use Correct Backend URL**: Copy the exact URL from your backend service (e.g., `https://backend-ccs-production.up.railway.app`)
+3. **Redeploy Frontend**: After setting the environment variable, trigger a new deployment:
+   - Go to frontend service → "Deployments" tab
+   - Click "Deploy Latest Commit" or make a dummy commit to trigger rebuild
+
+**Verification**:
+- Open browser developer tools → Network tab
+- Try logging in and verify API calls go to `https://backend-ccs-production.up.railway.app/api/...`
+
+#### 2. CORS Errors
+
+**Symptoms**: Console shows CORS-related errors
+
+**Solution**:
+1. Set `CORS_ORIGIN` in backend service to your frontend URL
+2. Redeploy backend service
+
+#### 3. Database Connection Issues
+
+**Symptoms**: Backend logs show database connection errors
+
+**Solution**:
+1. Verify `DATABASE_URL` is correctly set in backend service
+2. Check PostgreSQL service is running
+3. Ensure database migrations ran successfully
+
+#### 4. Build Failures
+
+**Symptoms**: Deployment fails during build process
+
+**Solution**:
+1. Check deployment logs for specific error messages
+2. Ensure all required files are committed to Git
+3. Verify Docker build works locally
 
 ### Performance Optimization
 
