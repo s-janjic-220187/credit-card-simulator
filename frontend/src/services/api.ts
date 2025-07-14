@@ -111,10 +111,17 @@ export const checkApiHealth = async () => {
   try {
     console.log('🔍 Testing API connectivity...');
     
+    // Get the base URL and construct the correct health endpoint URL
+    const apiBaseUrl = getApiBaseUrl();
+    console.log('📡 Original API base URL:', apiBaseUrl);
+    
+    // Remove /api suffix to get the root backend URL
+    const backendRootUrl = apiBaseUrl.replace(/\/api$/, '');
+    console.log('🏠 Backend root URL:', backendRootUrl);
+    
     // Create a separate axios instance for health checks (without /api prefix)
-    const baseURL = getApiBaseUrl().replace('/api', ''); // Remove /api suffix
     const healthApi = axios.create({
-      baseURL,
+      baseURL: backendRootUrl,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',
@@ -124,11 +131,13 @@ export const checkApiHealth = async () => {
     // First try /health, then /ping as fallback
     let response;
     try {
-      console.log(`🔍 Trying health check at: ${baseURL}/health`);
+      const healthUrl = `${backendRootUrl}/health`;
+      console.log(`🔍 Trying health check at: ${healthUrl}`);
       response = await healthApi.get('/health');
     } catch (healthError) {
       console.log('Health endpoint failed, trying ping...');
-      console.log(`🔍 Trying ping at: ${baseURL}/ping`);
+      const pingUrl = `${backendRootUrl}/ping`;
+      console.log(`🔍 Trying ping at: ${pingUrl}`);
       response = await healthApi.get('/ping');
     }
     console.log('✅ API Health Check successful:', response.data);
