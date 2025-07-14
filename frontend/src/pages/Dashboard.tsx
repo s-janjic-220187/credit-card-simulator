@@ -1,18 +1,123 @@
 import { Link } from 'react-router-dom';
+import { useUser } from '../contexts/UserContext';
+import { useState } from 'react';
+import CreditCardDetails from '../components/CreditCard/CreditCardDetails';
+import type { CreditCard } from '../contexts/UserContext';
+// import CreditCardList from '../components/CreditCards/CreditCardList';
 
 const Dashboard = () => {
+  const { state } = useUser();
+  const [selectedCard, setSelectedCard] = useState<CreditCard | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const handleCardClick = (card: CreditCard) => {
+    setSelectedCard(card);
+    setIsDetailsOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setIsDetailsOpen(false);
+    setSelectedCard(null);
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          💳 Credit Card Billing Cycle Simulator
+          💳 SJ Credit Card Management Suite
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
           Master credit card fundamentals with this comprehensive educational platform. 
           Learn about billing cycles, interest calculations, payment strategies, and more through interactive tools and simulations.
         </p>
       </div>
+
+      {/* User's Credit Cards Section */}
+      {state.creditCards.length > 0 && (
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Credit Cards</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {state.creditCards.map((card) => (
+              <div
+                key={card.id}
+                className="relative rounded-lg p-6 text-white shadow-lg bg-gradient-to-br from-blue-600 to-purple-700 cursor-pointer transform transition-all hover:scale-105 hover:shadow-xl"
+                onClick={() => handleCardClick(card)}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div className="text-sm font-medium opacity-90">
+                    Credit Card
+                  </div>
+                  <div className="text-sm font-medium text-green-300">
+                    {card.status}
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <div className="text-lg font-mono tracking-wider">
+                    {card.cardNumber ? card.cardNumber.replace(/(.{4})/g, '$1 ').trim() : 'N/A'}
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-end">
+                  <div>
+                    <div className="text-xs opacity-75 uppercase">Cardholder</div>
+                    <div className="text-sm font-medium">
+                      {card.cardholderName}
+                    </div>
+                  </div>
+                  <div className="text-xs opacity-75">
+                    Click for details →
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-white border-opacity-20">
+                  <div className="flex justify-between text-xs">
+                    <div>
+                      <div className="opacity-75">Available</div>
+                      <div className="font-semibold">
+                        ${(card.availableCredit || (card.creditLimit - card.currentBalance)).toLocaleString()}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="opacity-75">Limit</div>
+                      <div className="font-semibold">
+                        ${card.creditLimit.toLocaleString()}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="opacity-75">Balance</div>
+                      <div className="font-semibold">
+                        ${card.currentBalance.toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Usage indicator */}
+                <div className="mt-3">
+                  <div className="w-full bg-white bg-opacity-20 rounded-full h-1">
+                    <div
+                      className="bg-white h-1 rounded-full transition-all duration-300"
+                      style={{
+                        width: `${(card.currentBalance / card.creditLimit) * 100}%`
+                      }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-white bg-opacity-0 hover:bg-opacity-10 rounded-lg transition-all duration-200 pointer-events-none"></div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Help text */}
+          <div className="mt-4 text-center text-gray-500 text-sm">
+            💡 Click on any card to view detailed information, transactions, and account details
+          </div>
+        </div>
+      )}
 
       {/* Feature Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -274,6 +379,15 @@ const Dashboard = () => {
           </p>
         </div>
       </div>
+
+      {/* Credit Card Details Modal */}
+      {selectedCard && (
+        <CreditCardDetails
+          card={selectedCard}
+          isOpen={isDetailsOpen}
+          onClose={handleCloseDetails}
+        />
+      )}
     </div>
   );
 };
