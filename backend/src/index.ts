@@ -94,68 +94,32 @@ app.get('/ping', (_req, res) => {
   });
 });
 
-// Environment debug endpoint
-app.get('/debug', (_req, res) => {
-  res.json({
-    status: 'OK',
-    environment: process.env.NODE_ENV,
-    port: process.env.PORT,
-    databaseUrlPresent: !!process.env.DATABASE_URL,
-    databaseUrlPrefix: process.env.DATABASE_URL?.substring(0, 20) + '...',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Test user lookup endpoint
-app.get('/test-user/:email', async (req, res) => {
+// Manual seed trigger endpoint
+app.post('/admin/seed', async (_req, res) => {
   try {
-    const { email } = req.params;
-    const user = await prisma.user.findUnique({
-      where: { email }
+    const { exec } = require('child_process');
+    
+    await new Promise((resolve, reject) => {
+      exec('npm run db:seed', (error: any, stdout: string, _stderr: string) => {
+        if (error) {
+          console.log('Seed error:', error.message);
+          reject(error);
+        } else {
+          console.log('Seed output:', stdout);
+          resolve(stdout);
+        }
+      });
     });
     
     res.json({
-      found: !!user,
-      email: user?.email,
-      role: user?.role,
-      hasPassword: !!user?.password
+      success: true,
+      message: 'Seed completed successfully'
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
+      message: 'Seed failed',
       error: error instanceof Error ? error.message : 'Unknown error'
-    });
-  }
-});
-
-// Test login endpoint for debugging
-app.post('/test-login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    // Step 1: Find user
-    const user = await prisma.user.findUnique({
-      where: { email }
-    });
-    
-    if (!user) {
-      res.json({ step: 'user_not_found', email });
-      return;
-    }
-    
-    // Step 2: Test password comparison
-    const bcrypt = require('bcryptjs');
-    const isValid = await bcrypt.compare(password, user.password);
-    
-    res.json({
-      step: 'password_check',
-      email: user.email,
-      passwordValid: isValid,
-      hashedPassword: user.password.substring(0, 10) + '...'
-    });
-  } catch (error) {
-    res.status(500).json({
-      step: 'error',
-      message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 });
@@ -217,8 +181,7 @@ app.use((error: any, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({
     success: false,
     message: 'Internal server error',
-    error: error.message, // Always show error message for debugging
-    stack: error.stack?.split('\n').slice(0, 5) // Show first 5 lines of stack
+    error: process.env.NODE_ENV === 'development' ? error.message : undefined
   });
 });
 
