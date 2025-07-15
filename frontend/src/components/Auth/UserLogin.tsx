@@ -152,6 +152,7 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
           </button>
         </div>
       </div>
+      </div>
     </div>
   );
 };
