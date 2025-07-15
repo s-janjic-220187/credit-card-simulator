@@ -43,8 +43,15 @@ RUN npx prisma generate
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy migrations from builder stage (important for Railway!)
+COPY --from=builder /app/prisma/migrations ./prisma/migrations
+COPY --from=builder /app/prisma/migration_lock.toml ./prisma/migration_lock.toml
+
 # Copy seed script for production
 COPY seed.js ./
+
+# Copy migration scripts
+COPY scripts/ ./scripts/
 
 # Copy startup script
 COPY start.sh ./

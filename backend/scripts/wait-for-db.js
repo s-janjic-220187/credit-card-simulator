@@ -37,6 +37,7 @@ async function runMigrations() {
     exec('npx prisma migrate deploy', (error, stdout, stderr) => {
       if (error) {
         console.log('❌ Migration failed:', error.message);
+        console.log('stderr:', stderr);
         reject(error);
       } else {
         console.log('✅ Migrations completed successfully!');
