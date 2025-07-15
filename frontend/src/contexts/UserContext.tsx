@@ -235,8 +235,12 @@ export const useUserActions = () => {
           const profileResponse = await api.get(`/profile/${userId}`);
           profile = profileResponse.data.data;
           dispatch({ type: 'SET_PROFILE', payload: profile });
-        } catch (error) {
-          console.log('No profile found for user');
+        } catch (error: any) {
+          if (error.response?.status === 404) {
+            console.log('No profile found for user - this is normal for new users');
+          } else {
+            console.error('Error fetching profile:', error);
+          }
         }
 
         try {
@@ -250,8 +254,12 @@ export const useUserActions = () => {
             console.log('💳 No credit cards found for regular user, setting empty array');
             dispatch({ type: 'SET_CREDIT_CARDS', payload: [] });
           }
-        } catch (error) {
-          console.log('💳 No credit cards found for regular user or error fetching cards:', error);
+        } catch (error: any) {
+          if (error.response?.status === 404) {
+            console.log('💳 No credit cards found for user - this is normal for new users');
+          } else {
+            console.log('💳 Error fetching credit cards:', error);
+          }
           // Dispatch empty array to trigger card creation flow for new users
           dispatch({ type: 'SET_CREDIT_CARDS', payload: [] });
         }

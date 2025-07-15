@@ -84,14 +84,27 @@ api.interceptors.response.use(
   (error) => {
     // Enhanced error logging
     if (error.response) {
-      console.error(`❌ API Error ${error.response.status}:`, {
-        url: error.config?.url,
-        method: error.config?.method,
-        baseURL: error.config?.baseURL,
-        data: error.response.data,
-        status: error.response.status,
-        statusText: error.response.statusText
-      });
+      const status = error.response.status;
+      const url = error.config?.url;
+      
+      // Don't log 404s as errors for profile and cards endpoints (normal for new users)
+      const isExpected404 = status === 404 && (
+        url?.includes('/profile/') || 
+        url?.includes('/cards')
+      );
+      
+      if (isExpected404) {
+        console.log(`ℹ️ API Info ${status}: ${error.config?.method?.toUpperCase()} ${url} - Resource not found (normal for new users)`);
+      } else {
+        console.error(`❌ API Error ${status}:`, {
+          url: error.config?.url,
+          method: error.config?.method,
+          baseURL: error.config?.baseURL,
+          data: error.response.data,
+          status: error.response.status,
+          statusText: error.response.statusText
+        });
+      }
     } else if (error.request) {
       console.error('❌ Network Error:', {
         url: error.config?.url,
