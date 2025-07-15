@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useUser, useUserActions } from '../../contexts/UserContext';
 import { creditCardService } from '../../services/creditCardService';
+import api from '../../services/api';
 
 const CreditCardCreate: React.FC = () => {
   const { state } = useUser();
@@ -59,19 +60,12 @@ const CreditCardCreate: React.FC = () => {
     try {
       console.log('Creating demo data...');
       
-      // Use the api service to make the request with proper Railway URL mapping
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/demo/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // Use the api service to make the request with proper URL routing
+      const response = await api.post('/demo/create');
+      console.log('Demo creation response:', response.data);
 
-      const data = await response.json();
-      console.log('Demo creation response:', data);
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to create demo data');
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to create demo data');
       }
 
       // The demo creates user, profile, and credit card
