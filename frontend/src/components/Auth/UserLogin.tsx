@@ -81,7 +81,7 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
             {t.auth?.welcomeBack || 'Welcome Back'}
           </h2>
           <p className="text-gray-600 mt-2">
-            {t.auth?.signInPrompt || 'Sign in to your account'}
+            {t.auth?.signInPrompt || 'Sign in to your account or use demo acount to browse the content'}
           </p>
         </div>
 
