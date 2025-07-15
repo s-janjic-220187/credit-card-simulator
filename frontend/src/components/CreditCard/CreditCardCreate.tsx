@@ -58,22 +58,28 @@ const CreditCardCreate: React.FC = () => {
     setError('');
 
     try {
-      console.log('Creating demo data...');
+      console.log('Creating demo credit card for user:', state.user?.id);
       
-      // Use the api service to make the request with proper URL routing
-      const response = await api.post('/demo/create');
-      console.log('Demo creation response:', response.data);
+      if (!state.user?.id) {
+        throw new Error('No user logged in');
+      }
+      
+      // Use the new demo credit card endpoint for the current user
+      const response = await api.post(`/${state.user.id}/cards/demo`);
+      console.log('Demo credit card creation response:', response.data);
 
       if (!response.data.success) {
-        throw new Error(response.data.message || 'Failed to create demo data');
+        throw new Error(response.data.message || 'Failed to create demo credit card');
       }
 
-      // The demo creates user, profile, and credit card
-      console.log('Demo data created successfully');
-      window.location.reload(); // Simple way to refresh with new data
+      // Add the new card to the context and navigate to dashboard
+      const newCard = response.data.data;
+      console.log('Demo credit card created successfully:', newCard);
+      addCreditCard(newCard);
+      goToStep('dashboard');
     } catch (error) {
-      console.error('Demo creation error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to create demo data');
+      console.error('Demo credit card creation error:', error);
+      setError(error instanceof Error ? error.message : 'Failed to create demo credit card');
     } finally {
       setIsLoading(false);
     }
@@ -115,14 +121,14 @@ const CreditCardCreate: React.FC = () => {
           <div className="border border-gray-200 rounded-lg p-4">
             <h3 className="font-medium text-gray-900 mb-2">🚀 Quick Start Option</h3>
             <p className="text-gray-600 text-sm mb-3">
-              Create demo data including a user profile and credit card with sample settings.
+              Create a demo credit card with randomly generated realistic settings to get started quickly.
             </p>
             <button
               onClick={handleCreateDemo}
               disabled={isLoading}
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors disabled:opacity-50"
             >
-              {isLoading ? 'Creating...' : 'Create Demo Card'}
+              {isLoading ? 'Creating...' : 'Create Random Demo Card'}
             </button>
           </div>
 

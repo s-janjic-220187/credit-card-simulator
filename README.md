@@ -117,12 +117,14 @@ Credit Card Simulator/
 ### Local Development Setup
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/s-janjic-220187/credit-card-simulator.git
    cd credit-card-simulator
    ```
 
 2. **Install dependencies**:
+
    ```bash
    # Backend
    cd backend
@@ -136,6 +138,7 @@ Credit Card Simulator/
 3. **Configure environment variables**:
 
    **Backend** (`backend/.env`):
+
    ```env
    NODE_ENV=development
    PORT=3000
@@ -146,6 +149,7 @@ Credit Card Simulator/
    ```
 
    **Frontend** (`frontend/.env`):
+
    ```env
    VITE_API_URL=http://localhost:3000/api
    VITE_APP_NAME=Credit Card Simulator
@@ -153,6 +157,7 @@ Credit Card Simulator/
    ```
 
 4. **Set up the database**:
+
    ```bash
    cd backend
    npx prisma db push
@@ -160,6 +165,7 @@ Credit Card Simulator/
    ```
 
 5. **Start development servers**:
+
    ```bash
    # Backend (Terminal 1)
    cd backend
@@ -240,6 +246,7 @@ interface BillingCycle {
 ## 🔗 API Documentation
 
 ### Authentication Routes
+
 ```bash
 POST /api/users/login          # User login
 POST /api/users               # Create user
@@ -247,6 +254,7 @@ GET  /api/users/:id           # Get user details
 ```
 
 ### Profile Management
+
 ```bash
 POST /api/profile/:userId     # Create profile
 GET  /api/profile/:userId     # Get profile
@@ -254,6 +262,7 @@ PUT  /api/profile/:userId     # Update profile
 ```
 
 ### Credit Card Operations
+
 ```bash
 POST /api/:userId/cards       # Create credit card
 GET  /api/:userId/cards       # Get user's cards
@@ -262,6 +271,7 @@ POST /api/cards/:cardId/freeze # Freeze card
 ```
 
 ### Transaction Management
+
 ```bash
 POST /api/cards/:cardId/transactions/purchase  # Make purchase
 POST /api/cards/:cardId/transactions/refund    # Process refund
@@ -269,6 +279,7 @@ GET  /api/cards/:cardId/transactions           # Get transactions
 ```
 
 ### Billing Operations
+
 ```bash
 POST /api/billing/cycle/:cardId    # Generate billing cycle
 GET  /api/billing/cycles/:cardId   # Get cycle history
@@ -278,6 +289,7 @@ GET  /api/billing/statement/:cycleId # Get statement
 ## 🎨 UI Components & Features
 
 ### Modern Design System
+
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
 - **Dark/Light Mode**: User preference support
 - **Interactive Charts**: Recharts integration for data visualization
@@ -285,6 +297,7 @@ GET  /api/billing/statement/:cycleId # Get statement
 - **Accessibility**: WCAG 2.1 compliant components
 
 ### Key User Interfaces
+
 - **Dashboard**: Comprehensive financial overview
 - **Card Management**: Create, view, and manage credit cards
 - **Transaction Center**: Purchase simulation and transaction history
@@ -334,6 +347,7 @@ Production environment variables are managed through Railway's interface with se
 ## 📚 Educational Value
 
 ### Learning Outcomes
+
 - **Financial Literacy**: Understanding credit card mechanics
 - **Interest Calculations**: Compound interest and APR concepts
 - **Payment Strategies**: Impact of different payment amounts
@@ -342,6 +356,7 @@ Production environment variables are managed through Railway's interface with se
 - **Budgeting Skills**: Managing credit within means
 
 ### Interactive Scenarios
+
 1. **College Student**: Learning responsible credit use
 2. **Young Professional**: Building credit history
 3. **Family Manager**: Balancing multiple financial priorities
@@ -349,6 +364,7 @@ Production environment variables are managed through Railway's interface with se
 ## 🧪 Testing & Quality
 
 ### Testing Strategy
+
 - **Unit Tests**: Core business logic testing
 - **Integration Tests**: API endpoint validation
 - **E2E Tests**: Full user journey testing
@@ -356,6 +372,7 @@ Production environment variables are managed through Railway's interface with se
 - **Security Tests**: Vulnerability assessments
 
 ### Code Quality
+
 - **TypeScript**: Full type safety throughout
 - **ESLint**: Code quality and consistency
 - **Prettier**: Automatic code formatting
@@ -364,12 +381,14 @@ Production environment variables are managed through Railway's interface with se
 ## 📈 Performance Optimization
 
 ### Frontend Optimizations
+
 - **Code Splitting**: Lazy loading of route components
 - **Bundle Optimization**: Webpack optimization for smaller bundles
 - **Caching**: API response caching with React Query
 - **Image Optimization**: Optimized asset delivery
 
 ### Backend Optimizations
+
 - **Database Indexing**: Optimized query performance
 - **Connection Pooling**: Efficient database connections
 - **API Caching**: Redis caching for frequent requests
@@ -378,6 +397,7 @@ Production environment variables are managed through Railway's interface with se
 ## 🔄 Changelog & Updates
 
 ### Version 1.0.0 (Latest)
+
 - ✅ Complete billing cycle simulation engine
 - ✅ Advanced data visualization suite
 - ✅ Educational dashboard and learning modules
@@ -388,6 +408,7 @@ Production environment variables are managed through Railway's interface with se
 - ✅ API documentation and testing suite
 
 ### Recent Fixes
+
 - 🔧 Fixed "Route not found" error for first card creation
 - 🔧 Resolved Railway database reset issues with safe migrations
 - 🔧 Improved API routing and error handling
@@ -404,6 +425,7 @@ Production environment variables are managed through Railway's interface with se
 5. **Open a Pull Request**
 
 ### Coding Standards
+
 - Follow TypeScript best practices
 - Use Prettier for code formatting
 - Write meaningful commit messages
@@ -413,6 +435,7 @@ Production environment variables are managed through Railway's interface with se
 ## 📞 Support & Community
 
 ### Getting Help
+
 - **Documentation**: Complete API and component documentation
 - **Issues**: [GitHub Issues](https://github.com/s-janjic-220187/credit-card-simulator/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/s-janjic-220187/credit-card-simulator/discussions)
@@ -423,6 +446,7 @@ Production environment variables are managed through Railway's interface with se
 **Common Issues:**
 
 1. **Database Connection Issues**:
+
    ```bash
    # Check database status
    npx prisma studio
@@ -431,6 +455,7 @@ Production environment variables are managed through Railway's interface with se
    ```
 
 2. **API Connection Errors**:
+
    ```bash
    # Verify backend is running
    curl http://localhost:3000/health

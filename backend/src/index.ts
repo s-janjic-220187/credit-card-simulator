@@ -21,7 +21,7 @@ console.log('🔧 Database URL present:', !!process.env.DATABASE_URL);
 console.log('🔧 Database URL preview:', process.env.DATABASE_URL?.substring(0, 50) + '...');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Database connection test with retries
 const connectDB = async () => {

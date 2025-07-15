@@ -6,6 +6,7 @@ const router = Router();
 // Credit card routes for specific user
 router.post('/:userId/cards', CreditCardController.createCreditCard);
 router.get('/:userId/cards', CreditCardController.getCreditCards);
+router.post('/:userId/cards/demo', CreditCardController.createDemoCreditCard);
 
 // Default user routes (userId = 1)
 router.post('/cards', CreditCardController.createCreditCard);

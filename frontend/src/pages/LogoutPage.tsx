@@ -14,7 +14,7 @@
  * @version 1.0.0
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser, useUserActions } from '../contexts/UserContext';
 
@@ -30,7 +30,8 @@ const LogoutPage = () => {
     // Simulate logout process with a brief delay for UX
     setTimeout(() => {
       logout();
-      // Don't navigate anywhere - the AppCoordinator will handle showing the login UI
+      // AppCoordinator will handle showing the login UI after logout
+      setIsLoggingOut(false);
     }, 1500);
   };
 
@@ -39,17 +40,15 @@ const LogoutPage = () => {
   };
 
   const handleSwitchAccount = () => {
-    logout();
-    // Don't navigate anywhere - the AppCoordinator will handle showing the login UI
+    setIsLoggingOut(true);
+    setTimeout(() => {
+      logout();
+      // AppCoordinator will handle showing the login UI after logout
+      setIsLoggingOut(false);
+    }, 500); // Shorter delay for account switching
   };
 
-  useEffect(() => {
-    // If user is not logged in, this component shouldn't be accessible
-    // The AppCoordinator will handle showing the login UI
-    if (!state.user) {
-      navigate('/', { replace: true });
-    }
-  }, [state.user, navigate]);
+  // No need for navigation logic here - AppCoordinator handles auth state changes
 
   if (isLoggingOut) {
     return (

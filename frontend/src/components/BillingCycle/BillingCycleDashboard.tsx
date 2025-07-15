@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useUser } from '../../contexts/UserContext';
+import { useUser, useUserActions } from '../../contexts/UserContext';
+import api from '../../services/api';
 
 interface BillingCycle {
   id: string;
@@ -22,6 +23,7 @@ interface BillingCycle {
 
 const BillingCycleDashboard: React.FC = () => {
   const { state } = useUser();
+  const { addCreditCard } = useUserActions();
   const [selectedCycle, setSelectedCycle] = useState<BillingCycle | null>(null);
   const creditCardId = state.creditCards.length > 0 ? state.creditCards[0].id : null;
 
@@ -30,12 +32,8 @@ const BillingCycleDashboard: React.FC = () => {
     queryFn: async () => {
       if (!creditCardId) return [];
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/billing/cycles/${creditCardId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch billing cycles');
-      }
-      const result = await response.json();
-      return result.data as BillingCycle[];
+      const response = await api.get(`/billing/cycles/${creditCardId}`);
+      return response.data.data as BillingCycle[];
     },
     enabled: !!creditCardId, // Only run query if we have a credit card ID
   });
@@ -62,47 +60,43 @@ const BillingCycleDashboard: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/billing/cycle/${creditCardId}`, {
-        method: 'POST',
-      });
-      if (response.ok) {
-        // Refresh the cycles list
-        refetch();
-      } else {
-        const errorData = await response.json();
-        alert(`Failed to generate billing cycle: ${errorData.message || 'Unknown error'}`);
-      }
+      await api.post(`/billing/cycle/${creditCardId}`);
+      // Refresh the cycles list
+      refetch();
     } catch (error) {
       console.error('Failed to generate billing cycle:', error);
-      alert('Failed to generate billing cycle. Please check the console for details.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Failed to generate billing cycle: ${errorMessage}`);
     }
   };
 
   const createDemoData = async () => {
     try {
-      console.log('Creating demo data from BillingCycleDashboard...');
+      console.log('Creating demo credit card from BillingCycleDashboard...');
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/demo/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      if (!state.user?.id) {
+        throw new Error('No user logged in');
+      }
+      
+      // Use the api service to create a demo credit card for the current user
+      const response = await api.post(`/${state.user.id}/cards/demo`);
+      console.log('Demo credit card creation response:', response.data);
 
-      const data = await response.json();
-      console.log('Demo creation response:', data);
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to create demo data');
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to create demo credit card');
       }
 
-      alert('Demo data created successfully! You can now use the billing cycle features.');
-      console.log('Demo data created successfully');
-      // Refresh the page to load the new data
+      // Add the new card to the context
+      const newCard = response.data.data;
+      console.log('Demo credit card created successfully:', newCard);
+      addCreditCard(newCard);
+      
+      alert('Demo credit card created successfully! You can now use the billing cycle features.');
+      // Refresh the component to load the new data
       window.location.reload();
     } catch (error) {
       console.error('Error creating demo data:', error);
-      alert(`Failed to create demo data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(`Failed to create demo credit card: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 

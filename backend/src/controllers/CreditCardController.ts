@@ -352,4 +352,74 @@ export class CreditCardController {
       });
     }
   }
+
+  /**
+   * Create a demo credit card with random realistic data
+   */
+  static async createDemoCreditCard(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = req.params.userId;
+
+      if (!userId) {
+        res.status(400).json({
+          success: false,
+          message: 'User ID is required'
+        });
+        return;
+      }
+
+      // Random demo credit card configurations
+      const demoConfigs = [
+        {
+          cardholderName: 'Default User',
+          creditLimit: 5000,
+          apr: 18.9,
+          cycleStartDate: 1
+        },
+        {
+          cardholderName: 'Default User',
+          creditLimit: 3000,
+          apr: 24.99,
+          cycleStartDate: 15
+        },
+        {
+          cardholderName: 'Default User',
+          creditLimit: 10000,
+          apr: 14.99,
+          cycleStartDate: 5
+        },
+        {
+          cardholderName: 'Default User',
+          creditLimit: 7500,
+          apr: 21.49,
+          cycleStartDate: 10
+        },
+        {
+          cardholderName: 'Default User',
+          creditLimit: 2000,
+          apr: 29.99,
+          cycleStartDate: 20
+        }
+      ];
+
+      // Select a random configuration
+      const randomConfig = demoConfigs[Math.floor(Math.random() * demoConfigs.length)];
+
+      // Create credit card with random demo data
+      const cardData = { ...randomConfig, userId };
+      const creditCard = await CreditCardService.createCreditCard(cardData);
+
+      res.status(201).json({
+        success: true,
+        message: 'Demo credit card created successfully',
+        data: creditCard
+      });
+    } catch (error) {
+      console.error('Error creating demo credit card:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error'
+      });
+    }
+  }
 }

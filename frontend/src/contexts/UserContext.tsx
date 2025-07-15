@@ -70,20 +70,22 @@ function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {
     case 'SET_USER':
       console.log('✅ Setting user:', action.payload);
-      console.log('🔄 SET_USER: Always navigating to dashboard after login');
+      console.log('🔄 SET_USER: User set, step will be determined later based on available data');
       return {
         ...state,
         user: action.payload,
         isAuthenticated: true,
-        currentStep: 'dashboard',
+        // Don't set currentStep here - it will be determined based on profile/cards availability
       };
     case 'SET_PROFILE':
       console.log('✅ Setting profile:', action.payload);
-      console.log('🔄 SET_PROFILE: Staying on dashboard (default page)');
+      // Determine next step based on whether user has credit cards
+      const nextStepAfterProfile = state.creditCards.length > 0 ? 'dashboard' : 'cards';
+      console.log('🔄 SET_PROFILE: Profile set, checking credit cards. User has', state.creditCards.length, 'cards. Next step:', nextStepAfterProfile);
       return {
         ...state,
         profile: action.payload,
-        currentStep: 'dashboard',
+        currentStep: nextStepAfterProfile,
       };
     case 'SET_CREDIT_CARDS':
       console.log('✅ Setting credit cards:', action.payload);
@@ -155,6 +157,15 @@ export const useUserActions = () => {
       if (userId === 'demo-user') {
         console.log('🎯 Attempting demo user login...');
         
+        // First, ensure demo data exists by calling the demo creation endpoint
+        console.log('📡 Ensuring demo data exists...');
+        try {
+          const demoCreateResponse = await api.post('/demo/create');
+          console.log('✅ Demo data ensured:', demoCreateResponse.data);
+        } catch (error) {
+          console.log('⚠️ Demo creation failed, but continuing with login:', error);
+        }
+        
         // Use the backend demo API
         console.log('📡 Making API call to /api/users/login');
         const response = await api.post('/users/login', {
@@ -189,12 +200,17 @@ export const useUserActions = () => {
             console.log('💳 Credit cards response data:', cardsResponse.data);
             if (cardsResponse.data.success) {
               console.log('💳 Setting credit cards:', cardsResponse.data.data);
+              console.log('💳 Number of credit cards found:', cardsResponse.data.data.length);
               dispatch({ type: 'SET_CREDIT_CARDS', payload: cardsResponse.data.data });
             } else {
               console.log('💳 Credit cards response not successful');
+              // If no cards are found, dispatch empty array to trigger card creation flow
+              dispatch({ type: 'SET_CREDIT_CARDS', payload: [] });
             }
           } catch (error) {
-            console.log('💳 No credit cards found or error fetching cards');
+            console.log('💳 No credit cards found or error fetching cards:', error);
+            // If error fetching cards, dispatch empty array to trigger card creation flow
+            dispatch({ type: 'SET_CREDIT_CARDS', payload: [] });
           }
         } else {
           console.error('❌ Login response success was false:', data);
@@ -202,25 +218,54 @@ export const useUserActions = () => {
         }
       } else {
         // For real users, fetch their data
+        let user = null;
+        let profile = null;
+        let creditCards = [];
+
         try {
           const userResponse = await api.get(`/users/${userId}`);
-          dispatch({ type: 'SET_USER', payload: userResponse.data.data });
+          user = userResponse.data.data;
+          dispatch({ type: 'SET_USER', payload: user });
         } catch (error) {
           console.error('Failed to fetch user data:', error);
+          throw new Error('Failed to fetch user data');
         }
 
         try {
           const profileResponse = await api.get(`/profile/${userId}`);
-          dispatch({ type: 'SET_PROFILE', payload: profileResponse.data.data });
+          profile = profileResponse.data.data;
+          dispatch({ type: 'SET_PROFILE', payload: profile });
         } catch (error) {
           console.log('No profile found for user');
         }
 
         try {
           const cardsResponse = await api.get(`/${userId}/cards`);
-          dispatch({ type: 'SET_CREDIT_CARDS', payload: cardsResponse.data.data || [] });
+          console.log('💳 Credit cards response for regular user:', cardsResponse.data);
+          if (cardsResponse.data.success) {
+            console.log('💳 Setting credit cards for regular user:', cardsResponse.data.data);
+            creditCards = cardsResponse.data.data || [];
+            dispatch({ type: 'SET_CREDIT_CARDS', payload: creditCards });
+          } else {
+            console.log('💳 No credit cards found for regular user, setting empty array');
+            dispatch({ type: 'SET_CREDIT_CARDS', payload: [] });
+          }
         } catch (error) {
-          console.log('No credit cards found for user');
+          console.log('💳 No credit cards found for regular user or error fetching cards:', error);
+          // Dispatch empty array to trigger card creation flow for new users
+          dispatch({ type: 'SET_CREDIT_CARDS', payload: [] });
+        }
+
+        // Determine the correct step based on available data
+        if (!profile) {
+          console.log('📋 No profile found, directing to profile creation');
+          dispatch({ type: 'SET_STEP', payload: 'profile' });
+        } else if (creditCards.length === 0) {
+          console.log('💳 No credit cards found, directing to card creation');
+          dispatch({ type: 'SET_STEP', payload: 'cards' });
+        } else {
+          console.log('✅ User has profile and cards, directing to dashboard');
+          dispatch({ type: 'SET_STEP', payload: 'dashboard' });
         }
       }
     } catch (error: any) {
@@ -253,23 +298,23 @@ export const useUserActions = () => {
 
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/profile/${state.user.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profileData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create profile');
+      console.log('📝 Creating profile for user:', state.user.id);
+      console.log('📝 Profile data:', profileData);
+      
+      const response = await api.post(`/profile/${state.user.id}`, profileData);
+      
+      console.log('✅ Profile created successfully:', response.data);
+      if (response.data.success) {
+        dispatch({ type: 'SET_PROFILE', payload: response.data.data });
+      } else {
+        throw new Error(response.data.message || 'Failed to create profile');
       }
-
-      const data = await response.json();
-      dispatch({ type: 'SET_PROFILE', payload: data.data });
-    } catch (error) {
-      console.error('Profile creation error:', error);
+    } catch (error: any) {
+      console.error('❌ Profile creation error:', error);
+      // Handle Axios errors
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
       throw error;
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
