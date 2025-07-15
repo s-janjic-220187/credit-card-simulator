@@ -27,16 +27,30 @@ fi
 
 # Run database migrations (this preserves existing data)
 echo "🔄 Running safe database migration..."
-if node scripts/migrate-safe.js; then
-    echo "✅ Database migration completed successfully"
-else
-    echo "⚠️ Database migration script failed, attempting fallback..."
-    
-    # Fallback: try standard migration
-    if npx prisma migrate deploy; then
-        echo "✅ Fallback migration succeeded"
+if [ -f "scripts/migrate-safe.js" ]; then
+    echo "📂 Using smart migration script..."
+    if node scripts/migrate-safe.js; then
+        echo "✅ Database migration completed successfully"
     else
-        echo "⚠️ Both migration approaches failed, continuing with existing schema..."
+        echo "⚠️ Smart migration failed, trying fallback..."
+        # Fallback: try standard migration
+        if npx prisma migrate deploy; then
+            echo "✅ Fallback migration succeeded"
+        elif npx prisma db push; then
+            echo "✅ Database schema pushed successfully"
+        else
+            echo "⚠️ All migration approaches failed, continuing with existing schema..."
+        fi
+    fi
+else
+    echo "📂 Migration script not found, using direct approach..."
+    # Try migrate deploy first (preserves data)
+    if npx prisma migrate deploy; then
+        echo "✅ Database migrations completed"
+    elif npx prisma db push; then
+        echo "✅ Database schema pushed successfully"
+    else
+        echo "⚠️ Migration failed, continuing with existing schema..."
     fi
 fi
 
