@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import TransactionService, { TransactionRequest, TransactionType } from '../services/TransactionService';
-import prisma from '../lib/prisma';
+import { prisma } from '../lib/prisma';
 
 export class TransactionController {
   /**
@@ -285,6 +285,219 @@ export class TransactionController {
       res.status(500).json({
         success: false,
         message: 'Failed to calculate transaction impact',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  }
+
+  /**
+   * Create a manual transaction
+   */
+  static async createManualTransaction(req: Request, res: Response): Promise<void> {
+    try {
+      const { cardId } = req.params;
+      const {
+        amount,
+        type,
+        description,
+        category,
+        merchantName,
+        location,
+        fees = 0
+      } = req.body;
+
+      // Validation
+      if (!amount || !type || !description) {
+        res.status(400).json({
+          success: false,
+          message: 'Amount, type, and description are required',
+        });
+        return;
+      }
+
+      if (!['PURCHASE', 'PAYMENT', 'REFUND', 'FEE', 'CASH_ADVANCE'].includes(type)) {
+        res.status(400).json({
+          success: false,
+          message: 'Invalid transaction type',
+          validTypes: ['PURCHASE', 'PAYMENT', 'REFUND', 'FEE', 'CASH_ADVANCE'],
+        });
+        return;
+      }
+
+      // Check if credit card exists and belongs to user
+      const creditCard = await prisma.creditCard.findUnique({
+        where: { id: cardId },
+        include: { user: true }
+      });
+
+      if (!creditCard) {
+        res.status(404).json({
+          success: false,
+          message: 'Credit card not found',
+        });
+        return;
+      }
+
+      // For purchases and cash advances, check credit limit
+      if (['PURCHASE', 'CASH_ADVANCE'].includes(type)) {
+        const totalAmount = Number(amount) + Number(fees);
+        const availableCredit = creditCard.creditLimit - creditCard.currentBalance;
+        
+        if (totalAmount > availableCredit) {
+          res.status(400).json({
+            success: false,
+            message: 'Transaction amount exceeds available credit',
+            availableCredit,
+            requestedAmount: totalAmount
+          });
+          return;
+        }
+      }
+
+      // Create the transaction
+      const transaction = await prisma.transaction.create({
+        data: {
+          creditCardId: cardId,
+          amount: Number(amount),
+          fees: Number(fees),
+          totalAmount: Number(amount) + Number(fees),
+          description,
+          category: category || 'OTHER',
+          type,
+          status: 'COMPLETED',
+          merchantName: merchantName || null,
+          location: location || null,
+          isInternational: false,
+          referenceId: `MAN${Date.now()}${Math.floor(Math.random() * 1000)}`,
+          date: new Date(),
+          timestamp: new Date(),
+        },
+      });
+
+      // Update credit card balance
+      const isCredit = ['PAYMENT', 'REFUND'].includes(type);
+      const balanceChange = isCredit ? -(Number(amount) + Number(fees)) : (Number(amount) + Number(fees));
+      
+      await prisma.creditCard.update({
+        where: { id: cardId },
+        data: {
+          currentBalance: {
+            increment: balanceChange
+          }
+        }
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Manual transaction created successfully',
+        data: transaction,
+      });
+    } catch (error) {
+      console.error('Error creating manual transaction:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to create manual transaction',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  }
+
+  /**
+   * Update a transaction
+   */
+  static async updateTransaction(req: Request, res: Response): Promise<void> {
+    try {
+      const { transactionId } = req.params;
+      const { description, category, merchantName, location } = req.body;
+
+      const transaction = await prisma.transaction.findUnique({
+        where: { id: transactionId }
+      });
+
+      if (!transaction) {
+        res.status(404).json({
+          success: false,
+          message: 'Transaction not found',
+        });
+        return;
+      }
+
+      const updatedTransaction = await prisma.transaction.update({
+        where: { id: transactionId },
+        data: {
+          description: description || transaction.description,
+          category: category || transaction.category,
+          merchantName: merchantName !== undefined ? merchantName : transaction.merchantName,
+          location: location !== undefined ? location : transaction.location,
+        }
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Transaction updated successfully',
+        data: updatedTransaction,
+      });
+    } catch (error) {
+      console.error('Error updating transaction:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to update transaction',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  }
+
+  /**
+   * Delete a transaction (soft delete by marking as cancelled)
+   */
+  static async deleteTransaction(req: Request, res: Response): Promise<void> {
+    try {
+      const { transactionId } = req.params;
+
+      const transaction = await prisma.transaction.findUnique({
+        where: { id: transactionId },
+        include: { creditCard: true }
+      });
+
+      if (!transaction) {
+        res.status(404).json({
+          success: false,
+          message: 'Transaction not found',
+        });
+        return;
+      }
+
+      // Mark transaction as cancelled
+      const cancelledTransaction = await prisma.transaction.update({
+        where: { id: transactionId },
+        data: {
+          status: 'CANCELLED'
+        }
+      });
+
+      // Reverse the balance change
+      const isCredit = ['PAYMENT', 'REFUND'].includes(transaction.type);
+      const balanceReverse = isCredit ? transaction.totalAmount : -transaction.totalAmount;
+      
+      await prisma.creditCard.update({
+        where: { id: transaction.creditCardId },
+        data: {
+          currentBalance: {
+            increment: balanceReverse
+          }
+        }
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Transaction cancelled successfully',
+        data: cancelledTransaction,
+      });
+    } catch (error) {
+      console.error('Error cancelling transaction:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to cancel transaction',
         error: error instanceof Error ? error.message : 'Unknown error',
       });
     }

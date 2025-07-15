@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import Dashboard from './pages/Dashboard';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
+import TransactionsPage from './pages/TransactionsPage';
 import Navigation from './components/Navigation';
 import BillingCycleDashboard from './components/BillingCycle/BillingCycleDashboard';
 import InterestCalculator from './components/Calculators/InterestCalculator';
@@ -173,6 +174,7 @@ const AppCoordinator = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/transactions" element={<TransactionsPage />} />
             <Route path="/billing-cycle" element={<BillingCycleDashboard />} />
             <Route path="/calculators/interest" element={<InterestCalculator />} />
             <Route path="/calculators/payment-strategy" element={<PaymentStrategyAnalyzer />} />

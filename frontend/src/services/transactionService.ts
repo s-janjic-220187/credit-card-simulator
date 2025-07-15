@@ -43,6 +43,46 @@ export const transactionService = {
     return response.data.data.transactions;
   },
 
+  // Create manual transaction
+  async createManualTransaction(cardId: string, transactionData: {
+    amount: number;
+    type: 'PURCHASE' | 'PAYMENT' | 'REFUND' | 'FEE' | 'CASH_ADVANCE';
+    description: string;
+    category?: string;
+    merchantName?: string;
+    location?: string;
+    fees?: number;
+  }): Promise<Transaction> {
+    const response = await api.post<ApiResponse<Transaction>>(`/transactions/${cardId}/manual`, transactionData);
+    if (!response.data.success || !response.data.data) {
+      throw new Error(response.data.message || 'Failed to create transaction');
+    }
+    return response.data.data;
+  },
+
+  // Update transaction
+  async updateTransaction(transactionId: string, updates: {
+    description?: string;
+    category?: string;
+    merchantName?: string;
+    location?: string;
+  }): Promise<Transaction> {
+    const response = await api.put<ApiResponse<Transaction>>(`/transactions/${transactionId}`, updates);
+    if (!response.data.success || !response.data.data) {
+      throw new Error(response.data.message || 'Failed to update transaction');
+    }
+    return response.data.data;
+  },
+
+  // Delete (cancel) transaction
+  async deleteTransaction(transactionId: string): Promise<Transaction> {
+    const response = await api.delete<ApiResponse<Transaction>>(`/transactions/${transactionId}`);
+    if (!response.data.success || !response.data.data) {
+      throw new Error(response.data.message || 'Failed to delete transaction');
+    }
+    return response.data.data;
+  },
+
   // Get transaction by ID
   async getTransaction(transactionId: string): Promise<Transaction> {
     const response = await api.get<ApiResponse<Transaction>>(`/transactions/${transactionId}`);

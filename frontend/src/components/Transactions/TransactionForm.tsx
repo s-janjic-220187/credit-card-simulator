@@ -1,36 +1,52 @@
 import React, { useState } from 'react';
-import { TransactionCategory } from '../../types';
+import { transactionService } from '../../services/transactionService';
+import toast from 'react-hot-toast';
 
 interface TransactionFormProps {
   creditCardId: string;
-  onSubmit: (transactionData: CreateTransactionData) => void;
+  onSuccess: () => void;
   onCancel: () => void;
   isLoading?: boolean;
 }
 
-export interface CreateTransactionData {
-  creditCardId: string;
+type TransactionType = 'PURCHASE' | 'PAYMENT' | 'REFUND' | 'FEE' | 'CASH_ADVANCE';
+type TransactionCategory = 'GROCERIES' | 'DINING' | 'GAS' | 'UTILITIES' | 'ENTERTAINMENT' | 'SHOPPING' | 'TRAVEL' | 'HEALTHCARE' | 'EDUCATION' | 'OTHER';
+
+interface CreateTransactionData {
   amount: number;
+  type: TransactionType;
   description: string;
   category: TransactionCategory;
   merchantName: string;
   location?: string;
+  fees?: number;
 }
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
   creditCardId,
-  onSubmit,
+  onSuccess,
   onCancel,
   isLoading = false
 }) => {
   const [formData, setFormData] = useState<CreateTransactionData>({
-    creditCardId,
     amount: 0,
+    type: 'PURCHASE',
     description: '',
     category: 'OTHER',
     merchantName: '',
-    location: ''
+    location: '',
+    fees: 0
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const transactionTypes: { value: TransactionType; label: string; description: string }[] = [
+    { value: 'PURCHASE', label: 'Purchase', description: 'Regular purchase transaction' },
+    { value: 'PAYMENT', label: 'Payment', description: 'Payment towards credit card balance' },
+    { value: 'REFUND', label: 'Refund', description: 'Refund from merchant' },
+    { value: 'FEE', label: 'Fee', description: 'Credit card fee (annual, late, etc.)' },
+    { value: 'CASH_ADVANCE', label: 'Cash Advance', description: 'Cash advance from credit card' }
+  ];
 
   const categories: { value: TransactionCategory; label: string }[] = [
     { value: 'GROCERIES', label: 'Groceries' },
@@ -49,21 +65,62 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'amount' ? parseFloat(value) || 0 : value
+      [name]: name === 'amount' || name === 'fees' ? parseFloat(value) || 0 : value
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    
+    if (formData.amount <= 0) {
+      toast.error('Amount must be greater than 0');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await transactionService.createManualTransaction(creditCardId, formData);
+      toast.success('Transaction created successfully!');
+      onSuccess();
+    } catch (error) {
+      console.error('Error creating transaction:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to create transaction');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const isCredit = ['PAYMENT', 'REFUND'].includes(formData.type);
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">New Transaction</h2>
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">Add Manual Transaction</h2>
       
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
+            Transaction Type *
+          </label>
+          <select
+            id="type"
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {transactionTypes.map(type => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-500 mt-1">
+            {transactionTypes.find(t => t.value === formData.type)?.description}
+          </p>
+        </div>
+
+        <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
             Amount ($) *
           </label>
@@ -76,11 +133,38 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             required
             min="0.01"
             step="0.01"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              isCredit ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'
+            }`}
           />
+          <p className="text-xs mt-1">
+            {isCredit ? (
+              <span className="text-green-600">✓ This will reduce your balance</span>
+            ) : (
+              <span className="text-red-600">⚠ This will increase your balance</span>
+            )}
+          </p>
         </div>
 
-        <div className="mb-4">
+        {['PURCHASE', 'CASH_ADVANCE', 'FEE'].includes(formData.type) && (
+          <div>
+            <label htmlFor="fees" className="block text-sm font-medium text-gray-700 mb-2">
+              Additional Fees ($)
+            </label>
+            <input
+              type="number"
+              id="fees"
+              name="fees"
+              value={formData.fees}
+              onChange={handleChange}
+              min="0"
+              step="0.01"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        )}
+
+        <div>
           <label htmlFor="merchantName" className="block text-sm font-medium text-gray-700 mb-2">
             Merchant Name *
           </label>
@@ -96,7 +180,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           />
         </div>
 
-        <div className="mb-4">
+        <div>
           <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
             Category *
           </label>
@@ -116,7 +200,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           </select>
         </div>
 
-        <div className="mb-4">
+        <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
             Description *
           </label>
@@ -128,13 +212,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             required
             rows={3}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="What was this purchase for?"
+            placeholder="Brief description of the transaction"
           />
         </div>
 
-        <div className="mb-6">
+        <div>
           <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-            Location (Optional)
+            Location
           </label>
           <input
             type="text"
@@ -147,21 +231,21 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           />
         </div>
 
-        <div className="flex justify-end gap-4">
+        <div className="flex space-x-3 pt-4">
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-            disabled={isLoading}
+            disabled={isSubmitting || isLoading}
+            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           >
-            {isLoading ? 'Processing...' : 'Create Transaction'}
+            {isSubmitting ? 'Creating...' : 'Create Transaction'}
           </button>
         </div>
       </form>

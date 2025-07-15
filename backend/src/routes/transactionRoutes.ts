@@ -1,7 +1,12 @@
 import express from 'express';
-import TransactionController from '../controllers/TransactionController';
+import { TransactionController } from '../controllers/TransactionController';
 
 const router = express.Router();
+
+// Manual transaction routes
+router.post('/:cardId/manual', TransactionController.createManualTransaction);
+router.put('/:transactionId', TransactionController.updateTransaction);
+router.delete('/:transactionId', TransactionController.deleteTransaction);
 
 // Transaction simulation routes
 router.post('/:cardId/simulate', TransactionController.simulateTransaction);

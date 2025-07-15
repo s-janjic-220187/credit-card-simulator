@@ -99,6 +99,18 @@ const Navigation = () => {
               </Link>
 
               <Link
+                to="/transactions"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  isActive('/transactions') 
+                    ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                }`}
+              >
+                <span className="hidden lg:inline">💳 Transactions</span>
+                <span className="lg:hidden">💳</span>
+              </Link>
+
+              <Link
                 to="/billing-cycle"
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                   isActive('/billing-cycle') 

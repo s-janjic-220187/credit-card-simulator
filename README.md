@@ -72,6 +72,17 @@ Credit Card Simulator/
 - **Interest Calculations**: Daily compounding with multiple APR support
 - **Fee Structure**: Complete fee system (late, overlimit, foreign transaction, annual fees)
 
+### 💳 Manual Transaction Management (NEW)
+
+- ✅ **Manual Transaction Creation**: Add purchases, payments, refunds, fees, and cash advances
+- ✅ **Transaction Categories**: Organized spending categories (Groceries, Dining, Gas, etc.)
+- ✅ **Real-time Balance Updates**: Automatic credit card balance adjustments
+- ✅ **Transaction History**: Complete transaction timeline with filtering and search
+- ✅ **Transaction Analytics**: Spending summaries and payment tracking
+- ✅ **Smart Validation**: Credit limit checks and transaction validation
+- ✅ **Dashboard Integration**: Recent transactions widget on main dashboard
+- ✅ **Dedicated Transactions Page**: Full-featured transaction management interface
+
 ### 🧮 Advanced Calculator Suite (5 Tools)
 
 - ✅ **Interest Calculator**: APR, daily, and monthly interest calculations
