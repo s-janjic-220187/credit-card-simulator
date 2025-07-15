@@ -3,6 +3,7 @@ import { useUser } from '../contexts/UserContext';
 import { useI18n } from '../contexts/I18nContext';
 import { useState } from 'react';
 import CreditCardDetails from '../components/CreditCard/CreditCardDetails';
+import TransactionsDashboard from '../components/Transactions/TransactionsDashboard';
 import type { CreditCard } from '../contexts/UserContext';
 // import CreditCardList from '../components/CreditCards/CreditCardList';
 
@@ -120,6 +121,18 @@ const Dashboard = () => {
         </div>
       )}
 
+      {/* Recent Transactions Section */}
+      {state.creditCards.length > 0 && (
+        <div className="mb-12">
+          <TransactionsDashboard
+            creditCardId={state.creditCards[0].id}
+            creditCardName={state.creditCards[0].cardholderName}
+            showAddButton={true}
+            maxDisplayed={5}
+          />
+        </div>
+      )}
+
       {/* Feature Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* Billing Cycle Management */}
@@ -170,6 +183,16 @@ const Dashboard = () => {
             {t.dashboard.cardBuilder.description}
           </p>
           <div className="text-indigo-600 font-medium">{t.dashboard.cardBuilder.action}</div>
+        </Link>
+
+        {/* Transaction Management */}
+        <Link to="/transactions" className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-orange-500">
+          <div className="text-4xl mb-4">💳</div>
+          <h3 className="text-xl font-semibold mb-3">Transaction Management</h3>
+          <p className="text-gray-600 mb-4">
+            Add, edit, and manage manual transactions for your credit cards. Track spending and payments.
+          </p>
+          <div className="text-orange-600 font-medium">Manage Transactions →</div>
         </Link>
 
         {/* Statement Generator */}
