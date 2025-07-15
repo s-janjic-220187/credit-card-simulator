@@ -70,22 +70,20 @@ function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {
     case 'SET_USER':
       console.log('✅ Setting user:', action.payload);
-      const newStepAfterUser = state.profile ? 'cards' : 'profile';
-      console.log('🔄 SET_USER: current profile exists?', !!state.profile, 'new step will be:', newStepAfterUser);
+      console.log('🔄 SET_USER: Always navigating to dashboard after login');
       return {
         ...state,
         user: action.payload,
         isAuthenticated: true,
-        currentStep: newStepAfterUser,
+        currentStep: 'dashboard',
       };
     case 'SET_PROFILE':
       console.log('✅ Setting profile:', action.payload);
-      const newStepAfterProfile = state.creditCards.length > 0 ? 'dashboard' : 'cards';
-      console.log('🔄 SET_PROFILE: current credit cards count:', state.creditCards.length, 'new step will be:', newStepAfterProfile);
+      console.log('🔄 SET_PROFILE: Staying on dashboard (default page)');
       return {
         ...state,
         profile: action.payload,
-        currentStep: newStepAfterProfile,
+        currentStep: 'dashboard',
       };
     case 'SET_CREDIT_CARDS':
       console.log('✅ Setting credit cards:', action.payload);

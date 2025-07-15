@@ -153,7 +153,6 @@ const UserLogin: React.FC<UserLoginProps> = ({ onShowCreateUser }) => {
         </div>
       </div>
     </div>
-    </div>
   );
 };
 
