@@ -3,11 +3,11 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Copy package files first for better caching
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies with increased timeout and retries
+RUN npm ci --production=false --maxsockets 1 --fetch-timeout=300000
 
 # Copy source code
 COPY . .
@@ -17,10 +17,18 @@ ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
 # Set default API URL if not provided
-ENV VITE_API_URL=${VITE_API_URL:-http://localhost:3001/api}
+ENV VITE_API_URL=${VITE_API_URL:-https://backend-ccs-production.up.railway.app/api}
 
-# Build the application
-RUN npm run build
+# Increase Node.js memory limit for build
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Debug: Show environment
+RUN echo "Building with VITE_API_URL: $VITE_API_URL"
+RUN echo "Node version: $(node --version)"
+RUN echo "TypeScript version: $(npx tsc --version)"
+
+# Build with verbose output to catch specific errors
+RUN npm run build 2>&1 | tee build.log || (echo "Build failed, showing log:" && cat build.log && exit 1)
 
 # Production stage
 FROM nginx:alpine
