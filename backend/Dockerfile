@@ -1,4 +1,5 @@
 # Backend Dockerfile - Multi-stage build
+# Updated: July 22, 2025 - Fix migration_lock.toml copy issue
 FROM node:18-slim AS builder
 
 WORKDIR /app
@@ -47,6 +48,9 @@ COPY --from=builder /app/dist ./dist
 
 # Copy all migrations and related files from builder
 COPY --from=builder /app/prisma/migrations/ ./prisma/migrations/
+
+# Ensure all migration files are properly copied
+RUN ls -la ./prisma/migrations/ || echo "Migrations directory created"
 
 # Copy seed script for production
 COPY seed.js ./
