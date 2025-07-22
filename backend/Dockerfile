@@ -43,6 +43,10 @@ RUN npx prisma generate
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy migrations and related files if they exist
+RUN mkdir -p ./prisma/migrations
+COPY --from=builder /app/prisma/migrations/ ./prisma/migrations/
+
 # Copy seed script for production
 COPY seed.js ./
 
