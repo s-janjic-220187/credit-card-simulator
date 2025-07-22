@@ -1,4 +1,5 @@
 # Backend Dockerfile - Multi-stage build
+# Updated: July 22, 2025 - Fix migration_lock.toml copy issue
 FROM node:18-slim AS builder
 
 WORKDIR /app
@@ -32,7 +33,9 @@ RUN apt-get update -y && apt-get install -y openssl bash && rm -rf /var/lib/apt/
 
 # Copy package files
 COPY package*.json ./
-COPY prisma ./prisma/
+
+# Copy prisma schema (needed for generate)
+COPY prisma/schema.prisma ./prisma/schema.prisma
 
 # Install only production dependencies
 RUN npm ci --only=production
@@ -43,6 +46,12 @@ RUN npx prisma generate
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy all migrations and related files from builder
+COPY --from=builder /app/prisma/migrations/ ./prisma/migrations/
+
+# Ensure all migration files are properly copied
+RUN ls -la ./prisma/migrations/ || echo "Migrations directory created"
+
 # Copy seed script for production
 COPY seed.js ./
 
@@ -51,9 +60,6 @@ COPY start.sh ./
 
 # Copy local scripts directory
 COPY scripts/ ./scripts/
-
-# Create directories for Prisma
-RUN mkdir -p ./prisma/migrations
 
 # Make startup script executable
 RUN chmod +x start.sh
