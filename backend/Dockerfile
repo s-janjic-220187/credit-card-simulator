@@ -32,7 +32,9 @@ RUN apt-get update -y && apt-get install -y openssl bash && rm -rf /var/lib/apt/
 
 # Copy package files
 COPY package*.json ./
-COPY prisma ./prisma/
+
+# Copy prisma schema (needed for generate)
+COPY prisma/schema.prisma ./prisma/schema.prisma
 
 # Install only production dependencies
 RUN npm ci --only=production
@@ -43,8 +45,7 @@ RUN npx prisma generate
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Copy migrations and related files if they exist
-RUN mkdir -p ./prisma/migrations
+# Copy all migrations and related files from builder
 COPY --from=builder /app/prisma/migrations/ ./prisma/migrations/
 
 # Copy seed script for production
@@ -55,9 +56,6 @@ COPY start.sh ./
 
 # Copy local scripts directory
 COPY scripts/ ./scripts/
-
-# Create directories for Prisma
-RUN mkdir -p ./prisma/migrations
 
 # Make startup script executable
 RUN chmod +x start.sh
