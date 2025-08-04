@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useUser, useUserActions } from '../../contexts/UserContext';
-import api from '../../services/api';
+import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useI18n } from "../../contexts/I18nContext";
+import { useUser, useUserActions } from "../../contexts/UserContext";
+import api from "../../services/api";
 
 interface BillingCycle {
   id: string;
@@ -22,16 +23,22 @@ interface BillingCycle {
 }
 
 const BillingCycleDashboard: React.FC = () => {
+  const { t } = useI18n();
   const { state } = useUser();
   const { addCreditCard } = useUserActions();
   const [selectedCycle, setSelectedCycle] = useState<BillingCycle | null>(null);
-  const creditCardId = state.creditCards.length > 0 ? state.creditCards[0].id : null;
+  const creditCardId =
+    state.creditCards.length > 0 ? state.creditCards[0].id : null;
 
-  const { data: billingCycles, isLoading, refetch } = useQuery({
-    queryKey: ['billingCycles', creditCardId],
+  const {
+    data: billingCycles,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["billingCycles", creditCardId],
     queryFn: async () => {
       if (!creditCardId) return [];
-      
+
       const response = await api.get(`/billing/cycles/${creditCardId}`);
       return response.data.data as BillingCycle[];
     },
@@ -39,23 +46,23 @@ const BillingCycleDashboard: React.FC = () => {
   });
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(amount);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   const generateNewCycle = async () => {
     if (!creditCardId) {
-      alert('Please add a credit card first');
+      alert("Please add a credit card first");
       return;
     }
 
@@ -64,39 +71,48 @@ const BillingCycleDashboard: React.FC = () => {
       // Refresh the cycles list
       refetch();
     } catch (error) {
-      console.error('Failed to generate billing cycle:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error("Failed to generate billing cycle:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       alert(`Failed to generate billing cycle: ${errorMessage}`);
     }
   };
 
   const createDemoData = async () => {
     try {
-      console.log('Creating demo credit card from BillingCycleDashboard...');
-      
+      console.log("Creating demo credit card from BillingCycleDashboard...");
+
       if (!state.user?.id) {
-        throw new Error('No user logged in');
+        throw new Error("No user logged in");
       }
-      
+
       // Use the api service to create a demo credit card for the current user
       const response = await api.post(`/${state.user.id}/cards/demo`);
-      console.log('Demo credit card creation response:', response.data);
+      console.log("Demo credit card creation response:", response.data);
 
       if (!response.data.success) {
-        throw new Error(response.data.message || 'Failed to create demo credit card');
+        throw new Error(
+          response.data.message || "Failed to create demo credit card"
+        );
       }
 
       // Add the new card to the context
       const newCard = response.data.data;
-      console.log('Demo credit card created successfully:', newCard);
+      console.log("Demo credit card created successfully:", newCard);
       addCreditCard(newCard);
-      
-      alert('Demo credit card created successfully! You can now use the billing cycle features.');
+
+      alert(
+        "Demo credit card created successfully! You can now use the billing cycle features."
+      );
       // Refresh the component to load the new data
       window.location.reload();
     } catch (error) {
-      console.error('Error creating demo data:', error);
-      alert(`Failed to create demo credit card: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error creating demo data:", error);
+      alert(
+        `Failed to create demo credit card: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   };
 
@@ -114,34 +130,35 @@ const BillingCycleDashboard: React.FC = () => {
       <div className="max-w-4xl mx-auto p-6">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            💳 Billing Cycle Dashboard
+            💳 {t.billingCycle.dashboard.title}
           </h1>
           <p className="text-gray-600">
-            Track and analyze credit card billing cycles, interest calculations, and fee structures.
+            {t.billingCycle.dashboard.description}
           </p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-8 text-center">
           <div className="text-gray-400 text-6xl mb-6">🏦</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            No Credit Cards Found
+            {t.billingCycle.dashboard.noCreditCards}
           </h2>
           <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            To use the billing cycle features, you need to have at least one credit card set up. 
-            Credit cards are required to generate billing cycles, track spending, and analyze interest calculations.
+            {t.billingCycle.dashboard.noCreditCardsDesc}
           </p>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 max-w-2xl mx-auto">
-            <h3 className="font-medium text-blue-900 mb-3">🚀 Quick Setup Options</h3>
+            <h3 className="font-medium text-blue-900 mb-3">
+              🚀 {t.billingCycle.dashboard.quickSetup}
+            </h3>
             <div className="space-y-3">
               <button
                 onClick={createDemoData}
                 className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
               >
-                Create Demo Credit Card
+                {t.billingCycle.dashboard.createDemoCard}
               </button>
               <p className="text-blue-800 text-sm">
-                Instantly creates a demo user profile and credit card with realistic settings for testing
+                {t.billingCycle.dashboard.demoCardDesc}
               </p>
             </div>
           </div>
@@ -177,7 +194,8 @@ const BillingCycleDashboard: React.FC = () => {
           </button>
         </div>
         <p className="text-gray-600">
-          Track and analyze credit card billing cycles, interest calculations, and fee structures.
+          Track and analyze credit card billing cycles, interest calculations,
+          and fee structures.
         </p>
       </div>
 
@@ -194,8 +212,8 @@ const BillingCycleDashboard: React.FC = () => {
                     onClick={() => setSelectedCycle(cycle)}
                     className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                       selectedCycle?.id === cycle.id
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
                     <div className="flex justify-between items-start mb-2">
@@ -205,17 +223,22 @@ const BillingCycleDashboard: React.FC = () => {
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           cycle.isPaid
-                            ? 'bg-green-100 text-green-800'
+                            ? "bg-green-100 text-green-800"
                             : cycle.isOverdue
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                            ? "bg-red-100 text-red-800"
+                            : "bg-yellow-100 text-yellow-800"
                         }`}
                       >
-                        {cycle.isPaid ? 'Paid' : cycle.isOverdue ? 'Overdue' : 'Current'}
+                        {cycle.isPaid
+                          ? "Paid"
+                          : cycle.isOverdue
+                          ? "Overdue"
+                          : "Current"}
                       </span>
                     </div>
                     <div className="text-sm text-gray-600">
-                      {formatDate(cycle.startDate)} - {formatDate(cycle.endDate)}
+                      {formatDate(cycle.startDate)} -{" "}
+                      {formatDate(cycle.endDate)}
                     </div>
                     <div className="text-sm font-medium text-gray-900 mt-1">
                       Balance: {formatCurrency(cycle.endingBalance)}
@@ -225,16 +248,26 @@ const BillingCycleDashboard: React.FC = () => {
               ) : (
                 <div className="text-center py-8">
                   <div className="text-gray-400 text-4xl mb-4">📊</div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Billing Cycles Found</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    No Billing Cycles Found
+                  </h3>
                   <p className="text-gray-600 mb-4">
                     No billing cycles exist for this credit card yet.
                   </p>
                   <div className="text-sm text-gray-500 bg-gray-50 p-4 rounded-lg mb-4">
                     <p className="font-medium mb-2">💡 To get started:</p>
                     <ul className="text-left space-y-1">
-                      <li>• Make sure you have a valid credit card in the system</li>
-                      <li>• Click "Generate New Cycle" to create your first billing cycle</li>
-                      <li>• Add some transactions to see billing cycle calculations</li>
+                      <li>
+                        • Make sure you have a valid credit card in the system
+                      </li>
+                      <li>
+                        • Click "Generate New Cycle" to create your first
+                        billing cycle
+                      </li>
+                      <li>
+                        • Add some transactions to see billing cycle
+                        calculations
+                      </li>
                     </ul>
                   </div>
                   <div className="border-t pt-4">
@@ -248,7 +281,8 @@ const BillingCycleDashboard: React.FC = () => {
                       🚀 Create Demo Data
                     </button>
                     <p className="text-xs text-gray-500 mt-2">
-                      This will create a demo user, profile, and credit card for testing
+                      This will create a demo user, profile, and credit card for
+                      testing
                     </p>
                   </div>
                 </div>
@@ -271,7 +305,9 @@ const BillingCycleDashboard: React.FC = () => {
                     <div className="text-2xl font-bold text-blue-600">
                       {formatCurrency(selectedCycle.startingBalance)}
                     </div>
-                    <div className="text-sm text-gray-600">Starting Balance</div>
+                    <div className="text-sm text-gray-600">
+                      Starting Balance
+                    </div>
                   </div>
                   <div className="text-center p-4 bg-green-50 rounded-lg">
                     <div className="text-2xl font-bold text-green-600">
@@ -290,11 +326,15 @@ const BillingCycleDashboard: React.FC = () => {
 
               {/* Interest and Fees Breakdown */}
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold mb-4">💰 Interest & Fees</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  💰 Interest & Fees
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Average Daily Balance:</span>
+                      <span className="text-gray-600">
+                        Average Daily Balance:
+                      </span>
                       <span className="font-medium">
                         {formatCurrency(selectedCycle.averageDailyBalance)}
                       </span>
@@ -344,22 +384,24 @@ const BillingCycleDashboard: React.FC = () => {
                   <div className="bg-white rounded-lg p-4">
                     <strong>Interest Calculation:</strong>
                     <p className="mt-1 text-gray-700">
-                      Daily interest rate × Average daily balance × Days in cycle = 
-                      Interest charge ({formatCurrency(selectedCycle.interestCharged)})
+                      Daily interest rate × Average daily balance × Days in
+                      cycle = Interest charge (
+                      {formatCurrency(selectedCycle.interestCharged)})
                     </p>
                   </div>
                   <div className="bg-white rounded-lg p-4">
                     <strong>Average Daily Balance:</strong>
                     <p className="mt-1 text-gray-700">
-                      Sum of daily balances ÷ Number of days in cycle = 
+                      Sum of daily balances ÷ Number of days in cycle =
                       {formatCurrency(selectedCycle.averageDailyBalance)}
                     </p>
                   </div>
                   <div className="bg-white rounded-lg p-4">
                     <strong>Minimum Payment:</strong>
                     <p className="mt-1 text-gray-700">
-                      Typically 2-3% of balance or $35 (whichever is higher), 
-                      plus interest and fees = {formatCurrency(selectedCycle.minimumPayment)}
+                      Typically 2-3% of balance or $35 (whichever is higher),
+                      plus interest and fees ={" "}
+                      {formatCurrency(selectedCycle.minimumPayment)}
                     </p>
                   </div>
                 </div>
@@ -368,16 +410,26 @@ const BillingCycleDashboard: React.FC = () => {
           ) : (
             <div className="bg-white rounded-lg shadow-md p-8 text-center">
               <div className="text-gray-400 mb-4">
-                <svg className="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                <svg
+                  className="mx-auto h-16 w-16"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
                 </svg>
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 Select a Billing Cycle
               </h3>
               <p className="text-gray-600">
-                Choose a billing cycle from the list to view detailed calculations,
-                interest breakdowns, and educational information.
+                Choose a billing cycle from the list to view detailed
+                calculations, interest breakdowns, and educational information.
               </p>
             </div>
           )}

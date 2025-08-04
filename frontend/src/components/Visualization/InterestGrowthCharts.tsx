@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  LineChart,
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-} from 'recharts';
-import './InterestGrowthCharts.css';
+} from "recharts";
+import { useI18n } from "../../contexts/I18nContext";
+import "./InterestGrowthCharts.css";
 
 interface InterestGrowthChartsProps {
   cardId?: string;
@@ -46,11 +47,14 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
   apr = 24.99,
   minimumPayment = 150,
 }) => {
+  const { t } = useI18n();
   const [scenarios, setScenarios] = useState<PayoffScenario[]>([]);
-  const [selectedScenario, setSelectedScenario] = useState<string>('minimum');
+  const [selectedScenario, setSelectedScenario] = useState<string>("minimum");
   const [customPayment, setCustomPayment] = useState<number>(200);
   const [loading, setLoading] = useState(false);
-  const [chartType, setChartType] = useState<'balance' | 'interest' | 'comparison'>('balance');
+  const [chartType, setChartType] = useState<
+    "balance" | "interest" | "comparison"
+  >("balance");
 
   useEffect(() => {
     calculateScenarios();
@@ -58,32 +62,58 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
 
   const calculateScenarios = () => {
     setLoading(true);
-    
+
     const monthlyRate = apr / 12 / 100;
     const scenarioConfigs = [
-      { name: 'Minimum Payment', payment: minimumPayment, color: '#ff6b6b' },
-      { name: 'Custom Payment', payment: customPayment, color: '#4ecdc4' },
-      { name: '2x Minimum', payment: minimumPayment * 2, color: '#45b7d1' },
-      { name: '3x Minimum', payment: minimumPayment * 3, color: '#96ceb4' },
+      {
+        name: t.visualizations.interestGrowth.minimumPayment,
+        payment: minimumPayment,
+        color: "#ff6b6b",
+      },
+      {
+        name: t.visualizations.interestGrowth.customPayment,
+        payment: customPayment,
+        color: "#4ecdc4",
+      },
+      {
+        name: `2x ${t.visualizations.interestGrowth.minimumPayment}`,
+        payment: minimumPayment * 2,
+        color: "#45b7d1",
+      },
+      {
+        name: `3x ${t.visualizations.interestGrowth.minimumPayment}`,
+        payment: minimumPayment * 3,
+        color: "#96ceb4",
+      },
     ];
 
-    const calculatedScenarios: PayoffScenario[] = scenarioConfigs.map(config => {
-      const data = calculatePayoffData(initialBalance, config.payment, monthlyRate);
-      return {
-        name: config.name,
-        monthlyPayment: config.payment,
-        color: config.color,
-        data,
-        totalInterest: data[data.length - 1]?.cumulativeInterest || 0,
-        payoffTime: data.length,
-      };
-    });
+    const calculatedScenarios: PayoffScenario[] = scenarioConfigs.map(
+      (config) => {
+        const data = calculatePayoffData(
+          initialBalance,
+          config.payment,
+          monthlyRate
+        );
+        return {
+          name: config.name,
+          monthlyPayment: config.payment,
+          color: config.color,
+          data,
+          totalInterest: data[data.length - 1]?.cumulativeInterest || 0,
+          payoffTime: data.length,
+        };
+      }
+    );
 
     setScenarios(calculatedScenarios);
     setLoading(false);
   };
 
-  const calculatePayoffData = (balance: number, payment: number, monthlyRate: number): ChartData[] => {
+  const calculatePayoffData = (
+    balance: number,
+    payment: number,
+    monthlyRate: number
+  ): ChartData[] => {
     const data: ChartData[] = [];
     let currentBalance = balance;
     let cumulativeInterest = 0;
@@ -92,13 +122,16 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
     // Cap at 600 months to prevent infinite loops
     while (currentBalance > 0.01 && month < 600) {
       const monthlyInterest = currentBalance * monthlyRate;
-      const principalPayment = Math.min(payment - monthlyInterest, currentBalance);
-      
+      const principalPayment = Math.min(
+        payment - monthlyInterest,
+        currentBalance
+      );
+
       if (principalPayment <= 0) {
         // Payment doesn't cover interest - balance will grow
         currentBalance += monthlyInterest;
         cumulativeInterest += monthlyInterest;
-        
+
         data.push({
           month: month + 1,
           balance: Math.round(currentBalance * 100) / 100,
@@ -107,7 +140,7 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
           principalPaid: 0,
           monthlyInterest: Math.round(monthlyInterest * 100) / 100,
         });
-        
+
         month++;
         if (month > 120) break; // Stop at 10 years for growing balances
         continue;
@@ -132,9 +165,9 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
   };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(value);
   };
 
@@ -147,7 +180,9 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
   };
 
   const getSelectedScenarioData = () => {
-    const scenario = scenarios.find(s => s.name.toLowerCase().includes(selectedScenario));
+    const scenario = scenarios.find((s) =>
+      s.name.toLowerCase().includes(selectedScenario)
+    );
     return scenario?.data || [];
   };
 
@@ -155,18 +190,23 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
     <ResponsiveContainer width="100%" height={400}>
       <AreaChart data={getSelectedScenarioData()}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
-          dataKey="month" 
+        <XAxis
+          dataKey="month"
           tickFormatter={formatMonth}
-          label={{ value: 'Time', position: 'insideBottom', offset: -5 }}
+          label={{ value: "Time", position: "insideBottom", offset: -5 }}
         />
-        <YAxis 
+        <YAxis
           tickFormatter={(value) => formatCurrency(value)}
-          label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft' }}
+          label={{ value: "Amount ($)", angle: -90, position: "insideLeft" }}
         />
-        <Tooltip 
-          formatter={(value: number, name: string) => [formatCurrency(value), name]}
-          labelFormatter={(month: number) => `Month ${month} (${formatMonth(month)})`}
+        <Tooltip
+          formatter={(value: number, name: string) => [
+            formatCurrency(value),
+            name,
+          ]}
+          labelFormatter={(month: number) =>
+            `Month ${month} (${formatMonth(month)})`
+          }
         />
         <Legend />
         <Area
@@ -176,7 +216,7 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
           stroke="#ff6b6b"
           fill="#ff6b6b"
           fillOpacity={0.6}
-          name="Remaining Balance"
+          name={t.visualizations.interestGrowth.remainingBalance}
         />
         <Area
           type="monotone"
@@ -185,7 +225,7 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
           stroke="#ffa726"
           fill="#ffa726"
           fillOpacity={0.6}
-          name="Total Interest Paid"
+          name={t.visualizations.interestGrowth.cumulativeInterest}
         />
       </AreaChart>
     </ResponsiveContainer>
@@ -195,18 +235,23 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
     <ResponsiveContainer width="100%" height={400}>
       <LineChart data={getSelectedScenarioData()}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
-          dataKey="month" 
+        <XAxis
+          dataKey="month"
           tickFormatter={formatMonth}
-          label={{ value: 'Time', position: 'insideBottom', offset: -5 }}
+          label={{ value: "Time", position: "insideBottom", offset: -5 }}
         />
-        <YAxis 
+        <YAxis
           tickFormatter={(value) => formatCurrency(value)}
-          label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft' }}
+          label={{ value: "Amount ($)", angle: -90, position: "insideLeft" }}
         />
-        <Tooltip 
-          formatter={(value: number, name: string) => [formatCurrency(value), name]}
-          labelFormatter={(month: number) => `Month ${month} (${formatMonth(month)})`}
+        <Tooltip
+          formatter={(value: number, name: string) => [
+            formatCurrency(value),
+            name,
+          ]}
+          labelFormatter={(month: number) =>
+            `Month ${month} (${formatMonth(month)})`
+          }
         />
         <Legend />
         <Line
@@ -214,21 +259,21 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
           dataKey="monthlyInterest"
           stroke="#ff6b6b"
           strokeWidth={2}
-          name="Monthly Interest"
+          name={t.visualizations.interestGrowth.monthlyInterest}
         />
         <Line
           type="monotone"
           dataKey="cumulativeInterest"
           stroke="#4ecdc4"
           strokeWidth={2}
-          name="Cumulative Interest"
+          name={t.visualizations.interestGrowth.cumulativeInterest}
         />
         <Line
           type="monotone"
           dataKey="principalPaid"
           stroke="#45b7d1"
           strokeWidth={2}
-          name="Monthly Principal"
+          name={t.visualizations.interestGrowth.monthlyPrincipal}
         />
       </LineChart>
     </ResponsiveContainer>
@@ -236,13 +281,13 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
 
   const renderComparisonChart = () => {
     // Prepare data for comparison - take data up to the shortest payoff time
-    const maxLength = Math.min(...scenarios.map(s => s.data.length));
+    const maxLength = Math.min(...scenarios.map((s) => s.data.length));
     const comparisonData = [];
 
     for (let month = 1; month <= maxLength; month++) {
       const dataPoint: any = { month };
-      scenarios.forEach(scenario => {
-        const monthData = scenario.data.find(d => d.month === month);
+      scenarios.forEach((scenario) => {
+        const monthData = scenario.data.find((d) => d.month === month);
         if (monthData) {
           dataPoint[`${scenario.name}_balance`] = monthData.balance;
           dataPoint[`${scenario.name}_interest`] = monthData.cumulativeInterest;
@@ -255,18 +300,27 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={comparisonData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis 
-            dataKey="month" 
+          <XAxis
+            dataKey="month"
             tickFormatter={formatMonth}
-            label={{ value: 'Time', position: 'insideBottom', offset: -5 }}
+            label={{ value: "Time", position: "insideBottom", offset: -5 }}
           />
-          <YAxis 
+          <YAxis
             tickFormatter={(value) => formatCurrency(value)}
-            label={{ value: 'Remaining Balance ($)', angle: -90, position: 'insideLeft' }}
+            label={{
+              value: "Remaining Balance ($)",
+              angle: -90,
+              position: "insideLeft",
+            }}
           />
-          <Tooltip 
-            formatter={(value: number, name: string) => [formatCurrency(value), name]}
-            labelFormatter={(month: number) => `Month ${month} (${formatMonth(month)})`}
+          <Tooltip
+            formatter={(value: number, name: string) => [
+              formatCurrency(value),
+              name,
+            ]}
+            labelFormatter={(month: number) =>
+              `Month ${month} (${formatMonth(month)})`
+            }
           />
           <Legend />
           {scenarios.map((scenario) => (
@@ -285,7 +339,7 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
   };
 
   const renderSummaryChart = () => {
-    const summaryData = scenarios.map(scenario => ({
+    const summaryData = scenarios.map((scenario) => ({
       name: scenario.name,
       totalInterest: scenario.totalInterest,
       payoffTime: scenario.payoffTime,
@@ -295,7 +349,9 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
     return (
       <div className="summary-charts">
         <div className="chart-container">
-          <h4>Total Interest Paid Comparison</h4>
+          <h4>
+            {t.visualization.interestGrowth.charts.totalInterestComparison}
+          </h4>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={summaryData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -308,7 +364,7 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
         </div>
 
         <div className="chart-container">
-          <h4>Payoff Time Comparison</h4>
+          <h4>{t.visualization.interestGrowth.charts.payoffTimeComparison}</h4>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={summaryData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -324,14 +380,19 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
   };
 
   if (loading) {
-    return <div className="loading">Calculating interest scenarios...</div>;
+    return (
+      <div className="loading">{t.visualization.interestGrowth.loading}</div>
+    );
   }
 
   return (
     <div className="interest-growth-charts">
       <div className="charts-header">
-        <h2>Interest Growth Analysis</h2>
-        <p>Visualize how different payment strategies affect your debt payoff journey</p>
+        <h2>{t.visualization.interestGrowth.title}</h2>
+        <p>
+          Visualize how different payment strategies affect your debt payoff
+          journey
+        </p>
       </div>
 
       <div className="controls">
@@ -349,26 +410,36 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
         </div>
 
         <div className="chart-type-controls">
-          <label>Chart Type:</label>
-          <select 
-            value={chartType} 
+          <label>{t.visualization.interestGrowth.labels.chartType}</label>
+          <select
+            value={chartType}
             onChange={(e) => setChartType(e.target.value as any)}
           >
-            <option value="balance">Balance Over Time</option>
-            <option value="interest">Interest Analysis</option>
-            <option value="comparison">Payment Comparison</option>
+            <option value="balance">
+              {t.visualization.interestGrowth.chartTypes.balance}
+            </option>
+            <option value="interest">
+              {t.visualization.interestGrowth.chartTypes.interest}
+            </option>
+            <option value="comparison">
+              {t.visualization.interestGrowth.chartTypes.comparison}
+            </option>
           </select>
         </div>
 
-        {(chartType === 'balance' || chartType === 'interest') && (
+        {(chartType === "balance" || chartType === "interest") && (
           <div className="scenario-controls">
-            <label>Scenario:</label>
-            <select 
-              value={selectedScenario} 
+            <label>{t.visualization.interestGrowth.labels.scenario}</label>
+            <select
+              value={selectedScenario}
               onChange={(e) => setSelectedScenario(e.target.value)}
             >
-              <option value="minimum">Minimum Payment</option>
-              <option value="custom">Custom Payment</option>
+              <option value="minimum">
+                {t.visualization.interestGrowth.scenarios.minimum}
+              </option>
+              <option value="custom">
+                {t.visualization.interestGrowth.scenarios.custom}
+              </option>
               <option value="2x">2x Minimum</option>
               <option value="3x">3x Minimum</option>
             </select>
@@ -377,22 +448,42 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
       </div>
 
       <div className="chart-display">
-        {chartType === 'balance' && renderBalanceChart()}
-        {chartType === 'interest' && renderInterestChart()}
-        {chartType === 'comparison' && renderComparisonChart()}
+        {chartType === "balance" && renderBalanceChart()}
+        {chartType === "interest" && renderInterestChart()}
+        {chartType === "comparison" && renderComparisonChart()}
       </div>
 
       <div className="scenarios-summary">
-        <h3>Payment Scenarios Summary</h3>
+        <h3>{t.visualization.interestGrowth.summary.title}</h3>
         <div className="scenarios-grid">
           {scenarios.map((scenario) => (
             <div key={scenario.name} className="scenario-card">
               <h4 style={{ color: scenario.color }}>{scenario.name}</h4>
               <div className="scenario-details">
-                <p><strong>Monthly Payment:</strong> {formatCurrency(scenario.monthlyPayment)}</p>
-                <p><strong>Payoff Time:</strong> {formatMonth(scenario.payoffTime)}</p>
-                <p><strong>Total Interest:</strong> {formatCurrency(scenario.totalInterest)}</p>
-                <p><strong>Total Cost:</strong> {formatCurrency(initialBalance + scenario.totalInterest)}</p>
+                <p>
+                  <strong>
+                    {t.visualization.interestGrowth.labels.monthlyPayment}
+                  </strong>{" "}
+                  {formatCurrency(scenario.monthlyPayment)}
+                </p>
+                <p>
+                  <strong>
+                    {t.visualization.interestGrowth.labels.payoffTime}
+                  </strong>{" "}
+                  {formatMonth(scenario.payoffTime)}
+                </p>
+                <p>
+                  <strong>
+                    {t.visualization.interestGrowth.labels.totalInterest}
+                  </strong>{" "}
+                  {formatCurrency(scenario.totalInterest)}
+                </p>
+                <p>
+                  <strong>
+                    {t.visualization.interestGrowth.labels.totalCost}
+                  </strong>{" "}
+                  {formatCurrency(initialBalance + scenario.totalInterest)}
+                </p>
               </div>
             </div>
           ))}
@@ -402,26 +493,26 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
       {renderSummaryChart()}
 
       <div className="insights">
-        <h3>Key Insights</h3>
+        <h3>{t.visualization.interestGrowth.summary.keyInsights}</h3>
         <div className="insights-list">
           <div className="insight">
             <h4>💡 Payment Impact</h4>
             <p>
-              Doubling your minimum payment can reduce payoff time by up to 50% 
+              Doubling your minimum payment can reduce payoff time by up to 50%
               and save thousands in interest charges.
             </p>
           </div>
           <div className="insight">
             <h4>📈 Interest Compounds</h4>
             <p>
-              Early in the payoff period, most of your payment goes to interest. 
+              Early in the payoff period, most of your payment goes to interest.
               Higher payments mean more goes to principal sooner.
             </p>
           </div>
           <div className="insight">
             <h4>⏰ Time Value</h4>
             <p>
-              Every extra dollar paid toward principal today saves you multiple 
+              Every extra dollar paid toward principal today saves you multiple
               dollars in future interest charges.
             </p>
           </div>

@@ -1,31 +1,38 @@
 /**
  * Admin Dashboard
- * 
+ *
  * Complete administrative interface for managing users, credit cards,
  * and system monitoring in the SJ-CCMS application.
- * 
+ *
  * Features:
  * - User management (view, edit, delete)
  * - Credit card oversight
  * - System statistics
  * - Recent transactions monitoring
- * 
+ *
  * @author Credit Card Simulator Team
  * @version 1.0.0
  */
 
-import React, { useState, useEffect } from 'react';
-import './AdminDashboard.css';
-import adminService, { AdminUser, AdminCreditCard, AdminTransaction, AdminStats } from '../../services/adminService';
+import React, { useEffect, useState } from "react";
+import { useI18n } from "../../contexts/I18nContext";
+import adminService, {
+  AdminCreditCard,
+  AdminStats,
+  AdminTransaction,
+  AdminUser,
+} from "../../services/adminService";
+import "./AdminDashboard.css";
 
 const AdminDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const { t } = useI18n();
+  const [activeTab, setActiveTab] = useState("overview");
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [creditCards, setCreditCards] = useState<AdminCreditCard[]>([]);
   const [transactions, setTransactions] = useState<AdminTransaction[]>([]);
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [editingCard, setEditingCard] = useState<AdminCreditCard | null>(null);
@@ -37,66 +44,84 @@ const AdminDashboard: React.FC = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      setError('');
+      setError("");
 
-      console.log('📊 Loading dashboard data using admin service...');
-      
+      console.log("📊 Loading dashboard data using admin service...");
+
       const [users, creditCards, transactions, stats] = await Promise.all([
         adminService.getAllUsers(),
         adminService.getAllCreditCards(),
         adminService.getRecentTransactions(20),
-        adminService.getSystemStats()
+        adminService.getSystemStats(),
       ]);
 
-      console.log('✅ Dashboard data loaded successfully');
-      console.log('Users:', users.length);
-      console.log('Credit Cards:', creditCards.length);
-      console.log('Transactions:', transactions.length);
-      console.log('Stats:', stats);
+      console.log("✅ Dashboard data loaded successfully");
+      console.log("Users:", users.length);
+      console.log("Credit Cards:", creditCards.length);
+      console.log("Transactions:", transactions.length);
+      console.log("Stats:", stats);
 
       setUsers(users);
       setCreditCards(creditCards);
       setTransactions(transactions);
       setStats(stats);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load data');
-      console.error('❌ Dashboard load error:', err);
+      setError(err instanceof Error ? err.message : "Failed to load data");
+      console.error("❌ Dashboard load error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this user? This action cannot be undone."
+      )
+    ) {
       return;
     }
 
     try {
       await adminService.deleteUser(userId);
-      setUsers(users.filter(user => user.id !== userId));
-      alert('User deleted successfully');
+      setUsers(users.filter((user) => user.id !== userId));
+      alert("User deleted successfully");
     } catch (err) {
-      alert('Failed to delete user: ' + (err instanceof Error ? err.message : 'Unknown error'));
+      alert(
+        "Failed to delete user: " +
+          (err instanceof Error ? err.message : "Unknown error")
+      );
     }
   };
 
-  const handleUpdateCreditCard = async (cardId: string, updatedData: Partial<AdminCreditCard>) => {
+  const handleUpdateCreditCard = async (
+    cardId: string,
+    updatedData: Partial<AdminCreditCard>
+  ) => {
     try {
-      const updatedCard = await adminService.updateCreditCard(cardId, updatedData);
-      setCreditCards(cards => 
-        cards.map(card => card.id === cardId ? { ...card, ...updatedCard } : card)
+      const updatedCard = await adminService.updateCreditCard(
+        cardId,
+        updatedData
+      );
+      setCreditCards((cards) =>
+        cards.map((card) =>
+          card.id === cardId ? { ...card, ...updatedCard } : card
+        )
       );
       setEditingCard(null);
-      alert('Credit card updated successfully');
+      alert("Credit card updated successfully");
     } catch (err) {
-      alert('Failed to update credit card: ' + (err instanceof Error ? err.message : 'Unknown error'));
+      alert(
+        "Failed to update credit card: " +
+          (err instanceof Error ? err.message : "Unknown error")
+      );
     }
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
-      currency: 'USD' 
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(amount);
   };
 
@@ -105,7 +130,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   const maskCardNumber = (cardNumber: string) => {
-    return '**** **** **** ' + cardNumber.slice(-4);
+    return "**** **** **** " + cardNumber.slice(-4);
   };
 
   if (loading) {
@@ -123,7 +148,7 @@ const AdminDashboard: React.FC = () => {
     return (
       <div className="admin-dashboard">
         <div className="error">
-          <h2>Error Loading Dashboard</h2>
+          <h2>{t.admin.dashboard.errorLoading}</h2>
           <p>{error}</p>
           <button onClick={loadDashboardData} className="btn-primary">
             Retry
@@ -136,55 +161,57 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="admin-dashboard">
       <div className="admin-header">
-        <h1>SJ-CCMS Admin Dashboard</h1>
-        <p>Complete system oversight and user management</p>
+        <h1>{t.admin.dashboard.title}</h1>
+        <p>{t.admin.dashboard.subtitle}</p>
       </div>
 
       <div className="admin-nav">
-        <button 
-          className={activeTab === 'overview' ? 'active' : ''}
-          onClick={() => setActiveTab('overview')}
+        <button
+          className={activeTab === "overview" ? "active" : ""}
+          onClick={() => setActiveTab("overview")}
         >
-          Overview
+          {t.admin.dashboard.tabs.overview}
         </button>
-        <button 
-          className={activeTab === 'users' ? 'active' : ''}
-          onClick={() => setActiveTab('users')}
+        <button
+          className={activeTab === "users" ? "active" : ""}
+          onClick={() => setActiveTab("users")}
         >
-          Users ({users.length})
+          {t.admin.dashboard.tabs.users} ({users.length})
         </button>
-        <button 
-          className={activeTab === 'cards' ? 'active' : ''}
-          onClick={() => setActiveTab('cards')}
+        <button
+          className={activeTab === "cards" ? "active" : ""}
+          onClick={() => setActiveTab("cards")}
         >
-          Credit Cards ({creditCards.length})
+          {t.admin.dashboard.tabs.creditCards} ({creditCards.length})
         </button>
-        <button 
-          className={activeTab === 'transactions' ? 'active' : ''}
-          onClick={() => setActiveTab('transactions')}
+        <button
+          className={activeTab === "transactions" ? "active" : ""}
+          onClick={() => setActiveTab("transactions")}
         >
-          Transactions
+          {t.admin.dashboard.tabs.transactions}
         </button>
       </div>
 
       <div className="admin-content">
-        {activeTab === 'overview' && stats && (
+        {activeTab === "overview" && stats && (
           <div className="overview-section">
             <div className="stats-grid">
               <div className="stat-card">
-                <h3>Total Users</h3>
+                <h3>{t.admin.dashboard.stats.totalUsers}</h3>
                 <div className="stat-number">{stats.users.total}</div>
                 <div className="stat-detail">
                   {stats.users.recentlyCreated} new this month
                 </div>
               </div>
               <div className="stat-card">
-                <h3>Credit Cards</h3>
+                <h3>{t.admin.dashboard.stats.creditCards}</h3>
                 <div className="stat-number">{stats.cards.total}</div>
-                <div className="stat-detail">Active cards in system</div>
+                <div className="stat-detail">
+                  {t.admin.dashboard.stats.activeCards}
+                </div>
               </div>
               <div className="stat-card">
-                <h3>Transactions</h3>
+                <h3>{t.admin.dashboard.stats.transactions}</h3>
                 <div className="stat-number">{stats.transactions.total}</div>
                 <div className="stat-detail">
                   {formatCurrency(stats.transactions.totalValue)} total volume
@@ -193,19 +220,29 @@ const AdminDashboard: React.FC = () => {
             </div>
 
             <div className="recent-activity">
-              <h2>Recent Activity</h2>
+              <h2>{t.admin.dashboard.sections.recentActivity}</h2>
               <div className="activity-list">
-                {transactions.slice(0, 5).map(transaction => (
+                {transactions.slice(0, 5).map((transaction) => (
                   <div key={transaction.id} className="activity-item">
                     <div className="activity-details">
                       <strong>{transaction.description}</strong>
-                      <div className="activity-meta">                        {transaction.creditCard?.user.profile?.firstName || 'Unknown'} {transaction.creditCard?.user.profile?.lastName || 'User'} -
-                        {transaction.creditCard?.cardNumber ? maskCardNumber(transaction.creditCard.cardNumber) : 'Unknown Card'} -
-                        {formatDate(transaction.date)}
+                      <div className="activity-meta">
+                        {" "}
+                        {transaction.creditCard?.user.profile?.firstName ||
+                          "Unknown"}{" "}
+                        {transaction.creditCard?.user.profile?.lastName ||
+                          "User"}{" "}
+                        -
+                        {transaction.creditCard?.cardNumber
+                          ? maskCardNumber(transaction.creditCard.cardNumber)
+                          : "Unknown Card"}{" "}
+                        -{formatDate(transaction.date)}
                       </div>
                     </div>
                     <div className="activity-amount">
-                      {formatCurrency(transaction.totalAmount || transaction.amount)}
+                      {formatCurrency(
+                        transaction.totalAmount || transaction.amount
+                      )}
                     </div>
                   </div>
                 ))}
@@ -214,10 +251,10 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'users' && (
+        {activeTab === "users" && (
           <div className="users-section">
             <div className="section-header">
-              <h2>User Management</h2>
+              <h2>{t.admin.dashboard.sections.userManagement}</h2>
               <button onClick={loadDashboardData} className="btn-secondary">
                 Refresh
               </button>
@@ -227,12 +264,12 @@ const AdminDashboard: React.FC = () => {
               <div className="table-header">
                 <div>User</div>
                 <div>Email</div>
-                <div>Credit Score</div>
+                <div>{t.admin.dashboard.sections.creditScore}</div>
                 <div>Cards</div>
                 <div>Status</div>
                 <div>Actions</div>
               </div>
-              {users.map(user => (
+              {users.map((user) => (
                 <div key={user.id} className="table-row">
                   <div className="user-info">
                     <strong>
@@ -241,20 +278,24 @@ const AdminDashboard: React.FC = () => {
                     <div className="user-username">@{user.username}</div>
                   </div>
                   <div>{user.email}</div>
-                  <div>{user.profile?.creditScore || 'N/A'}</div>
+                  <div>{user.profile?.creditScore || "N/A"}</div>
                   <div>{user.creditCards?.length || 0}</div>
-                  <div className={`status ${user.isActive ? 'active' : 'inactive'}`}>
-                    {user.isActive ? 'Active' : 'Inactive'}
+                  <div
+                    className={`status ${
+                      user.isActive ? "active" : "inactive"
+                    }`}
+                  >
+                    {user.isActive ? "Active" : "Inactive"}
                   </div>
                   <div className="user-actions">
-                    <button 
+                    <button
                       onClick={() => setSelectedUser(user)}
                       className="btn-small btn-primary"
                     >
                       View
                     </button>
-                    {user.role !== 'ADMIN' && (
-                      <button 
+                    {user.role !== "ADMIN" && (
+                      <button
                         onClick={() => handleDeleteUser(user.id)}
                         className="btn-small btn-danger"
                       >
@@ -268,33 +309,47 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'cards' && (
+        {activeTab === "cards" && (
           <div className="cards-section">
             <div className="section-header">
-              <h2>Credit Card Management</h2>
+              <h2>{t.admin.dashboard.sections.creditCardManagement}</h2>
               <button onClick={loadDashboardData} className="btn-secondary">
                 Refresh
               </button>
             </div>
 
             <div className="cards-grid">
-              {creditCards.map(card => (
+              {creditCards.map((card) => (
                 <div key={card.id} className="card-item">
                   <div className="card-header">
                     <h3>{maskCardNumber(card.cardNumber)}</h3>
-                    <span className={`card-status ${card.status.toLowerCase()}`}>
+                    <span
+                      className={`card-status ${card.status.toLowerCase()}`}
+                    >
                       {card.status}
                     </span>
                   </div>
                   <div className="card-details">
-                    <p><strong>Cardholder:</strong> {card.cardholderName}</p>
-                    <p><strong>Limit:</strong> {formatCurrency(card.creditLimit)}</p>
-                    <p><strong>Balance:</strong> {formatCurrency(card.currentBalance)}</p>
-                    <p><strong>Available:</strong> {formatCurrency(card.creditLimit - card.currentBalance)}</p>
-                    <p><strong>Issued:</strong> {formatDate(card.issueDate)}</p>
+                    <p>
+                      <strong>Cardholder:</strong> {card.cardholderName}
+                    </p>
+                    <p>
+                      <strong>Limit:</strong> {formatCurrency(card.creditLimit)}
+                    </p>
+                    <p>
+                      <strong>Balance:</strong>{" "}
+                      {formatCurrency(card.currentBalance)}
+                    </p>
+                    <p>
+                      <strong>Available:</strong>{" "}
+                      {formatCurrency(card.creditLimit - card.currentBalance)}
+                    </p>
+                    <p>
+                      <strong>Issued:</strong> {formatDate(card.issueDate)}
+                    </p>
                   </div>
                   <div className="card-actions">
-                    <button 
+                    <button
                       onClick={() => setEditingCard(card)}
                       className="btn-small btn-primary"
                     >
@@ -307,7 +362,7 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'transactions' && (
+        {activeTab === "transactions" && (
           <div className="transactions-section">
             <div className="section-header">
               <h2>Recent Transactions</h2>
@@ -324,17 +379,27 @@ const AdminDashboard: React.FC = () => {
                 <div>Card</div>
                 <div>Amount</div>
               </div>
-              {transactions.map(transaction => (
+              {transactions.map((transaction) => (
                 <div key={transaction.id} className="table-row">
                   <div>{formatDate(transaction.date)}</div>
                   <div>{transaction.description}</div>
                   <div>
-                    {transaction.creditCard?.user.profile?.firstName || 'Unknown'} {transaction.creditCard?.user.profile?.lastName || 'User'}
-                    <div className="user-email">{transaction.creditCard?.user.email || 'Unknown Email'}</div>
+                    {transaction.creditCard?.user.profile?.firstName ||
+                      "Unknown"}{" "}
+                    {transaction.creditCard?.user.profile?.lastName || "User"}
+                    <div className="user-email">
+                      {transaction.creditCard?.user.email || "Unknown Email"}
+                    </div>
                   </div>
-                  <div>{transaction.creditCard?.cardNumber ? maskCardNumber(transaction.creditCard.cardNumber) : 'Unknown Card'}</div>
+                  <div>
+                    {transaction.creditCard?.cardNumber
+                      ? maskCardNumber(transaction.creditCard.cardNumber)
+                      : "Unknown Card"}
+                  </div>
                   <div className="transaction-amount">
-                    {formatCurrency(transaction.totalAmount || transaction.amount)}
+                    {formatCurrency(
+                      transaction.totalAmount || transaction.amount
+                    )}
                   </div>
                 </div>
               ))}
@@ -346,10 +411,10 @@ const AdminDashboard: React.FC = () => {
       {/* User Detail Modal */}
       {selectedUser && (
         <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>User Details</h2>
-              <button 
+              <button
                 onClick={() => setSelectedUser(null)}
                 className="modal-close"
               >
@@ -360,19 +425,41 @@ const AdminDashboard: React.FC = () => {
               <div className="user-detail-grid">
                 <div className="detail-section">
                   <h3>Personal Information</h3>
-                  <p><strong>Name:</strong> {selectedUser.profile?.firstName} {selectedUser.profile?.lastName}</p>
-                  <p><strong>Email:</strong> {selectedUser.email}</p>
-                  <p><strong>Username:</strong> {selectedUser.username}</p>
-                  <p><strong>Role:</strong> {selectedUser.role}</p>
-                  <p><strong>Status:</strong> {selectedUser.isActive ? 'Active' : 'Inactive'}</p>
-                  <p><strong>Member Since:</strong> {formatDate(selectedUser.createdAt)}</p>
-                  <p><strong>Credit Score:</strong> {selectedUser.profile?.creditScore || 'N/A'}</p>
+                  <p>
+                    <strong>Name:</strong> {selectedUser.profile?.firstName}{" "}
+                    {selectedUser.profile?.lastName}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {selectedUser.email}
+                  </p>
+                  <p>
+                    <strong>Username:</strong> {selectedUser.username}
+                  </p>
+                  <p>
+                    <strong>Role:</strong> {selectedUser.role}
+                  </p>
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    {selectedUser.isActive ? "Active" : "Inactive"}
+                  </p>
+                  <p>
+                    <strong>Member Since:</strong>{" "}
+                    {formatDate(selectedUser.createdAt)}
+                  </p>
+                  <p>
+                    <strong>Credit Score:</strong>{" "}
+                    {selectedUser.profile?.creditScore || "N/A"}
+                  </p>
                 </div>
                 <div className="detail-section">
-                  <h3>Credit Cards ({selectedUser.creditCards?.length || 0})</h3>
-                  {selectedUser.creditCards?.map(card => (
+                  <h3>
+                    Credit Cards ({selectedUser.creditCards?.length || 0})
+                  </h3>
+                  {selectedUser.creditCards?.map((card) => (
                     <div key={card.id} className="card-summary">
-                      <p><strong>{maskCardNumber(card.cardNumber)}</strong></p>
+                      <p>
+                        <strong>{maskCardNumber(card.cardNumber)}</strong>
+                      </p>
                       <p>Limit: {formatCurrency(card.creditLimit)}</p>
                       <p>Balance: {formatCurrency(card.currentBalance)}</p>
                       <p>Status: {card.status}</p>
@@ -388,10 +475,10 @@ const AdminDashboard: React.FC = () => {
       {/* Card Edit Modal */}
       {editingCard && (
         <div className="modal-overlay" onClick={() => setEditingCard(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Edit Credit Card</h2>
-              <button 
+              <button
                 onClick={() => setEditingCard(null)}
                 className="modal-close"
               >
@@ -399,16 +486,22 @@ const AdminDashboard: React.FC = () => {
               </button>
             </div>
             <div className="modal-body">
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target as HTMLFormElement);
-                const updatedData = {
-                  creditLimit: parseFloat(formData.get('creditLimit') as string),
-                  currentBalance: parseFloat(formData.get('currentBalance') as string),
-                  status: formData.get('status') as string
-                };
-                handleUpdateCreditCard(editingCard.id, updatedData);
-              }}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target as HTMLFormElement);
+                  const updatedData = {
+                    creditLimit: parseFloat(
+                      formData.get("creditLimit") as string
+                    ),
+                    currentBalance: parseFloat(
+                      formData.get("currentBalance") as string
+                    ),
+                    status: formData.get("status") as string,
+                  };
+                  handleUpdateCreditCard(editingCard.id, updatedData);
+                }}
+              >
                 <div className="form-grid">
                   <div>
                     <label htmlFor="creditLimit">Credit Limit:</label>
@@ -448,7 +541,11 @@ const AdminDashboard: React.FC = () => {
                   </div>
                 </div>
                 <div className="modal-actions">
-                  <button type="button" onClick={() => setEditingCard(null)} className="btn-secondary">
+                  <button
+                    type="button"
+                    onClick={() => setEditingCard(null)}
+                    className="btn-secondary"
+                  >
                     Cancel
                   </button>
                   <button type="submit" className="btn-primary">

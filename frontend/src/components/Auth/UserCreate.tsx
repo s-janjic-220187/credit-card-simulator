@@ -1,42 +1,44 @@
-import React, { useState } from 'react';
-import { useUserActions } from '../../contexts/UserContext';
-import api from '../../services/api';
+import React, { useState } from "react";
+import { useI18n } from "../../contexts/I18nContext";
+import { useUserActions } from "../../contexts/UserContext";
+import api from "../../services/api";
 
 interface UserCreateProps {
   onShowLogin: () => void;
 }
 
 const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { login } = useUserActions();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t.auth.registration.passwordMismatch);
       setIsLoading(false);
       return;
     }
 
     try {
-      const response = await api.post('/users', {
+      const response = await api.post("/users", {
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -48,7 +50,7 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
       // Use login action to authenticate the new user
       await login(data.data.user.id);
     } catch (error: any) {
-      let errorMessage = 'Failed to create account';
+      let errorMessage = t.auth.registration.accountCreationFailed;
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.message) {
@@ -63,8 +65,10 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
-        <p className="text-gray-600 mt-2">Get started with your credit card simulator</p>
+        <h2 className="text-2xl font-bold text-gray-900">
+          {t.auth.registration.title}
+        </h2>
+        <p className="text-gray-600 mt-2">{t.auth.registration.subtitle}</p>
       </div>
 
       {error && (
@@ -75,8 +79,11 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-            Username
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            {t.auth.registration.username}
           </label>
           <input
             type="text"
@@ -90,8 +97,11 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            {t.auth.registration.email}
           </label>
           <input
             type="email"
@@ -105,8 +115,11 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Password
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            {t.auth.registration.password}
           </label>
           <input
             type="password"
@@ -120,8 +133,11 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
         </div>
 
         <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-            Confirm Password
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            {t.auth.registration.confirmPassword}
           </label>
           <input
             type="password"
@@ -139,17 +155,21 @@ const UserCreate: React.FC<UserCreateProps> = ({ onShowLogin }) => {
           disabled={isLoading}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
         >
-          {isLoading ? 'Creating Account...' : 'Create Account'}
+          {isLoading
+            ? t.auth.registration.creating
+            : t.auth.registration.createButton}
         </button>
       </form>
 
       <div className="mt-6 text-center">
-        <span className="text-gray-600 text-sm">Already have an account? </span>
+        <span className="text-gray-600 text-sm">
+          {t.auth.registration.alreadyHaveAccount}
+        </span>
         <button
           onClick={onShowLogin}
           className="text-blue-600 hover:text-blue-500 text-sm font-medium"
         >
-          Sign in
+          {t.auth.registration.signIn}
         </button>
       </div>
     </div>
