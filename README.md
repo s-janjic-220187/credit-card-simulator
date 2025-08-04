@@ -53,11 +53,13 @@ Transform credit card education through interactive simulation and visualization
 **Users** → **UserProfile** → **CreditCard[]** → **Transaction[]** → **Statement[]**
 
 **Business Logic Services:**
+
 - **BillingService**: Central calculation engine (interest, payments, fees)
 - **TransactionService**: Transaction processing and validation
 - **CreditScoreCalculatorService**: 100-point financial health scoring
 
 **State Management:**
+
 - **UserContext**: Global user state with reducer pattern
 - **React Query**: 5-minute stale time for API responses
 - **Toast Notifications**: react-hot-toast for user feedback
@@ -703,8 +705,9 @@ npm run test:e2e
 ## 📊 Database Schema
 
 **PostgreSQL with Prisma ORM:**
+
 - **Users**: Profile and authentication data
-- **CreditCards**: Card details and configurations  
+- **CreditCards**: Card details and configurations
 - **Transactions**: Purchase and payment records
 - **BillingCycles**: Monthly billing periods
 - **Statements**: Generated billing statements
@@ -724,12 +727,14 @@ npm run test:e2e
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/s-janjic-220187/credit-card-simulator.git
    cd credit-card-simulator
    ```
 
 2. **Backend Setup**
+
    ```bash
    cd backend
    npm install
@@ -741,6 +746,7 @@ npm run test:e2e
    ```
 
 3. **Frontend Setup**
+
    ```bash
    cd frontend
    npm install
@@ -749,11 +755,12 @@ npm run test:e2e
    ```
 
 4. **Start Development Servers**
+
    ```bash
    # Terminal 1 - Backend
    cd backend && npm run dev
 
-   # Terminal 2 - Frontend  
+   # Terminal 2 - Frontend
    cd frontend && npm run dev
    ```
 
@@ -773,6 +780,7 @@ docker-compose up        # Full stack (Backend: 3001, Frontend: 8080, DB: 5432)
 ### Environment Variables
 
 **Backend (.env):**
+
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/credit_card_simulator"
 NODE_ENV=development
@@ -782,6 +790,7 @@ CORS_ORIGIN=http://localhost:5173
 ```
 
 **Frontend (.env):**
+
 ```env
 VITE_API_URL=http://localhost:3001/api
 VITE_APP_NAME="Credit Card Simulator"
@@ -802,12 +811,14 @@ npm run db:migrate:deploy # Deploy migrations (production)
 ### Production Environment
 
 The application is deployed on Railway with:
+
 - **Frontend**: Static site deployment with automatic builds
 - **Backend**: Node.js application with PostgreSQL database
 - **Database**: Managed PostgreSQL with automated backups
 - **CI/CD**: Automatic deployments on Git push
 
 ### Environment Variables (Production)
+
 - **Backend**: `DATABASE_URL`, `JWT_SECRET`, `CORS_ORIGIN`
 - **Frontend**: `VITE_API_URL` (points to Railway backend)
 - **Migration Strategy**: Auto-run on startup
@@ -815,6 +826,7 @@ The application is deployed on Railway with:
 ### Database Migration Strategy
 
 Safe deployment with data persistence:
+
 ```javascript
 // Intelligent migration logic
 if (migrationsExist) {
@@ -829,12 +841,14 @@ if (migrationsExist) {
 ### Performance Optimization
 
 **Frontend:**
+
 - **Build Memory**: Frontend requires 4GB RAM (`NODE_OPTIONS="--max-old-space-size=4096"`)
 - **Multi-stage Docker**: Reduce production image size
 - **Code Splitting**: Lazy load calculator components
 - **React Query**: 5-minute cache with stale-while-revalidate
 
 **Backend:**
+
 - **Prisma Relations**: Careful `include` usage to avoid N+1 queries
 - **Connection Pooling**: Automatic via Prisma
 - **Transaction Queries**: Filter by `creditCardId` and date ranges
@@ -842,6 +856,7 @@ if (migrationsExist) {
 ## 🔒 Security
 
 ### Authentication & Authorization
+
 - **JWT Authentication**: bcryptjs with 10 salt rounds
 - **Input Validation**: Joi schemas + Prisma constraints
 - **SQL Injection Prevention**: Prisma ORM automatic escaping
@@ -850,12 +865,14 @@ if (migrationsExist) {
 - **Financial Precision**: Decimal/BigInt for monetary calculations
 
 ### API Response Format
+
 ```typescript
 // Success: { success: true, data: T, message?: string }
 // Error: { success: false, message: string, error?: string }
 ```
 
 ### Error Handling Standards
+
 ```typescript
 // Controller pattern
 try {
@@ -864,7 +881,7 @@ try {
   console.error("Context:", error);
   res.status(500).json({
     success: false,
-    message: "User-friendly message"
+    message: "User-friendly message",
   });
 }
 ```
@@ -872,11 +889,13 @@ try {
 ## 🧪 Testing & Quality
 
 ### Current State
+
 - **Manual Testing**: Demo credentials (demo@example.com / demo123)
 - **Health Checks**: `/health` and `/ping` endpoints
 - **Railway Testing**: Production environment validation
 
 ### Logging Conventions
+
 - **Emoji Prefixes**: 🔧 config, ✅ success, ❌ error, ⚠️ warning
 - **Structured Context**: Error details with safe client messages
 - **CORS Debugging**: Origin logging for Railway troubleshooting
@@ -884,6 +903,7 @@ try {
 ## 🛠️ Development
 
 ### Project Structure
+
 ```
 credit-card-simulator/
 ├── backend/                 # Node.js API server
@@ -914,6 +934,7 @@ credit-card-simulator/
 ### Available Scripts
 
 **Backend:**
+
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Build for production
 - `npm run start` - Start production server
@@ -922,22 +943,26 @@ credit-card-simulator/
 - `npm run db:seed` - Seed database with sample data
 
 **Frontend:**
+
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
 ### TypeScript Conventions
+
 - **Strict mode**: Handle undefined states
 - **Interfaces**: `User`, `Transaction` (no `I` prefix)
 - **Services**: Static methods for calculations
 - **API**: Generic `ApiResponse<T>` type
 
 ### Calculation Patterns
+
 - **Daily Interest**: APR / 365 / 100
 - **Minimum Payment**: Max(2% balance, $35, interest + fees)
 
 ### Common Pitfalls
+
 - **Prisma Enums**: UPPERCASE values required
 - **Railway Builds**: Build-time env vars needed
 - **JSX**: Strict parsing - balanced tags
@@ -975,6 +1000,7 @@ credit-card-simulator/
 **Common Issues:**
 
 1. **Database Connection Issues**:
+
    ```bash
    # Check database status
    npx prisma studio
@@ -983,6 +1009,7 @@ credit-card-simulator/
    ```
 
 2. **API Connection Errors**:
+
    ```bash
    # Verify backend is running
    curl http://localhost:3001/health
