@@ -506,7 +506,6 @@ const TransactionSearch: React.FC<TransactionSearchProps> = ({
                 key={transaction.id}
                 transaction={transaction}
                 onDelete={() => handleDeleteTransaction(transaction.id)}
-                showFullDetails={true}
               />
             ))}
           </div>

@@ -86,6 +86,7 @@ export const de = {
     thisMonth: "Dieser Monat",
     lastMonth: "Letzter Monat",
     thisYear: "Dieses Jahr",
+    time: "Zeit",
 
     // Currency
     currency: "€",
@@ -100,6 +101,11 @@ export const de = {
     invalid: "Ungültig",
     tooShort: "Zu kurz",
     tooLong: "Zu lang",
+
+    // Language
+    languageSelector: "Language / Sprache",
+    englishUS: "English (US)",
+    germanDE: "Deutsch (Deutschland)",
   },
 
   // Authentication
@@ -143,6 +149,7 @@ export const de = {
   // Navigation Component
   navigation: {
     brand: "SJ-CCMS",
+    transactions: "Transaktionen",
     mobile: {
       menu: "Menü",
       close: "Schließen",
@@ -538,6 +545,7 @@ export const de = {
     title: "Transaktionen",
     selectCard: "Kreditkarte auswählen",
     addTransaction: "Transaktion hinzufügen",
+    unknownMerchant: "Unbekannter Händler",
 
     // Dashboard
     dashboard: {
@@ -583,6 +591,8 @@ export const de = {
       REFUND: "Rückerstattung",
       FEE: "Gebühr",
       CASH_ADVANCE: "Bargeldvorschuss",
+      INTEREST: "Zinsen",
+      CREDIT: "Kredit",
     },
     typeDescriptions: {
       PURCHASE: "Reguläre Kauftransaktion",
@@ -602,6 +612,12 @@ export const de = {
       HEALTHCARE: "Gesundheitswesen",
       EDUCATION: "Bildung",
       OTHER: "Sonstiges",
+    },
+    statuses: {
+      ACTIVE: "Aktiv",
+      PENDING: "Ausstehend",
+      CANCELLED: "Storniert",
+      COMPLETED: "Abgeschlossen",
     },
     history: {
       title: "Transaktionshistorie",
@@ -712,6 +728,7 @@ export const de = {
       managingCard: "Verwaltete Karte",
       currentBalance: "Aktueller Saldo",
       creditLimit: "Kreditlimit",
+      utilization: "ausgelastet",
       tabs: {
         overview: "Übersicht",
         overviewDesc: "Dashboard & Schnellaktionen",
@@ -732,6 +749,16 @@ export const de = {
     dashboard: {
       title: "Profilinformationen",
       editProfile: "Profil bearbeiten",
+      sections: {
+        address: "Adresse",
+        employment: "Beschäftigung",
+        creditInformation: "Kreditinformationen",
+        accountInformation: "Kontoinformationen",
+      },
+      labels: {
+        profileCreated: "Profil erstellt",
+        lastUpdated: "Zuletzt aktualisiert",
+      },
       personalInfo: {
         title: "Persönliche Informationen",
         firstName: "Vorname",
@@ -739,6 +766,9 @@ export const de = {
         email: "E-Mail-Adresse",
         phone: "Telefonnummer",
         dateOfBirth: "Geburtsdatum",
+        name: "Name",
+        phoneLabel: "Telefon",
+        dateOfBirthLabel: "Geburtsdatum",
       },
       financialInfo: {
         title: "Finanzielle Informationen",
@@ -746,6 +776,9 @@ export const de = {
         employmentStatus: "Beschäftigungsstatus",
         creditScore: "Kredit-Score",
         creditRating: "Kreditbewertung",
+        statusLabel: "Status",
+        annualIncomeLabel: "Jahreseinkommen",
+        creditScoreLabel: "Kredit-Score",
       },
       addressInfo: {
         title: "Adressinformationen",
@@ -780,9 +813,65 @@ export const de = {
   // Billing Cycle Components
   billingCycle: {
     dashboard: {
-      title: "Abrechnungszyklus-Dashboard",
+      title: "💳 Abrechnungszyklus-Dashboard",
       description:
         "Verfolgen und analysieren Sie Kreditkarten-Abrechnungszyklen, Zinsberechnungen und Gebührenstrukturen.",
+      generateNewCycle: "Neuen Zyklus generieren",
+      billingCycles: "Abrechnungszyklen",
+      cycleNumber: "Zyklus #",
+      overview: "Übersicht",
+      current: "Aktuell",
+      paid: "Bezahlt",
+      overdue: "Überfällig",
+      balance: "Saldo",
+
+      // No cycles found section
+      noBillingCyclesFound: "Keine Abrechnungszyklen gefunden",
+      noBillingCyclesDesc:
+        "Für diese Kreditkarte existieren noch keine Abrechnungszyklen.",
+      toGetStarted: "Zum Einstieg:",
+      getStartedSteps: [
+        "Stellen Sie sicher, dass Sie eine gültige Kreditkarte im System haben",
+        'Klicken Sie auf "Neuen Zyklus generieren", um Ihren ersten Abrechnungszyklus zu erstellen',
+        "Fügen Sie einige Transaktionen hinzu, um Abrechnungszyklus-Berechnungen zu sehen",
+      ],
+      noCreditCardsYet: "Haben Sie noch keine Kreditkarten eingerichtet?",
+      createDemoData: "Demo-Daten erstellen",
+      createDemoDataDesc:
+        "Dies erstellt einen Demo-Benutzer, ein Profil und eine Kreditkarte zum Testen",
+
+      // Cycle overview cards
+      startingBalance: "Startsaldo",
+      totalPurchases: "Gesamtkäufe",
+      endingBalance: "Endsaldo",
+
+      // Interest & Fees section
+      interestAndFees: "Zinsen & Gebühren",
+      averageDailyBalance: "Durchschnittlicher Tagessaldo",
+      interestCharged: "Berechnete Zinsen",
+      feesCharged: "Berechnete Gebühren",
+      totalPayments: "Gesamtzahlungen",
+      minimumPayment: "Mindestzahlung",
+      dueDate: "Fälligkeitsdatum",
+
+      // Educational section
+      howCalculated: "Wie dieser Zyklus berechnet wurde",
+      interestCalculation: "Zinsberechnung",
+      interestCalculationDesc:
+        "Tageszinssatz × Durchschnittlicher Tagessaldo × Tage im Zyklus = Zinsgebühr",
+      averageDailyBalanceCalc: "Durchschnittlicher Tagessaldo",
+      averageDailyBalanceDesc:
+        "Summe der Tagessalden ÷ Anzahl der Tage im Zyklus =",
+      minimumPaymentCalc: "Mindestzahlung",
+      minimumPaymentDesc:
+        "Normalerweise 2-3% des Saldos oder 35€ (je nachdem, was höher ist), plus Zinsen und Gebühren =",
+
+      // No cycle selected
+      selectBillingCycle: "Abrechnungszyklus auswählen",
+      selectBillingCycleDesc:
+        "Wählen Sie einen Abrechnungszyklus aus der Liste, um detaillierte Berechnungen, Zinsaufschlüsselungen und Bildungsinformationen anzuzeigen.",
+
+      // Legacy fields (keeping for compatibility)
       noCreditCards: "Keine Kreditkarten gefunden",
       noCreditCardsDesc:
         "Um die Abrechnungszyklus-Funktionen zu nutzen, benötigen Sie mindestens eine eingerichtete Kreditkarte. Kreditkarten sind erforderlich, um Abrechnungszyklen zu generieren, Ausgaben zu verfolgen und Zinsberechnungen zu analysieren.",
@@ -794,17 +883,10 @@ export const de = {
       currentCycle: "Aktueller Zyklus",
       previousCycles: "Vorherige Zyklen",
       cycleDetails: "Zyklus-Details",
-      startingBalance: "Startsaldo",
-      endingBalance: "Endsaldo",
-      totalPurchases: "Gesamtkäufe",
-      totalPayments: "Gesamtzahlungen",
-      interestCharged: "Berechnete Zinsen",
-      feesCharged: "Berechnete Gebühren",
-      minimumPayment: "Mindestzahlung",
-      dueDate: "Fälligkeitsdatum",
-      paid: "Bezahlt",
       unpaid: "Unbezahlt",
-      overdue: "Überfällig",
+      selectCycle: "Rechnungszyklus auswählen",
+      selectCycleDesc:
+        "Wählen Sie einen Rechnungszyklus aus der Liste aus, um detaillierte Berechnungen, Zinsaufschlüsselungen und Bildungsinformationen anzuzeigen.",
     },
   },
 
@@ -1102,6 +1184,8 @@ export const de = {
           creditCards: "Kreditkarten",
           role: "Rolle",
           createdAt: "Erstellt am",
+          memberSince: "Mitglied seit",
+          creditScore: "Kreditwürdigkeit",
           lastLogin: "Letzter Login",
         },
       },
@@ -1397,6 +1481,674 @@ export const de = {
       budget: "Budget",
       goals: "Ziele",
       alerts: "Benachrichtigungen",
+    },
+  },
+
+  // Hardcoded Component Strings
+  components: {
+    // Admin Dashboard
+    adminDashboard: {
+      loadingMessage: "Admin-Dashboard wird geladen...",
+      retry: "Wiederholen",
+      user: "Benutzer",
+      cards: "Karten",
+      actions: "Aktionen",
+      view: "Anzeigen",
+      delete: "Löschen",
+      cardholder: "Karteninhaber",
+      limit: "Limit",
+      balance: "Saldo",
+      available: "Verfügbar",
+      issued: "Ausgegeben",
+      recentTransactions: "Letzte Transaktionen",
+      refresh: "Aktualisieren",
+      date: "Datum",
+      card: "Karte",
+      userDetails: "Benutzerdetails",
+      personalInformation: "Persönliche Informationen",
+      name: "Name",
+      creditLimit: "Kreditlimit",
+      currentBalance: "Aktueller Saldo",
+      editCreditCard: "Kreditkarte bearbeiten",
+      cancel: "Abbrechen",
+      updateCard: "Karte aktualisieren",
+      cardStatuses: {
+        active: "Aktiv",
+        inactive: "Inaktiv",
+        suspended: "Gesperrt",
+        closed: "Geschlossen",
+      },
+    },
+
+    // Navigation
+    navigation: {
+      mobileBrandShort: "💳 SJ",
+      openNavigationMenu: "Navigationsmenü öffnen",
+    },
+
+    // Visualization Components
+    visualizations: {
+      paymentImpact: {
+        paymentPower: "🚀 Zahlungskraft",
+        timeValue: "⏰ Zeitwert",
+        compoundEffect: "📈 Zinseszinseffekt",
+        strategyTip: "💡 Strategietipp",
+        paymentPowerDesc:
+          "Jeder zusätzliche Euro reduziert Ihre Gesamtzinskosten dramatisch.",
+        timeValueDesc:
+          "Je früher Sie Ihr Guthaben tilgen, desto mehr sparen Sie bei den Zinsen.",
+        compoundEffectDesc:
+          "Zinsen werden täglich kapitalisiert. Höhere Zahlungen durchbrechen diesen teuren Zyklus schneller.",
+        strategyTipDesc:
+          "Schon kleine Erhöhungen des Zahlungsbetrags können Ihnen Hunderte oder Tausende an Zinsen sparen.",
+      },
+      interestGrowth: {
+        doubleMinimum: "2x Minimum",
+        tripleMinimum: "3x Minimum",
+        paymentImpact: "💡 Zahlungsauswirkung",
+        interestCompounds: "📈 Zinsen akkumulieren",
+        timeValue: "⏰ Zeitwert",
+        paymentImpactDesc:
+          "Kleine Erhöhungen des Zahlungsbetrags schaffen dramatische Einsparungen bei den Gesamtzinsen.",
+        interestCompoundsDesc:
+          "Kreditkartenzinsen werden täglich kapitalisiert und lassen kleine Salden exponentiell wachsen.",
+        timeValueDesc:
+          "Je länger Sie ein Guthaben halten, desto teurer wird es durch Zinseszinseffekt.",
+      },
+      feeAnalysis: {
+        monthly: "Monatlich",
+        annual: "Jährlich",
+        annualFeeImpact: "💳 Jahresgebühr-Auswirkung",
+        foreignTransactionFees: "🌍 Auslandstransaktionsgebühren",
+        balanceTransferStrategy: "🔄 Saldoübertragungsstrategie",
+        cashAdvanceCosts: "💰 Bargeldvorschuss-Kosten",
+        penaltyFeeAvoidance: "⚠️ Strafgebühren-Vermeidung",
+        totalCostAnalysis: "📊 Gesamtkostenanalyse",
+        annualFee: "Jahresgebühr (€)",
+        foreignTransactionFee: "Auslandstransaktionsgebühr (%)",
+        balanceTransferFee: "Saldoübertragungsgebühr (%)",
+        cashAdvanceFee: "Bargeldvorschussgebühr (%)",
+        latePaymentFee: "Verzugsgebühr (€)",
+        overlimitFee: "Überlimitgebühr (€)",
+        annualFeeImpactDesc:
+          "Jahresgebühren reduzieren Ihre effektive Belohnungsrate. Berechnen Sie, ob Belohnungen die Gebühren übersteigen.",
+        foreignTransactionFeesDesc:
+          "Vermeiden Sie Auslandstransaktionsgebühren auf Reisen, indem Sie die richtigen Karten verwenden.",
+        balanceTransferStrategyDesc:
+          "Saldoübertragungsgebühren können sich für erhebliche Zinseinsparungen lohnen.",
+        cashAdvanceCostsDesc:
+          "Bargeldvorschüsse sind teuer mit hohen Gebühren und sofortigen Zinsen.",
+        penaltyFeeAvoidanceDesc:
+          "Verspätungs- und Überlimitgebühren sind mit ordentlichen Zahlungsgewohnheiten völlig vermeidbar.",
+        totalCostAnalysisDesc:
+          "Berücksichtigen Sie alle Gebühren bei der Bewertung der wahren Kosten des Kreditkartenbesitzes.",
+      },
+    },
+
+    // Transaction Components
+    transactions: {
+      transactionTypes: {
+        purchase: "Kauf",
+        payment: "Zahlung",
+        refund: "Rückerstattung",
+        fee: "Gebühr",
+        interest: "Zinsen",
+        credit: "Guthaben",
+      },
+      categories: {
+        dining: "Restaurant",
+        gas: "Benzin",
+        groceries: "Lebensmittel",
+        entertainment: "Unterhaltung",
+        utilities: "Versorgungsunternehmen",
+        shopping: "Einkaufen",
+        travel: "Reisen",
+        healthcare: "Gesundheitswesen",
+        education: "Bildung",
+        other: "Sonstiges",
+      },
+      messages: {
+        failedToLoad: "Fehler beim Laden der Transaktionen",
+        confirmCancel:
+          "Sind Sie sicher, dass Sie diese Transaktion stornieren möchten?",
+        cancelledSuccessfully: "Transaktion erfolgreich storniert",
+        failedToCancel: "Fehler beim Stornieren der Transaktion",
+      },
+      search: "Suchen",
+      type: "Typ",
+      category: "Kategorie",
+      cancel: "Stornieren",
+      cancelled: "STORNIERT",
+    },
+
+    // Statement Generator
+    statementGenerator: {
+      title: "Kreditkartenabrechnung",
+      addTransaction: "Transaktion hinzufügen",
+      validationError: "Bitte geben Sie Beschreibung und Betrag ein",
+      keyMetrics: "Wichtige Kennzahlen",
+      creditUtilization: "Kreditnutzung",
+      availableCredit: "Verfügbarer Kredit",
+      interestThisPeriod: "Zinsen in diesem Zeitraum",
+      feesThisPeriod: "Gebühren in diesem Zeitraum",
+      spendingByCategory: "Ausgaben nach Kategorie",
+      paymentImpact: "Zahlungsauswirkung",
+      highCreditUtilization: "Hohe Kreditnutzung",
+      editStatement: "Abrechnung bearbeiten",
+      viewAnalysis: "Analyse anzeigen",
+      viewStatement: "Abrechnung anzeigen",
+      statementAnalysis: "Abrechnungsanalyse",
+      creditCardStatement: "KREDITKARTENABRECHNUNG",
+      accountHolder: "Kontoinhaber",
+      accountNumber: "Kontonummer",
+      creditLimit: "Kreditlimit",
+      statementPeriod: "Abrechnungszeitraum",
+      paymentDueDate: "Zahlungsfälligkeitsdatum",
+      newBalance: "Neuer Saldo",
+      minimumPaymentDue: "Mindestfällige Zahlung",
+      accountSummary: "Kontozusammenfassung",
+      previousBalance: "Vorheriger Saldo",
+      paymentsCredits: "Zahlungen & Guthaben",
+      purchasesAdvances: "Käufe & Vorschüsse",
+      feesInterest: "Gebühren & Zinsen",
+      creditInformation: "Kreditinformationen",
+      annualPercentageRate: "Effektiver Jahreszins",
+      transactionHistory: "Transaktionsverlauf",
+      date: "Datum",
+      description: "Beschreibung",
+      category: "Kategorie",
+      amount: "Betrag",
+      currentTransactions: "Aktuelle Transaktionen",
+      remove: "Entfernen",
+      type: "Typ",
+      recommendations: "Empfehlungen",
+      interestCharges: "Zinsgebühren",
+      feesCharged: "Berechnete Gebühren",
+      importantPaymentInformation: "Wichtige Zahlungsinformationen",
+      minimumPayment: "Mindestzahlung",
+      latePaymentFee: "Verzugsgebühr",
+      interestCalculation: "Zinsberechnung",
+      placeholders: {
+        merchantName: "z.B. AMAZON.COM EINKAUF",
+      },
+      messages: {
+        highCreditUtilizationDesc:
+          "Ihre Nutzung beträgt {{utilization}}%. Erwägen Sie, den Saldo auf unter 30% zu reduzieren, um Ihre Kreditwürdigkeit zu verbessern.",
+        interestChargesDesc:
+          "Sie haben {{amount}} an Zinsen bezahlt. Zahlen Sie Ihren vollständigen Saldo, um Zinsgebühren zu vermeiden.",
+        feesChargedDesc:
+          "Ihnen wurden {{amount}} an Gebühren berechnet. Überprüfen Sie die Gebührenrichtlinien, um zukünftige Gebühren zu vermeiden.",
+        minimumPaymentDesc:
+          "{{amount}} (oder {{percentage}}% des Saldos, je nachdem, welcher Betrag höher ist)",
+        latePaymentFeeDesc:
+          "Bis zu {{amount}}, wenn die Zahlung nach dem Fälligkeitsdatum eingeht",
+        interestCalculationDesc:
+          "Zinsen werden täglich auf Ihren durchschnittlichen Tagessaldo mit {{apr}}% effektivem Jahreszins berechnet",
+        statementDescription:
+          "Erstellen und analysieren Sie realistische Kreditkartenabrechnungen, um Abrechnungszyklen, Zinsberechnungen und Zahlungsstrategien zu verstehen.",
+      },
+    },
+
+    // Scenario Learning
+    scenarioLearning: {
+      title: "🎯 Szenario-basiertes Lernen",
+      description:
+        "Üben Sie reale finanzielle Entscheidungsfindung durch interaktive Szenarien. Testen Sie Ihr Wissen und lernen Sie aus realistischen Situationen.",
+      startScenario: "Szenario starten",
+      learningObjectives: "Lernziele:",
+      moreObjectives: "weitere Ziele...",
+      howItWorks: {
+        title: "So funktioniert Szenario-Lernen",
+        step1: {
+          title: "1. Situation verstehen",
+          description:
+            "Jedes Szenario präsentiert eine realistische finanzielle Situation mit spezifischen Herausforderungen.",
+        },
+        step2: {
+          title: "2. Entscheidungen treffen",
+          description:
+            "Wählen Sie aus mehreren Optionen für jeden Entscheidungspunkt im Szenario.",
+        },
+        step3: {
+          title: "3. Aus Ergebnissen lernen",
+          description:
+            "Erhalten Sie sofortiges Feedback und verstehen Sie die Konsequenzen Ihrer Entscheidungen.",
+        },
+      },
+      difficulties: {
+        beginner: "anfänger",
+        intermediate: "fortgeschritten",
+        advanced: "experte",
+      },
+      categories: {
+        debt_management: "Schuldenverwaltung",
+        credit_building: "Kreditaufbau",
+        payment_strategy: "Zahlungsstrategie",
+        fee_avoidance: "Gebührenvermeidung",
+      },
+      backToScenarios: "← Zurück zu Szenarien",
+      progress: "Fortschritt",
+      score: "Punktzahl",
+      points: "Punkte",
+      availableIncome: "Verfügbares Einkommen",
+      yourPreviousDecisions: "Ihre bisherigen Entscheidungen",
+      decisionAnalysis: "Entscheidungsanalyse",
+      situation: "Situation",
+      currentBalance: "Aktueller Saldo",
+      apr: "Effektiver Jahreszins",
+      creditScore: "Kredit-Score",
+      monthlyIncome: "Monatliches Einkommen",
+      monthlyExpenses: "Monatliche Ausgaben",
+      decision: "Entscheidung",
+      clickToSelect:
+        "Klicken Sie, um diese Option auszuwählen und das Ergebnis zu sehen",
+      yourChoice: "Ihre Wahl:",
+      impact: "Auswirkung",
+      scenarioComplete: "Szenario abgeschlossen!",
+      pointsEarned: "Punkte erhalten:",
+      tryAgain: "Nochmal versuchen",
+      chooseNewScenario: "Neues Szenario wählen",
+      positiveImpact: "positiv",
+      negativeImpact: "negativ",
+      neutralImpact: "neutral",
+      scenarios: {
+        emergencyDebt: {
+          title: "Notfall-Schuldenverwaltung",
+          description:
+            "Bewältigen Sie einen unerwarteten finanziellen Notfall bei gleichzeitigem Management bestehender Kreditkartenschulden.",
+          situation:
+            "Sie haben einen Saldo von 3.500 $ auf Ihrer Kreditkarte (18% effektiver Jahreszins, 5.000 $ Limit) und leisten monatlich 150 $ Zahlungen. Ihr Auto benötigt plötzlich 1.200 $ für Reparaturen. Sie haben 300 $ Erspartes und verdienen 3.200 $/Monat bei 2.800 $ Ausgaben.",
+          objectives: [
+            "Die Notreparatur bewältigen, ohne Ihre Kreditwürdigkeit schwer zu beschädigen",
+            "Langfristige Zinskosten minimieren",
+            "Einen nachhaltigen Zahlungsplan beibehalten",
+          ],
+          decisions: {
+            emergencyFunding: {
+              question:
+                "Wie sollten Sie die 1.200 $ für die Autoreparatur finanzieren?",
+              options: [
+                {
+                  text: "Kreditkarte verwenden (300 $ Erspartes + 900 $ auf Karte)",
+                  explanation:
+                    "Dies erhöht Ihre Auslastung auf 88% und fügt hochverzinsliche Schulden hinzu.",
+                },
+                {
+                  text: "Erspartes + Privatkredit für verbleibenden Betrag verwenden",
+                  explanation:
+                    "Privatkredit hat wahrscheinlich niedrigere Zinsen als Kreditkarte.",
+                },
+                {
+                  text: "Erspartes + Zahlungsplan mit Mechaniker aushandeln",
+                  explanation:
+                    "Beste Option - vermeidet neue Schulden und kann zinsfrei sein.",
+                },
+                {
+                  text: "Zahltagdarlehen für schnelles Bargeld verwenden",
+                  explanation:
+                    "Zahltagdarlehen haben extrem hohe Zinssätze (400%+ effektiver Jahreszins).",
+                },
+              ],
+            },
+            paymentStrategy: {
+              question:
+                "Nach Bewältigung des Notfalls, wie sollten Sie Ihre Kreditkartenzahlungen anpassen?",
+              options: [
+                {
+                  text: "Vorübergehend auf Mindestzahlungen reduzieren",
+                  explanation:
+                    "Wird die Zinskosten über die Zeit erheblich erhöhen.",
+                },
+                {
+                  text: "150 $/Monat beibehalten, aber andere Ausgaben kürzen",
+                  explanation:
+                    "Gute Disziplin, aber möglicherweise schwer durchzuhalten.",
+                },
+                {
+                  text: "Zahlungen auf 200 $/Monat durch Reduzierung des Unterhaltungsbudgets erhöhen",
+                  explanation:
+                    "Ausgezeichnet - tilgt Schulden schneller und spart Zinsen.",
+                },
+                {
+                  text: "Schuldenlawinen-Methode für alle Schulden verwenden",
+                  explanation:
+                    "Mathematisch optimaler Ansatz für mehrere Schulden.",
+                },
+              ],
+            },
+            creditUtilization: {
+              question:
+                "Ihre Kreditauslastung ist jetzt hoch. Was sollte Ihre sofortige Priorität sein?",
+              options: [
+                {
+                  text: "Kreditlimiterhöhung beantragen",
+                  explanation:
+                    "Kann bei Auslastung helfen, könnte aber zu mehr Ausgaben verleiten.",
+                },
+                {
+                  text: "Saldo aggressiv abzahlen",
+                  explanation:
+                    "Beste langfristige Strategie für Kredit-Score und Finanzen.",
+                },
+                {
+                  text: "Neue Kreditkarte für mehr verfügbares Guthaben eröffnen",
+                  explanation:
+                    "Harte Anfrage schadet Score und fügt Versuchung zum Ausgeben hinzu.",
+                },
+                {
+                  text: "Sich darauf konzentrieren, alle Zahlungen pünktlich zu leisten",
+                  explanation:
+                    "Zahlungshistorie ist der wichtigste Faktor für Kredit-Score.",
+                },
+              ],
+            },
+          },
+          outcomes: {
+            excellent: {
+              title: "Finanzkrise abgewendet!",
+              description:
+                "Sie haben den Notfall klug bewältigt, Schuldenwachstum minimiert und einen nachhaltigen Erholungsplan erstellt.",
+            },
+            good: {
+              title: "Gut verwaltet",
+              description:
+                "Sie haben größtenteils gute Entscheidungen getroffen mit kleinen Verbesserungsmöglichkeiten im Schuldenmanagement.",
+            },
+            poor: {
+              title: "Lernerfahrung",
+              description:
+                "Diese Situation hat Bereiche aufgezeigt, in denen andere Entscheidungen zu besseren finanziellen Ergebnissen führen könnten.",
+            },
+          },
+        },
+        creditBuilding: {
+          title: "Kreditaufbau von Grund auf",
+          description:
+            "Lernen Sie, wie Sie verantwortlich eine Kredithistorie mit Ihrer ersten Kreditkarte aufbauen.",
+          situation:
+            "Sie sind 22 Jahre alt und haben gerade Ihre erste Kreditkarte mit 1.000 $ Limit und 24% effektivem Jahreszins erhalten. Sie haben ein stabiles Einkommen von 2.500 $/Monat und möchten exzellente Kreditwürdigkeit für zukünftige Ziele wie Autokauf oder Eigenheim aufbauen.",
+          objectives: [
+            "Positive Zahlungshistorie etablieren",
+            "Auslastung niedrig für optimalen Kredit-Score halten",
+            "Kredit verantwortlich aufbauen ohne Schuldenanhäufung",
+          ],
+          decisions: {
+            spendingStrategy: {
+              question:
+                "Wie viel sollten Sie monatlich auf Ihrer Kreditkarte ausgeben?",
+              options: [
+                {
+                  text: "Für alles verwenden, um schnell Kredit aufzubauen (800-900 $/Monat)",
+                  explanation:
+                    "Hohe Auslastung (80-90%) schadet Ihrem Kredit-Score erheblich.",
+                },
+                {
+                  text: "Nur für kleine Einkäufe verwenden (50-100 $/Monat)",
+                  explanation:
+                    "Perfekt! 5-10% Auslastung ist ideal für Kreditaufbau.",
+                },
+                {
+                  text: "Bis zum Limit ausschöpfen und Mindestzahlungen leisten",
+                  explanation:
+                    "Schlechteste Strategie - schadet Kredit-Score und erzeugt teure Schulden.",
+                },
+                {
+                  text: "Nur für Notfälle verwenden",
+                  explanation: "Sicher, aber minimale Kreditaufbau-Aktivität.",
+                },
+              ],
+            },
+            paymentTiming: {
+              question: "Wann sollten Sie Ihre Kreditkartenrechnung bezahlen?",
+              options: [
+                {
+                  text: "Den vollen Saldo jeden Monat vor dem Fälligkeitsdatum zahlen",
+                  explanation:
+                    "Ausgezeichnet! Vermeidet Zinsen und baut perfekte Zahlungshistorie auf.",
+                },
+                {
+                  text: "Mindestbetrag zahlen, um kleinen Saldo für Kreditaufbau zu behalten",
+                  explanation:
+                    "Mythos! Saldo zu tragen hilft nicht beim Kredit und kostet Zinsen.",
+                },
+                {
+                  text: "Vor Abrechnungsdatum zahlen, um 0 $ Saldo zu zeigen",
+                  explanation:
+                    "Gut für Auslastung, aber zeigt möglicherweise keine Kontoaktivität.",
+                },
+                {
+                  text: "Einige Tage nach Fälligkeitsdatum zahlen",
+                  explanation:
+                    "Verspätete Zahlungen schaden Kredit-Scores erheblich.",
+                },
+              ],
+            },
+            creditGrowth: {
+              question:
+                "Nach 6 Monaten verantwortlicher Nutzung, was sollten Sie als nächstes tun?",
+              options: [
+                {
+                  text: "Kreditlimiterhöhung für aktuelle Karte beantragen",
+                  explanation:
+                    "Gute Strategie zur Senkung der Auslastungsrate.",
+                },
+                {
+                  text: "Mehrere neue Karten beantragen, um verfügbares Guthaben zu erhöhen",
+                  explanation:
+                    "Mehrere Anfragen in kurzer Zeit können Ihrem Score schaden.",
+                },
+                {
+                  text: "Aktuelle Strategie fortsetzen und Nutzung schrittweise erhöhen",
+                  explanation:
+                    "Stetiger Ansatz - Geduld baut starken Kredit auf.",
+                },
+                {
+                  text: "Eine zusätzliche Karte mit besseren Belohnungen beantragen",
+                  explanation:
+                    "Vernünftig, wenn Sie niedrige Auslastung bei beiden Karten beibehalten.",
+                },
+              ],
+            },
+          },
+          outcomes: {
+            excellent: {
+              title: "Kreditaufbau-Champion!",
+              description:
+                "Sie haben exzellente Gewohnheiten entwickelt, die Ihnen während Ihrer gesamten finanziellen Reise dienen werden.",
+            },
+            good: {
+              title: "Starkes Fundament",
+              description:
+                "Sie sind auf dem richtigen Weg mit kleineren Anpassungen für Optimierung.",
+            },
+            poor: {
+              title: "Kurskorrektur erforderlich",
+              description:
+                "Diese Erkenntnisse helfen Ihnen, häufige Kreditaufbau-Fehler zu vermeiden.",
+            },
+          },
+        },
+        balanceTransfer: {
+          title: "Strategische Saldoübertragung",
+          description:
+            "Optimieren Sie Ihre Schuldenrückzahlungsstrategie mit Saldoübertragungsoptionen.",
+          situation:
+            "Sie haben 8.000 $ Kreditkartenschulden auf 3 Karten mit verschiedenen effektiven Jahreszinsen (Karte A: 3.000 $ bei 22%, Karte B: 3.500 $ bei 19%, Karte C: 1.500 $ bei 25%). Sie erhalten ein Saldoübertragungsangebot: 0% effektiver Jahreszins für 15 Monate, 3% Übertragungsgebühr, dann 16,99% effektiver Jahreszins.",
+          objectives: [
+            "Gesamte gezahlte Zinsen minimieren",
+            "Nachhaltigen Rückzahlungsplan erstellen",
+            "Rückfall in Schulden vermeiden",
+          ],
+          decisions: {
+            transferDecision: {
+              question:
+                "Welche Salden sollten Sie auf die 0%-Karte übertragen?",
+              options: [
+                {
+                  text: "Alle 8.000 $ übertragen, um 0%-Periode zu maximieren",
+                  explanation:
+                    "Gute Strategie, wenn Sie es innerhalb von 15 Monaten zurückzahlen können.",
+                },
+                {
+                  text: "Nur die höchste effektive Jahreszins-Schuld übertragen (Karte C: 1.500 $ bei 25%)",
+                  explanation:
+                    "Konservativ, aber maximiert möglicherweise nicht den Nutzen.",
+                },
+                {
+                  text: "Die zwei höchsten Salden übertragen (Karten A & B: 6.500 $)",
+                  explanation:
+                    "Exzellente Balance aus Nutzen und handhabbarem Zahlungsplan.",
+                },
+                {
+                  text: "Nicht übertragen - die 3% Gebühr ist es nicht wert",
+                  explanation:
+                    "Verpasst eine bedeutende Gelegenheit, Zinsen zu sparen.",
+                },
+              ],
+            },
+            payoffStrategy: {
+              question:
+                "Welche monatliche Zahlung sollten Sie für den übertragenen Saldo anpeilen?",
+              options: [
+                {
+                  text: "400 $/Monat (wird in ~16 Monaten abgezahlt)",
+                  explanation:
+                    "Riskant - Sie werden knapp vor Ende der Aktionslaufzeit fertig.",
+                },
+                {
+                  text: "500 $/Monat (wird in ~13 Monaten abgezahlt)",
+                  explanation:
+                    "Guter Puffer - fertig bevor Aktionslaufzeit abläuft.",
+                },
+                {
+                  text: "600 $/Monat (wird in ~11 Monaten abgezahlt)",
+                  explanation:
+                    "Ausgezeichnet - maximaler Nutzen mit komfortabler Marge.",
+                },
+                {
+                  text: "Mindestzahlungen, um es zu strecken",
+                  explanation: "Macht den Zweck der 0%-Aktion zunichte.",
+                },
+              ],
+            },
+            remainingCards: {
+              question:
+                "Wie sollten Sie mit den Karten umgehen, die Sie nicht übertragen haben?",
+              options: [
+                {
+                  text: "Schließen, um Versuchung zu entfernen",
+                  explanation:
+                    "Kartenschließung reduziert verfügbares Guthaben und schadet Kredit-Score.",
+                },
+                {
+                  text: "Offen lassen, aber physische Karten zerschneiden",
+                  explanation:
+                    "Klug! Erhält Kredithistorie bei gleichzeitiger Entfernung der Versuchung.",
+                },
+                {
+                  text: "Für kleine Einkäufe verwenden, um sie aktiv zu halten",
+                  explanation: "Gut, wenn Sie sie sofort abzahlen können.",
+                },
+                {
+                  text: "Alle Zahlungen auf Übertragungskarte konzentrieren und Mindestbeträge bei anderen",
+                  explanation: "Macht während der Aktionsperiode Sinn.",
+                },
+              ],
+            },
+          },
+          outcomes: {
+            excellent: {
+              title: "Übertragungsmeister!",
+              description:
+                "Sie haben den Nutzen der Saldoübertragung maximiert und häufige Fallstricke vermieden.",
+            },
+            good: {
+              title: "Strategisches Denken",
+              description:
+                "Gute Nutzung der Übertragungsoption mit Raum für kleinere Optimierung.",
+            },
+            poor: {
+              title: "Verpasste Gelegenheit",
+              description:
+                "Diese Strategien besser zu verstehen wird bei zukünftigem Schuldenmanagement helfen.",
+            },
+          },
+        },
+      },
+    },
+
+    // Credit Card Details
+    creditCardDetails: {
+      changePIN: "PIN ändern",
+      confirmPIN: "PIN bestätigen",
+      changingPIN: "PIN wird geändert...",
+      currentLimitNoLimit: "Aktuelles Limit: Kein Limit gesetzt",
+      placeholders: {
+        pinDefault: "0000",
+        spendingLimit: "1000,00",
+      },
+    },
+
+    // Financial Health Calculator
+    financialHealthCalculator: {
+      placeholders: {
+        creditLimit: "5000",
+        balance: "10000",
+        cardsCount: "2",
+        interestRate: "22,0",
+        creditScore: "700",
+        monthlyIncome: "5000",
+        monthlyExpenses: "3500",
+        monthlyDebtPayments: "500",
+      },
+    },
+
+    // Fee Analysis Dashboard
+    feeAnalysisDashboard: {
+      chartLabels: {
+        annualFees: "Jahresgebühren",
+        transactionFees: "Transaktionsgebühren",
+        penaltyFees: "Strafgebühren",
+        totalFees: "Gesamtgebühren",
+      },
+    },
+
+    // Profile Components
+    profileForm: {
+      editProfile: "Profil bearbeiten",
+      createProfile: "Profil erstellen",
+      updateProfile: "Profil aktualisieren",
+    },
+
+    // Credit Card Profile Builder
+    creditCardProfileBuilder: {
+      benefits: {
+        fraudProtection: "Betrugsschutz",
+        priceProtection: "Preisschutz",
+        extendedWarranty: "Erweiterte Garantie",
+        purchaseProtection: "Kaufschutz",
+        travelInsurance: "Reiseversicherung",
+        roadsideAssistance: "Pannenhilfe",
+        conciergeService: "Concierge-Service",
+        baggageInsurance: "Gepäckversicherung",
+      },
+      categories: {
+        gasStations: "Tankstellen",
+        onlineShopping: "Online-Shopping",
+        departmentStores: "Kaufhäuser",
+        streamingServices: "Streaming-Dienste",
+      },
+    },
+
+    // Budget Planner
+    budgetPlanner: {
+      newCategory: "Neue Kategorie",
+      newGoal: "Neues Ziel",
+    },
+
+    // Payment Impact Visualizer
+    paymentImpactVisualizer: {
+      minimumPayment: "Mindestbetrag",
     },
   },
 };

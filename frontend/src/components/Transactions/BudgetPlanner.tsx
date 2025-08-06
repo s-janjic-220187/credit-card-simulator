@@ -146,7 +146,7 @@ const BudgetPlanner: React.FC<BudgetPlannerProps> = ({
   const addBudgetCategory = () => {
     const newCategory: BudgetCategory = {
       id: `cat_${Date.now()}`,
-      name: "New Category",
+      name: t.components.budgetPlanner.newCategory,
       budgetAmount: 100,
       spentAmount: 0,
       color: "#95A5A6",
@@ -162,7 +162,7 @@ const BudgetPlanner: React.FC<BudgetPlannerProps> = ({
   const addSpendingGoal = () => {
     const newGoal: SpendingGoal = {
       id: `goal_${Date.now()}`,
-      title: "New Goal",
+      title: t.components.budgetPlanner.newGoal,
       targetAmount: 0,
       currentAmount: 0,
       deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)

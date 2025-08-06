@@ -46,24 +46,24 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
       setTransactions(data);
     } catch (error) {
       console.error("Error loading transactions:", error);
-      toast.error("Failed to load transactions");
+      toast.error(t.components.transactions.messages.failedToLoad);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteTransaction = async (transactionId: string) => {
-    if (!window.confirm("Are you sure you want to cancel this transaction?")) {
+    if (!window.confirm(t.components.transactions.messages.confirmCancel)) {
       return;
     }
 
     try {
       await transactionService.deleteTransaction(transactionId);
-      toast.success("Transaction cancelled successfully");
+      toast.success(t.components.transactions.messages.cancelledSuccessfully);
       loadTransactions();
     } catch (error) {
       console.error("Error deleting transaction:", error);
-      toast.error("Failed to cancel transaction");
+      toast.error(t.components.transactions.messages.failedToCancel);
     }
   };
 
@@ -143,7 +143,7 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Search
+              {t.components.transactions.search}
             </label>
             <input
               type="text"
@@ -158,7 +158,7 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Type
+              {t.components.transactions.type}
             </label>
             <select
               value={filter.type}
@@ -168,10 +168,18 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">{t.transactionsList.filters.allTypes}</option>
-              <option value="PURCHASE">Purchase</option>
-              <option value="PAYMENT">Payment</option>
-              <option value="REFUND">Refund</option>
-              <option value="FEE">Fee</option>
+              <option value="PURCHASE">
+                {t.components.transactions.transactionTypes.purchase}
+              </option>
+              <option value="PAYMENT">
+                {t.components.transactions.transactionTypes.payment}
+              </option>
+              <option value="REFUND">
+                {t.components.transactions.transactionTypes.refund}
+              </option>
+              <option value="FEE">
+                {t.components.transactions.transactionTypes.fee}
+              </option>
               <option value="CASH_ADVANCE">
                 {t.transactionsList.filters.cashAdvance}
               </option>
@@ -180,7 +188,7 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Category
+              {t.components.transactions.category}
             </label>
             <select
               value={filter.category}
@@ -193,21 +201,35 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
                 {t.transactionsList.filters.allCategories}
               </option>
               <option value="GROCERIES">
-                {t.transactionsList.filters.groceries}
+                {t.components.transactions.categories.groceries}
               </option>
-              <option value="DINING">Dining</option>
-              <option value="GAS">Gas</option>
+              <option value="DINING">
+                {t.components.transactions.categories.dining}
+              </option>
+              <option value="GAS">
+                {t.components.transactions.categories.gas}
+              </option>
               <option value="UTILITIES">
-                {t.transactionsList.filters.utilities}
+                {t.components.transactions.categories.utilities}
               </option>
               <option value="ENTERTAINMENT">
-                {t.transactionsList.filters.entertainment}
+                {t.components.transactions.categories.entertainment}
               </option>
-              <option value="SHOPPING">Shopping</option>
-              <option value="TRAVEL">Travel</option>
-              <option value="HEALTHCARE">Healthcare</option>
-              <option value="EDUCATION">Education</option>
-              <option value="OTHER">Other</option>
+              <option value="SHOPPING">
+                {t.components.transactions.categories.shopping}
+              </option>
+              <option value="TRAVEL">
+                {t.components.transactions.categories.travel}
+              </option>
+              <option value="HEALTHCARE">
+                {t.components.transactions.categories.healthcare}
+              </option>
+              <option value="EDUCATION">
+                {t.components.transactions.categories.education}
+              </option>
+              <option value="OTHER">
+                {t.components.transactions.categories.other}
+              </option>
             </select>
           </div>
         </div>
@@ -232,10 +254,13 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
                   <div>
                     <div className="flex items-center space-x-2">
                       <span className="font-medium text-gray-900">
-                        {transaction.merchantName || "Unknown Merchant"}
+                        {transaction.merchantName ||
+                          t.transactions.unknownMerchant}
                       </span>
                       <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                        {transaction.category}
+                        {t.transactions.categories[
+                          transaction.category as keyof typeof t.transactions.categories
+                        ] || transaction.category}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600">
@@ -247,11 +272,13 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
                         <span>📍 {transaction.location}</span>
                       )}
                       <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded">
-                        {transaction.type}
+                        {t.transactions.types[
+                          transaction.type as keyof typeof t.transactions.types
+                        ] || transaction.type}
                       </span>
                       {transaction.status === "CANCELLED" && (
                         <span className="bg-red-100 text-red-600 px-2 py-1 rounded">
-                          CANCELLED
+                          {t.components.transactions.cancelled}
                         </span>
                       )}
                     </div>
@@ -284,7 +311,7 @@ const TransactionsList: React.FC<TransactionsListProps> = ({
                         onClick={() => handleDeleteTransaction(transaction.id)}
                         className="text-xs text-red-600 hover:text-red-800"
                       >
-                        Cancel
+                        {t.components.transactions.cancel}
                       </button>
                     </div>
                   )}

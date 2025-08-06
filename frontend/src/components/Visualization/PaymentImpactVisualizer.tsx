@@ -208,7 +208,7 @@ const PaymentImpactVisualizer: React.FC<PaymentImpactVisualizerProps> = ({
         <XAxis
           dataKey="month"
           tickFormatter={formatMonth}
-          label={{ value: "Time", position: "insideBottom", offset: -5 }}
+          label={{ value: t.common.time, position: "insideBottom", offset: -5 }}
         />
         <YAxis
           tickFormatter={(value) => formatCurrency(value)}
@@ -362,7 +362,7 @@ const PaymentImpactVisualizer: React.FC<PaymentImpactVisualizerProps> = ({
         <XAxis
           dataKey="month"
           tickFormatter={formatMonth}
-          label={{ value: "Time", position: "insideBottom", offset: -5 }}
+          label={{ value: t.common.time, position: "insideBottom", offset: -5 }}
         />
         <YAxis
           tickFormatter={(value) => formatCurrency(value)}
@@ -485,7 +485,8 @@ const PaymentImpactVisualizer: React.FC<PaymentImpactVisualizerProps> = ({
                   </strong>{" "}
                   {formatCurrency(initialBalance + scenario.totalInterest)}
                 </p>
-                {scenario.name !== "Minimum Payment" && (
+                {scenario.name !==
+                  t.components.paymentImpactVisualizer.minimumPayment && (
                   <div className="savings-highlight">
                     <p>
                       <strong>
@@ -515,32 +516,22 @@ const PaymentImpactVisualizer: React.FC<PaymentImpactVisualizerProps> = ({
         <h3>{t.visualization.paymentImpact.summary.keyInsights}</h3>
         <div className="insights-list">
           <div className="insight">
-            <h4>🚀 Payment Power</h4>
+            <h4>{t.components.visualizations.paymentImpact.paymentPower}</h4>
+            <p>{t.components.visualizations.paymentImpact.paymentPowerDesc}</p>
+          </div>
+          <div className="insight">
+            <h4>{t.components.visualizations.paymentImpact.timeValue}</h4>
+            <p>{t.components.visualizations.paymentImpact.timeValueDesc}</p>
+          </div>
+          <div className="insight">
+            <h4>{t.components.visualizations.paymentImpact.compoundEffect}</h4>
             <p>
-              Doubling your minimum payment can cut your payoff time in half and
-              save thousands in interest charges.
+              {t.components.visualizations.paymentImpact.compoundEffectDesc}
             </p>
           </div>
           <div className="insight">
-            <h4>⏰ Time Value</h4>
-            <p>
-              Early payments have exponential impact - every extra dollar today
-              saves multiple dollars in future interest.
-            </p>
-          </div>
-          <div className="insight">
-            <h4>📈 Compound Effect</h4>
-            <p>
-              Small increases in payment amount create disproportionately large
-              savings due to reduced interest compounding.
-            </p>
-          </div>
-          <div className="insight">
-            <h4>💡 Strategy Tip</h4>
-            <p>
-              Even paying an extra $25-50 per month can save hundreds or
-              thousands in total interest over the life of the debt.
-            </p>
+            <h4>{t.components.visualizations.paymentImpact.strategyTip}</h4>
+            <p>{t.components.visualizations.paymentImpact.strategyTipDesc}</p>
           </div>
         </div>
       </div>

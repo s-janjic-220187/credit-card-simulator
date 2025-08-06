@@ -138,7 +138,7 @@ const AdminDashboard: React.FC = () => {
       <div className="admin-dashboard">
         <div className="loading">
           <div className="loading-spinner"></div>
-          <p>Loading admin dashboard...</p>
+          <p>{t.components.adminDashboard.loadingMessage}</p>
         </div>
       </div>
     );
@@ -151,7 +151,7 @@ const AdminDashboard: React.FC = () => {
           <h2>{t.admin.dashboard.errorLoading}</h2>
           <p>{error}</p>
           <button onClick={loadDashboardData} className="btn-primary">
-            Retry
+            {t.components.adminDashboard.retry}
           </button>
         </div>
       </div>
@@ -256,18 +256,18 @@ const AdminDashboard: React.FC = () => {
             <div className="section-header">
               <h2>{t.admin.dashboard.sections.userManagement}</h2>
               <button onClick={loadDashboardData} className="btn-secondary">
-                Refresh
+                {t.components.adminDashboard.refresh}
               </button>
             </div>
 
             <div className="users-table">
               <div className="table-header">
-                <div>User</div>
-                <div>Email</div>
+                <div>{t.components.adminDashboard.user}</div>
+                <div>{t.common.email}</div>
                 <div>{t.admin.dashboard.sections.creditScore}</div>
-                <div>Cards</div>
-                <div>Status</div>
-                <div>Actions</div>
+                <div>{t.components.adminDashboard.cards}</div>
+                <div>{t.common.status}</div>
+                <div>{t.components.adminDashboard.actions}</div>
               </div>
               {users.map((user) => (
                 <div key={user.id} className="table-row">
@@ -285,21 +285,23 @@ const AdminDashboard: React.FC = () => {
                       user.isActive ? "active" : "inactive"
                     }`}
                   >
-                    {user.isActive ? "Active" : "Inactive"}
+                    {user.isActive
+                      ? t.components.adminDashboard.cardStatuses.active
+                      : t.components.adminDashboard.cardStatuses.inactive}
                   </div>
                   <div className="user-actions">
                     <button
                       onClick={() => setSelectedUser(user)}
                       className="btn-small btn-primary"
                     >
-                      View
+                      {t.components.adminDashboard.view}
                     </button>
                     {user.role !== "ADMIN" && (
                       <button
                         onClick={() => handleDeleteUser(user.id)}
                         className="btn-small btn-danger"
                       >
-                        Delete
+                        {t.components.adminDashboard.delete}
                       </button>
                     )}
                   </div>
@@ -314,7 +316,7 @@ const AdminDashboard: React.FC = () => {
             <div className="section-header">
               <h2>{t.admin.dashboard.sections.creditCardManagement}</h2>
               <button onClick={loadDashboardData} className="btn-secondary">
-                Refresh
+                {t.components.adminDashboard.refresh}
               </button>
             </div>
 
@@ -331,21 +333,24 @@ const AdminDashboard: React.FC = () => {
                   </div>
                   <div className="card-details">
                     <p>
-                      <strong>Cardholder:</strong> {card.cardholderName}
+                      <strong>{t.components.adminDashboard.cardholder}:</strong>{" "}
+                      {card.cardholderName}
                     </p>
                     <p>
-                      <strong>Limit:</strong> {formatCurrency(card.creditLimit)}
+                      <strong>{t.components.adminDashboard.limit}:</strong>{" "}
+                      {formatCurrency(card.creditLimit)}
                     </p>
                     <p>
-                      <strong>Balance:</strong>{" "}
+                      <strong>{t.components.adminDashboard.balance}:</strong>{" "}
                       {formatCurrency(card.currentBalance)}
                     </p>
                     <p>
-                      <strong>Available:</strong>{" "}
+                      <strong>{t.components.adminDashboard.available}:</strong>{" "}
                       {formatCurrency(card.creditLimit - card.currentBalance)}
                     </p>
                     <p>
-                      <strong>Issued:</strong> {formatDate(card.issueDate)}
+                      <strong>{t.components.adminDashboard.issued}:</strong>{" "}
+                      {formatDate(card.issueDate)}
                     </p>
                   </div>
                   <div className="card-actions">
@@ -365,19 +370,19 @@ const AdminDashboard: React.FC = () => {
         {activeTab === "transactions" && (
           <div className="transactions-section">
             <div className="section-header">
-              <h2>Recent Transactions</h2>
+              <h2>{t.components.adminDashboard.recentTransactions}</h2>
               <button onClick={loadDashboardData} className="btn-secondary">
-                Refresh
+                {t.components.adminDashboard.refresh}
               </button>
             </div>
 
             <div className="transactions-table">
               <div className="table-header">
-                <div>Date</div>
-                <div>Description</div>
-                <div>User</div>
-                <div>Card</div>
-                <div>Amount</div>
+                <div>{t.components.adminDashboard.date}</div>
+                <div>{t.common.description}</div>
+                <div>{t.components.adminDashboard.user}</div>
+                <div>{t.components.adminDashboard.card}</div>
+                <div>{t.common.amount}</div>
               </div>
               {transactions.map((transaction) => (
                 <div key={transaction.id} className="table-row">
@@ -413,7 +418,7 @@ const AdminDashboard: React.FC = () => {
         <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>User Details</h2>
+              <h2>{t.components.adminDashboard.userDetails}</h2>
               <button
                 onClick={() => setSelectedUser(null)}
                 className="modal-close"
@@ -424,36 +429,50 @@ const AdminDashboard: React.FC = () => {
             <div className="modal-body">
               <div className="user-detail-grid">
                 <div className="detail-section">
-                  <h3>Personal Information</h3>
+                  <h3>{t.components.adminDashboard.personalInformation}</h3>
                   <p>
-                    <strong>Name:</strong> {selectedUser.profile?.firstName}{" "}
+                    <strong>{t.components.adminDashboard.name}:</strong>{" "}
+                    {selectedUser.profile?.firstName}{" "}
                     {selectedUser.profile?.lastName}
                   </p>
                   <p>
-                    <strong>Email:</strong> {selectedUser.email}
+                    <strong>{t.common.email}:</strong> {selectedUser.email}
                   </p>
                   <p>
-                    <strong>Username:</strong> {selectedUser.username}
+                    <strong>{t.common.username}:</strong>{" "}
+                    {selectedUser.username}
                   </p>
                   <p>
-                    <strong>Role:</strong> {selectedUser.role}
+                    <strong>
+                      {t.admin.dashboard.userManagement.userDetails.role}:
+                    </strong>{" "}
+                    {selectedUser.role}
                   </p>
                   <p>
-                    <strong>Status:</strong>{" "}
-                    {selectedUser.isActive ? "Active" : "Inactive"}
+                    <strong>{t.common.status}:</strong>{" "}
+                    {selectedUser.isActive
+                      ? t.common.active
+                      : t.common.inactive}
                   </p>
                   <p>
-                    <strong>Member Since:</strong>{" "}
+                    <strong>
+                      {t.admin.dashboard.userManagement.userDetails.memberSince}
+                      :
+                    </strong>{" "}
                     {formatDate(selectedUser.createdAt)}
                   </p>
                   <p>
-                    <strong>Credit Score:</strong>{" "}
+                    <strong>
+                      {t.admin.dashboard.userManagement.userDetails.creditScore}
+                      :
+                    </strong>{" "}
                     {selectedUser.profile?.creditScore || "N/A"}
                   </p>
                 </div>
                 <div className="detail-section">
                   <h3>
-                    Credit Cards ({selectedUser.creditCards?.length || 0})
+                    {t.admin.dashboard.userManagement.userDetails.creditCards} (
+                    {selectedUser.creditCards?.length || 0})
                   </h3>
                   {selectedUser.creditCards?.map((card) => (
                     <div key={card.id} className="card-summary">
@@ -477,7 +496,7 @@ const AdminDashboard: React.FC = () => {
         <div className="modal-overlay" onClick={() => setEditingCard(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Edit Credit Card</h2>
+              <h2>{t.components.adminDashboard.editCreditCard}</h2>
               <button
                 onClick={() => setEditingCard(null)}
                 className="modal-close"
@@ -504,7 +523,9 @@ const AdminDashboard: React.FC = () => {
               >
                 <div className="form-grid">
                   <div>
-                    <label htmlFor="creditLimit">Credit Limit:</label>
+                    <label htmlFor="creditLimit">
+                      {t.components.adminDashboard.creditLimit}:
+                    </label>
                     <input
                       type="number"
                       id="creditLimit"
@@ -515,7 +536,9 @@ const AdminDashboard: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="currentBalance">Current Balance:</label>
+                    <label htmlFor="currentBalance">
+                      {t.components.adminDashboard.currentBalance}:
+                    </label>
                     <input
                       type="number"
                       id="currentBalance"
@@ -526,17 +549,25 @@ const AdminDashboard: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="status">Status:</label>
+                    <label htmlFor="status">{t.common.status}:</label>
                     <select
                       id="status"
                       name="status"
                       defaultValue={editingCard.status}
                       required
                     >
-                      <option value="ACTIVE">Active</option>
-                      <option value="INACTIVE">Inactive</option>
-                      <option value="SUSPENDED">Suspended</option>
-                      <option value="CLOSED">Closed</option>
+                      <option value="ACTIVE">
+                        {t.components.adminDashboard.cardStatuses.active}
+                      </option>
+                      <option value="INACTIVE">
+                        {t.components.adminDashboard.cardStatuses.inactive}
+                      </option>
+                      <option value="SUSPENDED">
+                        {t.components.adminDashboard.cardStatuses.suspended}
+                      </option>
+                      <option value="CLOSED">
+                        {t.components.adminDashboard.cardStatuses.closed}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -546,10 +577,10 @@ const AdminDashboard: React.FC = () => {
                     onClick={() => setEditingCard(null)}
                     className="btn-secondary"
                   >
-                    Cancel
+                    {t.components.adminDashboard.cancel}
                   </button>
                   <button type="submit" className="btn-primary">
-                    Update Card
+                    {t.components.adminDashboard.updateCard}
                   </button>
                 </div>
               </form>

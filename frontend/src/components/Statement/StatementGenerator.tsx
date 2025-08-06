@@ -189,7 +189,7 @@ const StatementGenerator: React.FC = () => {
 
   const addTransaction = () => {
     if (!newTransaction.description || !newTransaction.amount) {
-      alert("Please fill in description and amount");
+      alert(t.components.statementGenerator.validationError);
       return;
     }
 
@@ -226,17 +226,43 @@ const StatementGenerator: React.FC = () => {
   };
 
   const transactionCategories = [
-    "Groceries",
-    "Gas",
-    "Dining",
-    "Online Shopping",
-    "Travel",
-    "Entertainment",
-    "Utilities",
-    "Healthcare",
-    "Education",
-    "Other",
+    "groceries",
+    "gas",
+    "dining",
+    "shopping",
+    "travel",
+    "entertainment",
+    "utilities",
+    "healthcare",
+    "education",
+    "other",
   ];
+
+  // Map display categories to translation keys
+  const getCategoryTranslation = (category: string) => {
+    const categoryMap: { [key: string]: string } = {
+      "Online Shopping": "shopping",
+      Groceries: "groceries",
+      Gas: "gas",
+      Dining: "dining",
+      Travel: "travel",
+      Entertainment: "entertainment",
+      Utilities: "utilities",
+      Healthcare: "healthcare",
+      Education: "education",
+      Other: "other",
+      Payment: "payment",
+      Interest: "interest",
+      Fee: "fee",
+    };
+
+    const translationKey = categoryMap[category] || category.toLowerCase();
+    return (
+      t.transactions.categories[
+        translationKey as keyof typeof t.transactions.categories
+      ] || category
+    );
+  };
 
   if (activeView === "builder") {
     return (
@@ -418,7 +444,7 @@ const StatementGenerator: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Payment Due Date
+                  {t.components.statementGenerator.paymentDueDate}
                 </label>
                 <input
                   type="date"
@@ -444,7 +470,9 @@ const StatementGenerator: React.FC = () => {
 
           {/* Add Transaction */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Add Transaction</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t.components.statementGenerator.addTransaction}
+            </h2>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -467,7 +495,7 @@ const StatementGenerator: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Type
+                    {t.components.statementGenerator.type}
                   </label>
                   <select
                     value={newTransaction.type}
@@ -479,11 +507,19 @@ const StatementGenerator: React.FC = () => {
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="purchase">Purchase</option>
-                    <option value="payment">Payment</option>
-                    <option value="fee">Fee</option>
-                    <option value="interest">Interest</option>
-                    <option value="credit">Credit</option>
+                    <option value="purchase">
+                      {t.transactions.types.PURCHASE}
+                    </option>
+                    <option value="payment">
+                      {t.transactions.types.PAYMENT}
+                    </option>
+                    <option value="fee">{t.transactions.types.FEE}</option>
+                    <option value="interest">
+                      {t.transactions.types.INTEREST}
+                    </option>
+                    <option value="credit">
+                      {t.transactions.types.CREDIT}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -491,7 +527,7 @@ const StatementGenerator: React.FC = () => {
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
+                    {t.components.statementGenerator.description}
                   </label>
                   <input
                     type="text"
@@ -508,7 +544,7 @@ const StatementGenerator: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category
+                    {t.components.statementGenerator.category}
                   </label>
                   <select
                     value={newTransaction.category}
@@ -522,14 +558,16 @@ const StatementGenerator: React.FC = () => {
                   >
                     {transactionCategories.map((cat) => (
                       <option key={cat} value={cat}>
-                        {cat}
+                        {t.transactions.categories[
+                          cat as keyof typeof t.transactions.categories
+                        ] || cat}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Amount ($)
+                    {t.components.statementGenerator.amount}
                   </label>
                   <input
                     type="number"
@@ -550,7 +588,7 @@ const StatementGenerator: React.FC = () => {
                 onClick={addTransaction}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
               >
-                Add Transaction
+                {t.components.statementGenerator.addTransaction}
               </button>
             </div>
           </div>
@@ -569,7 +607,8 @@ const StatementGenerator: React.FC = () => {
                   <div className="flex-1">
                     <div className="font-medium">{transaction.description}</div>
                     <div className="text-sm text-gray-600">
-                      {formatDate(transaction.date)} • {transaction.category}
+                      {formatDate(transaction.date)} •{" "}
+                      {getCategoryTranslation(transaction.category)}
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -626,10 +665,14 @@ const StatementGenerator: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Key Metrics */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Key Metrics</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t.components.statementGenerator.keyMetrics}
+            </h2>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span>Credit Utilization:</span>
+                <span>
+                  {t.components.statementGenerator.creditUtilization}:
+                </span>
                 <span
                   className={`font-medium ${
                     calculatedValues.creditUtilization > 30
@@ -641,19 +684,21 @@ const StatementGenerator: React.FC = () => {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Available Credit:</span>
+                <span>{t.components.statementGenerator.availableCredit}:</span>
                 <span className="font-medium">
                   {formatCurrency(calculatedValues.availableCredit)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Interest This Period:</span>
+                <span>
+                  {t.components.statementGenerator.interestThisPeriod}:
+                </span>
                 <span className="font-medium text-red-600">
                   {formatCurrency(calculatedValues.interest)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Fees This Period:</span>
+                <span>{t.components.statementGenerator.feesThisPeriod}:</span>
                 <span className="font-medium text-red-600">
                   {formatCurrency(calculatedValues.fees)}
                 </span>
@@ -663,7 +708,9 @@ const StatementGenerator: React.FC = () => {
 
           {/* Spending Breakdown */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Spending by Category</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t.components.statementGenerator.spendingByCategory}
+            </h2>
             <div className="space-y-3">
               {transactionCategories.map((category) => {
                 const categoryTotal = statementData.transactions
@@ -680,7 +727,7 @@ const StatementGenerator: React.FC = () => {
                 return (
                   <div key={category}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span>{category}</span>
+                      <span>{getCategoryTranslation(category)}</span>
                       <span>
                         {formatCurrency(categoryTotal)} ({percentage.toFixed(1)}
                         %)
@@ -700,7 +747,9 @@ const StatementGenerator: React.FC = () => {
 
           {/* Payment Impact Analysis */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Payment Impact</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t.components.statementGenerator.paymentImpact}
+            </h2>
             <div className="space-y-4">
               <div>
                 <h3 className="font-medium mb-2">
@@ -746,12 +795,14 @@ const StatementGenerator: React.FC = () => {
           {/* Recommendations */}
           <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4 text-green-900">
-              Recommendations
+              {t.components.statementGenerator.recommendations}
             </h2>
             <div className="space-y-3 text-sm">
               {calculatedValues.creditUtilization > 30 && (
                 <div className="bg-white rounded-lg p-3">
-                  <strong>High Credit Utilization:</strong>
+                  <strong>
+                    {t.components.statementGenerator.highCreditUtilization}:
+                  </strong>
                   <p className="mt-1 text-gray-700">
                     Your utilization is{" "}
                     {calculatedValues.creditUtilization.toFixed(1)}%. Consider
@@ -762,7 +813,9 @@ const StatementGenerator: React.FC = () => {
 
               {calculatedValues.interest > 0 && (
                 <div className="bg-white rounded-lg p-3">
-                  <strong>Interest Charges:</strong>
+                  <strong>
+                    {t.components.statementGenerator.interestCharges}:
+                  </strong>
                   <p className="mt-1 text-gray-700">
                     You paid {formatCurrency(calculatedValues.interest)} in
                     interest. Pay your full balance to avoid interest charges.
@@ -772,7 +825,9 @@ const StatementGenerator: React.FC = () => {
 
               {calculatedValues.fees > 0 && (
                 <div className="bg-white rounded-lg p-3">
-                  <strong>Fees Charged:</strong>
+                  <strong>
+                    {t.components.statementGenerator.feesCharged}:
+                  </strong>
                   <p className="mt-1 text-gray-700">
                     You were charged {formatCurrency(calculatedValues.fees)} in
                     fees. Review fee policies to avoid future charges.
@@ -792,26 +847,25 @@ const StatementGenerator: React.FC = () => {
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-bold text-gray-900">
-            📄 Credit Card Statement
+            📄 {t.components.statementGenerator.title}
           </h1>
           <div className="flex gap-2">
             <button
               onClick={() => setActiveView("builder")}
               className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
             >
-              Edit Statement
+              {t.components.statementGenerator.editStatement}
             </button>
             <button
               onClick={() => setActiveView("analysis")}
               className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
             >
-              View Analysis
+              {t.components.statementGenerator.viewAnalysis}
             </button>
           </div>
         </div>
         <p className="text-gray-600">
-          Generate and analyze realistic credit card statements to understand
-          billing cycles, interest calculations, and payment strategies.
+          {t.components.statementGenerator.messages.statementDescription}
         </p>
       </div>
 
@@ -824,18 +878,28 @@ const StatementGenerator: React.FC = () => {
             </h2>
             <div className="text-sm space-y-1">
               <div>
-                <strong>Account Holder:</strong> {statementData.cardholderName}
+                <strong>
+                  {t.components.statementGenerator.accountHolder}:
+                </strong>{" "}
+                {statementData.cardholderName}
               </div>
               <div>
-                <strong>Account Number:</strong> {statementData.accountNumber}
+                <strong>
+                  {t.components.statementGenerator.accountNumber}:
+                </strong>{" "}
+                {statementData.accountNumber}
               </div>
               <div>
-                <strong>Statement Period:</strong>{" "}
+                <strong>
+                  {t.components.statementGenerator.statementPeriod}:
+                </strong>{" "}
                 {formatDate(statementData.statementPeriod.startDate)} -{" "}
                 {formatDate(statementData.statementPeriod.endDate)}
               </div>
               <div>
-                <strong>Payment Due Date:</strong>{" "}
+                <strong>
+                  {t.components.statementGenerator.paymentDueDate}:
+                </strong>{" "}
                 {formatDate(statementData.statementPeriod.paymentDueDate)}
               </div>
             </div>
@@ -846,39 +910,53 @@ const StatementGenerator: React.FC = () => {
               <div className="text-2xl font-bold text-red-600 mb-2">
                 {formatCurrency(calculatedValues.newBalance)}
               </div>
-              <div className="text-sm text-gray-600">New Balance</div>
+              <div className="text-sm text-gray-600">
+                {t.components.statementGenerator.newBalance}
+              </div>
               <div className="text-lg font-medium text-blue-600 mt-2">
                 {formatCurrency(calculatedValues.minimumPayment)}
               </div>
-              <div className="text-xs text-gray-600">Minimum Payment Due</div>
+              <div className="text-xs text-gray-600">
+                {t.components.statementGenerator.minimumPaymentDue}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Account Summary */}
         <div className="border-t pt-6">
-          <h3 className="text-lg font-semibold mb-4">Account Summary</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            {t.components.statementGenerator.accountSummary}
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <div className="text-gray-600">Previous Balance</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.previousBalance}
+              </div>
               <div className="font-medium">
                 {formatCurrency(statementData.previousBalance)}
               </div>
             </div>
             <div>
-              <div className="text-gray-600">Payments & Credits</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.paymentsCredits}
+              </div>
               <div className="font-medium text-green-600">
                 -{formatCurrency(calculatedValues.payments)}
               </div>
             </div>
             <div>
-              <div className="text-gray-600">Purchases & Advances</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.purchasesAdvances}
+              </div>
               <div className="font-medium">
                 {formatCurrency(calculatedValues.purchases)}
               </div>
             </div>
             <div>
-              <div className="text-gray-600">Fees & Interest</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.feesInterest}
+              </div>
               <div className="font-medium text-red-600">
                 {formatCurrency(
                   calculatedValues.fees + calculatedValues.interest
@@ -890,22 +968,30 @@ const StatementGenerator: React.FC = () => {
 
         {/* Credit Information */}
         <div className="border-t pt-6 mt-6">
-          <h3 className="text-lg font-semibold mb-4">Credit Information</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            {t.components.statementGenerator.creditInformation}
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <div className="text-gray-600">Credit Limit</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.creditLimit}
+              </div>
               <div className="font-medium">
                 {formatCurrency(statementData.creditLimit)}
               </div>
             </div>
             <div>
-              <div className="text-gray-600">Available Credit</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.availableCredit}
+              </div>
               <div className="font-medium">
                 {formatCurrency(calculatedValues.availableCredit)}
               </div>
             </div>
             <div>
-              <div className="text-gray-600">Credit Utilization</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.creditUtilization}
+              </div>
               <div
                 className={`font-medium ${
                   calculatedValues.creditUtilization > 30
@@ -917,7 +1003,9 @@ const StatementGenerator: React.FC = () => {
               </div>
             </div>
             <div>
-              <div className="text-gray-600">Annual Percentage Rate</div>
+              <div className="text-gray-600">
+                {t.components.statementGenerator.annualPercentageRate}
+              </div>
               <div className="font-medium">{statementData.apr.toFixed(2)}%</div>
             </div>
           </div>
@@ -926,13 +1014,23 @@ const StatementGenerator: React.FC = () => {
 
       {/* Transaction History */}
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold mb-4">Transaction History</h3>
+        <h3 className="text-lg font-semibold mb-4">
+          {t.components.statementGenerator.transactionHistory}
+        </h3>
         <div className="space-y-1 text-sm">
           <div className="grid grid-cols-12 gap-2 font-medium text-gray-700 border-b pb-2">
-            <div className="col-span-2">Date</div>
-            <div className="col-span-6">Description</div>
-            <div className="col-span-2">Category</div>
-            <div className="col-span-2 text-right">Amount</div>
+            <div className="col-span-2">
+              {t.components.statementGenerator.date}
+            </div>
+            <div className="col-span-6">
+              {t.components.statementGenerator.description}
+            </div>
+            <div className="col-span-2">
+              {t.components.statementGenerator.category}
+            </div>
+            <div className="col-span-2 text-right">
+              {t.components.statementGenerator.amount}
+            </div>
           </div>
 
           {statementData.transactions.map((transaction) => (
@@ -956,7 +1054,7 @@ const StatementGenerator: React.FC = () => {
                       : "bg-gray-100 text-gray-800"
                   }`}
                 >
-                  {transaction.category}
+                  {getCategoryTranslation(transaction.category)}
                 </span>
               </div>
               <div
@@ -983,38 +1081,50 @@ const StatementGenerator: React.FC = () => {
       {/* Important Information */}
       <div className="bg-gradient-to-br from-yellow-50 to-orange-100 rounded-lg p-6 mt-6">
         <h3 className="text-lg font-semibold mb-4 text-orange-900">
-          Important Payment Information
+          {t.components.statementGenerator.importantPaymentInformation}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
           <div className="space-y-3">
             <div className="bg-white rounded-lg p-3">
-              <strong>Payment Due Date:</strong>
+              <strong>{t.components.statementGenerator.paymentDueDate}:</strong>
               <p className="mt-1 text-gray-700">
                 {formatDate(statementData.statementPeriod.paymentDueDate)}
               </p>
             </div>
             <div className="bg-white rounded-lg p-3">
-              <strong>Minimum Payment:</strong>
+              <strong>{t.components.statementGenerator.minimumPayment}:</strong>
               <p className="mt-1 text-gray-700">
-                {formatCurrency(calculatedValues.minimumPayment)} (or{" "}
-                {statementData.minimumPaymentPercentage}% of balance, whichever
-                is greater)
+                {t.components.statementGenerator.messages.minimumPaymentDesc
+                  .replace(
+                    "{{amount}}",
+                    formatCurrency(calculatedValues.minimumPayment)
+                  )
+                  .replace(
+                    "{{percentage}}",
+                    statementData.minimumPaymentPercentage.toString()
+                  )}
               </p>
             </div>
           </div>
           <div className="space-y-3">
             <div className="bg-white rounded-lg p-3">
-              <strong>Late Payment Fee:</strong>
+              <strong>{t.components.statementGenerator.latePaymentFee}:</strong>
               <p className="mt-1 text-gray-700">
-                Up to {formatCurrency(statementData.fees.late)} if payment is
-                received after due date
+                {t.components.statementGenerator.messages.latePaymentFeeDesc.replace(
+                  "{{amount}}",
+                  formatCurrency(statementData.fees.late)
+                )}
               </p>
             </div>
             <div className="bg-white rounded-lg p-3">
-              <strong>Interest Calculation:</strong>
+              <strong>
+                {t.components.statementGenerator.interestCalculation}:
+              </strong>
               <p className="mt-1 text-gray-700">
-                Interest is calculated daily on your average daily balance at{" "}
-                {statementData.apr.toFixed(2)}% APR
+                {t.components.statementGenerator.messages.interestCalculationDesc.replace(
+                  "{{apr}}",
+                  statementData.apr.toFixed(2)
+                )}
               </p>
             </div>
           </div>

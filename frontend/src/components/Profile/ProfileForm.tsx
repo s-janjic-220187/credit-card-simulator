@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { UserProfile } from '../../types';
+import React, { useState } from "react";
+import { useI18n } from "../../contexts/I18nContext";
+import { UserProfile } from "../../types";
 
 interface ProfileFormProps {
   profile?: UserProfile | null;
@@ -12,31 +13,35 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   profile,
   onSubmit,
   onCancel,
-  isLoading = false
+  isLoading = false,
 }) => {
+  const { t } = useI18n();
   const [formData, setFormData] = useState({
-    firstName: profile?.firstName || '',
-    lastName: profile?.lastName || '',
-    dateOfBirth: profile?.dateOfBirth 
-      ? new Date(profile.dateOfBirth).toISOString().split('T')[0] 
-      : '',
-    phoneNumber: profile?.phoneNumber || '',
-    address: profile?.address || '',
-    city: profile?.city || '',
-    state: profile?.state || '',
-    zipCode: profile?.zipCode || '',
+    firstName: profile?.firstName || "",
+    lastName: profile?.lastName || "",
+    dateOfBirth: profile?.dateOfBirth
+      ? new Date(profile.dateOfBirth).toISOString().split("T")[0]
+      : "",
+    phoneNumber: profile?.phoneNumber || "",
+    address: profile?.address || "",
+    city: profile?.city || "",
+    state: profile?.state || "",
+    zipCode: profile?.zipCode || "",
     annualIncome: profile?.annualIncome || 0,
-    employmentStatus: profile?.employmentStatus || 'EMPLOYED',
-    creditScore: profile?.creditScore || 650
+    employmentStatus: profile?.employmentStatus || "EMPLOYED",
+    creditScore: profile?.creditScore || 650,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === 'annualIncome' || name === 'creditScore' 
-        ? parseFloat(value) || 0 
-        : value
+      [name]:
+        name === "annualIncome" || name === "creditScore"
+          ? parseFloat(value) || 0
+          : value,
     }));
   };
 
@@ -44,19 +49,27 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     e.preventDefault();
     onSubmit({
       ...formData,
-      dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth : undefined
+      dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth : undefined,
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md"
+    >
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        {profile ? 'Edit Profile' : 'Create Profile'}
+        {profile
+          ? t.components.profileForm.editProfile
+          : t.components.profileForm.createProfile}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="firstName"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             First Name *
           </label>
           <input
@@ -71,7 +84,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div>
-          <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="lastName"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Last Name *
           </label>
           <input
@@ -88,7 +104,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="dateOfBirth"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Date of Birth *
           </label>
           <input
@@ -103,7 +122,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div>
-          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="phoneNumber"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Phone Number
           </label>
           <input
@@ -118,7 +140,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
       </div>
 
       <div className="mb-4">
-        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="address"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Address *
         </label>
         <input
@@ -134,7 +159,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
-          <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="city"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             City *
           </label>
           <input
@@ -149,7 +177,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div>
-          <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="state"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             State *
           </label>
           <input
@@ -164,7 +195,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div>
-          <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="zipCode"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             ZIP Code *
           </label>
           <input
@@ -181,7 +215,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <label htmlFor="annualIncome" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="annualIncome"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Annual Income ($) *
           </label>
           <input
@@ -198,7 +235,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div>
-          <label htmlFor="employmentStatus" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="employmentStatus"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Employment Status *
           </label>
           <select
@@ -209,17 +249,30 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="EMPLOYED">Employed</option>
-            <option value="UNEMPLOYED">Unemployed</option>
-            <option value="SELF_EMPLOYED">Self Employed</option>
-            <option value="RETIRED">Retired</option>
-            <option value="STUDENT">Student</option>
+            <option value="EMPLOYED">
+              {t.profile.form.employmentStatuses.EMPLOYED}
+            </option>
+            <option value="UNEMPLOYED">
+              {t.profile.form.employmentStatuses.UNEMPLOYED}
+            </option>
+            <option value="SELF_EMPLOYED">
+              {t.profile.form.employmentStatuses.SELF_EMPLOYED}
+            </option>
+            <option value="RETIRED">
+              {t.profile.form.employmentStatuses.RETIRED}
+            </option>
+            <option value="STUDENT">
+              {t.profile.form.employmentStatuses.STUDENT}
+            </option>
           </select>
         </div>
       </div>
 
       <div className="mb-6">
-        <label htmlFor="creditScore" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="creditScore"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Credit Score (300-850)
         </label>
         <input
@@ -248,7 +301,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           disabled={isLoading}
         >
-          {isLoading ? 'Saving...' : (profile ? 'Update Profile' : 'Create Profile')}
+          {isLoading
+            ? "Saving..."
+            : profile
+            ? t.components.profileForm.updateProfile
+            : t.components.profileForm.createProfile}
         </button>
       </div>
     </form>

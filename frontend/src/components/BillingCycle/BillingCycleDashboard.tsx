@@ -184,26 +184,25 @@ const BillingCycleDashboard: React.FC = () => {
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl font-bold text-gray-900">
-            💳 Billing Cycle Dashboard
+            {t.billingCycle.dashboard.title}
           </h1>
           <button
             onClick={generateNewCycle}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
-            Generate New Cycle
+            {t.billingCycle.dashboard.generateNewCycle}
           </button>
         </div>
-        <p className="text-gray-600">
-          Track and analyze credit card billing cycles, interest calculations,
-          and fee structures.
-        </p>
+        <p className="text-gray-600">{t.billingCycle.dashboard.description}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Billing Cycles List */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Billing Cycles</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {t.billingCycle.dashboard.billingCycles}
+            </h2>
             <div className="space-y-3">
               {billingCycles && billingCycles.length > 0 ? (
                 billingCycles.map((cycle) => (
@@ -218,7 +217,8 @@ const BillingCycleDashboard: React.FC = () => {
                   >
                     <div className="flex justify-between items-start mb-2">
                       <span className="font-medium">
-                        Cycle #{cycle.cycleNumber}
+                        {t.billingCycle.dashboard.cycleNumber}
+                        {cycle.cycleNumber}
                       </span>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -230,10 +230,10 @@ const BillingCycleDashboard: React.FC = () => {
                         }`}
                       >
                         {cycle.isPaid
-                          ? "Paid"
+                          ? t.billingCycle.dashboard.paid
                           : cycle.isOverdue
-                          ? "Overdue"
-                          : "Current"}
+                          ? t.billingCycle.dashboard.overdue
+                          : t.billingCycle.dashboard.current}
                       </span>
                     </div>
                     <div className="text-sm text-gray-600">
@@ -241,7 +241,8 @@ const BillingCycleDashboard: React.FC = () => {
                       {formatDate(cycle.endDate)}
                     </div>
                     <div className="text-sm font-medium text-gray-900 mt-1">
-                      Balance: {formatCurrency(cycle.endingBalance)}
+                      {t.billingCycle.dashboard.balance}:{" "}
+                      {formatCurrency(cycle.endingBalance)}
                     </div>
                   </div>
                 ))
@@ -298,7 +299,9 @@ const BillingCycleDashboard: React.FC = () => {
               {/* Cycle Overview */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-xl font-semibold mb-4">
-                  Cycle #{selectedCycle.cycleNumber} Overview
+                  {t.billingCycle.dashboard.cycleNumber}
+                  {selectedCycle.cycleNumber}{" "}
+                  {t.billingCycle.dashboard.overview}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="text-center p-4 bg-blue-50 rounded-lg">
@@ -306,20 +309,24 @@ const BillingCycleDashboard: React.FC = () => {
                       {formatCurrency(selectedCycle.startingBalance)}
                     </div>
                     <div className="text-sm text-gray-600">
-                      Starting Balance
+                      {t.billingCycle.dashboard.startingBalance}
                     </div>
                   </div>
                   <div className="text-center p-4 bg-green-50 rounded-lg">
                     <div className="text-2xl font-bold text-green-600">
                       {formatCurrency(selectedCycle.totalPurchases)}
                     </div>
-                    <div className="text-sm text-gray-600">Total Purchases</div>
+                    <div className="text-sm text-gray-600">
+                      {t.billingCycle.dashboard.totalPurchases}
+                    </div>
                   </div>
                   <div className="text-center p-4 bg-purple-50 rounded-lg">
                     <div className="text-2xl font-bold text-purple-600">
                       {formatCurrency(selectedCycle.endingBalance)}
                     </div>
-                    <div className="text-sm text-gray-600">Ending Balance</div>
+                    <div className="text-sm text-gray-600">
+                      {t.billingCycle.dashboard.endingBalance}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -327,26 +334,30 @@ const BillingCycleDashboard: React.FC = () => {
               {/* Interest and Fees Breakdown */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold mb-4">
-                  💰 Interest & Fees
+                  💰 {t.billingCycle.dashboard.interestAndFees}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">
-                        Average Daily Balance:
+                        {t.billingCycle.dashboard.averageDailyBalance}:
                       </span>
                       <span className="font-medium">
                         {formatCurrency(selectedCycle.averageDailyBalance)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Interest Charged:</span>
+                      <span className="text-gray-600">
+                        {t.billingCycle.dashboard.interestCharged}:
+                      </span>
                       <span className="font-medium text-red-600">
                         {formatCurrency(selectedCycle.interestCharged)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Fees Charged:</span>
+                      <span className="text-gray-600">
+                        {t.billingCycle.dashboard.feesCharged}:
+                      </span>
                       <span className="font-medium text-red-600">
                         {formatCurrency(selectedCycle.feesCharged)}
                       </span>
@@ -354,19 +365,25 @@ const BillingCycleDashboard: React.FC = () => {
                   </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Total Payments:</span>
+                      <span className="text-gray-600">
+                        {t.billingCycle.dashboard.totalPayments}:
+                      </span>
                       <span className="font-medium text-green-600">
                         {formatCurrency(selectedCycle.totalPayments)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Minimum Payment:</span>
+                      <span className="text-gray-600">
+                        {t.billingCycle.dashboard.minimumPayment}:
+                      </span>
                       <span className="font-medium">
                         {formatCurrency(selectedCycle.minimumPayment)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Due Date:</span>
+                      <span className="text-gray-600">
+                        {t.billingCycle.dashboard.dueDate}:
+                      </span>
                       <span className="font-medium">
                         {formatDate(selectedCycle.dueDate)}
                       </span>
@@ -378,29 +395,31 @@ const BillingCycleDashboard: React.FC = () => {
               {/* Educational Information */}
               <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-6">
                 <h3 className="text-lg font-semibold mb-4 text-blue-900">
-                  📚 How This Cycle Was Calculated
+                  📚 {t.billingCycle.dashboard.howCalculated}
                 </h3>
                 <div className="space-y-3 text-sm">
                   <div className="bg-white rounded-lg p-4">
-                    <strong>Interest Calculation:</strong>
+                    <strong>
+                      {t.billingCycle.dashboard.interestCalculation}:
+                    </strong>
                     <p className="mt-1 text-gray-700">
-                      Daily interest rate × Average daily balance × Days in
-                      cycle = Interest charge (
+                      {t.billingCycle.dashboard.interestCalculationDesc} (
                       {formatCurrency(selectedCycle.interestCharged)})
                     </p>
                   </div>
                   <div className="bg-white rounded-lg p-4">
-                    <strong>Average Daily Balance:</strong>
+                    <strong>
+                      {t.billingCycle.dashboard.averageDailyBalance}:
+                    </strong>
                     <p className="mt-1 text-gray-700">
-                      Sum of daily balances ÷ Number of days in cycle =
+                      {t.billingCycle.dashboard.averageDailyBalanceDesc}
                       {formatCurrency(selectedCycle.averageDailyBalance)}
                     </p>
                   </div>
                   <div className="bg-white rounded-lg p-4">
-                    <strong>Minimum Payment:</strong>
+                    <strong>{t.billingCycle.dashboard.minimumPayment}:</strong>
                     <p className="mt-1 text-gray-700">
-                      Typically 2-3% of balance or $35 (whichever is higher),
-                      plus interest and fees ={" "}
+                      {t.billingCycle.dashboard.minimumPaymentDesc}{" "}
                       {formatCurrency(selectedCycle.minimumPayment)}
                     </p>
                   </div>
@@ -425,11 +444,10 @@ const BillingCycleDashboard: React.FC = () => {
                 </svg>
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Select a Billing Cycle
+                {t.billingCycle.dashboard.selectCycle}
               </h3>
               <p className="text-gray-600">
-                Choose a billing cycle from the list to view detailed
-                calculations, interest breakdowns, and educational information.
+                {t.billingCycle.dashboard.selectCycleDesc}
               </p>
             </div>
           )}

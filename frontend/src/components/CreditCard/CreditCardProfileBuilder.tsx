@@ -152,23 +152,23 @@ const CreditCardProfileBuilder: React.FC = () => {
         t.creditCard.builder.features.featureOptions.noForeignTransactionFees,
     },
     {
-      value: "Fraud Protection",
+      value: t.components.creditCardProfileBuilder.benefits.fraudProtection,
       label: t.creditCard.builder.features.featureOptions.fraudProtection,
     },
     {
-      value: "Price Protection",
+      value: t.components.creditCardProfileBuilder.benefits.priceProtection,
       label: t.creditCard.builder.features.featureOptions.priceProtection,
     },
     {
-      value: "Extended Warranty",
+      value: t.components.creditCardProfileBuilder.benefits.extendedWarranty,
       label: t.creditCard.builder.features.featureOptions.extendedWarranty,
     },
     {
-      value: "Purchase Protection",
+      value: t.components.creditCardProfileBuilder.benefits.purchaseProtection,
       label: t.creditCard.builder.features.featureOptions.purchaseProtection,
     },
     {
-      value: "Travel Insurance",
+      value: t.components.creditCardProfileBuilder.benefits.travelInsurance,
       label: t.creditCard.builder.features.featureOptions.travelInsurance,
     },
     {
@@ -176,11 +176,11 @@ const CreditCardProfileBuilder: React.FC = () => {
       label: t.creditCard.builder.features.featureOptions.rentalCarInsurance,
     },
     {
-      value: "Roadside Assistance",
+      value: t.components.creditCardProfileBuilder.benefits.roadsideAssistance,
       label: t.creditCard.builder.features.featureOptions.roadsideAssistance,
     },
     {
-      value: "Concierge Service",
+      value: t.components.creditCardProfileBuilder.benefits.conciergeService,
       label: t.creditCard.builder.features.featureOptions.conciergeService,
     },
     {
@@ -196,7 +196,7 @@ const CreditCardProfileBuilder: React.FC = () => {
       label: t.creditCard.builder.features.featureOptions.cellPhoneProtection,
     },
     {
-      value: "Baggage Insurance",
+      value: t.components.creditCardProfileBuilder.benefits.baggageInsurance,
       label: t.creditCard.builder.features.featureOptions.baggageInsurance,
     },
     {
@@ -208,7 +208,7 @@ const CreditCardProfileBuilder: React.FC = () => {
 
   const bonusCategories = [
     {
-      value: "Gas Stations",
+      value: t.components.creditCardProfileBuilder.categories.gasStations,
       label: t.creditCard.builder.rewards.bonusCategoryOptions.gasStations,
     },
     {
@@ -224,15 +224,15 @@ const CreditCardProfileBuilder: React.FC = () => {
       label: t.creditCard.builder.rewards.bonusCategoryOptions.travel,
     },
     {
-      value: "Online Shopping",
+      value: t.components.creditCardProfileBuilder.categories.onlineShopping,
       label: t.creditCard.builder.rewards.bonusCategoryOptions.onlineShopping,
     },
     {
-      value: "Department Stores",
+      value: t.components.creditCardProfileBuilder.categories.departmentStores,
       label: t.creditCard.builder.rewards.bonusCategoryOptions.departmentStores,
     },
     {
-      value: "Streaming Services",
+      value: t.components.creditCardProfileBuilder.categories.streamingServices,
       label:
         t.creditCard.builder.rewards.bonusCategoryOptions.streamingServices,
     },

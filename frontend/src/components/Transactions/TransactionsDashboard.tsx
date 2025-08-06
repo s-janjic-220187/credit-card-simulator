@@ -17,11 +17,12 @@ interface TransactionsDashboardProps {
 
 const TransactionsDashboard: React.FC<TransactionsDashboardProps> = ({
   creditCardId,
-  creditCardName = "Credit Card",
+  creditCardName,
   showAddButton = true,
   maxDisplayed = 5,
 }) => {
   const { t } = useI18n();
+  const defaultCardName = creditCardName || t.dashboard.creditCard;
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -112,7 +113,7 @@ const TransactionsDashboard: React.FC<TransactionsDashboardProps> = ({
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900">
-            {t.transactions.dashboard.recentTransactions} - {creditCardName}
+            {t.transactions.dashboard.recentTransactions} - {defaultCardName}
           </h2>
           {showAddButton && (
             <button

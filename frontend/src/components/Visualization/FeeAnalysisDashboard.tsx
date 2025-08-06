@@ -315,26 +315,26 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
           dataKey="annualFees"
           stackId="a"
           fill="#ff6b6b"
-          name="Annual Fees"
+          name={t.components.feeAnalysisDashboard.chartLabels.annualFees}
         />
         <Bar
           dataKey="transactionFees"
           stackId="a"
           fill="#4ecdc4"
-          name="Transaction Fees"
+          name={t.components.feeAnalysisDashboard.chartLabels.transactionFees}
         />
         <Bar
           dataKey="penaltyFees"
           stackId="a"
           fill="#feca57"
-          name="Penalty Fees"
+          name={t.components.feeAnalysisDashboard.chartLabels.penaltyFees}
         />
         <Line
           type="monotone"
           dataKey="totalFees"
           stroke="#8884d8"
           strokeWidth={3}
-          name="Total Fees"
+          name={t.components.feeAnalysisDashboard.chartLabels.totalFees}
         />
       </ComposedChart>
     </ResponsiveContainer>
@@ -396,8 +396,12 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
               setTimeframe(e.target.value as "monthly" | "annual")
             }
           >
-            <option value="monthly">Monthly</option>
-            <option value="annual">Annual</option>
+            <option value="monthly">
+              {t.components.visualizations.feeAnalysis.monthly}
+            </option>
+            <option value="annual">
+              {t.components.visualizations.feeAnalysis.annual}
+            </option>
           </select>
         </div>
 
@@ -431,47 +435,61 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
           <h3>{t.visualization.feeAnalysis.charts.feeAnalysisInsights}</h3>
           <div className="insights-grid">
             <div className="insight-card">
-              <h4>💳 Annual Fee Impact</h4>
+              <h4>{t.components.visualizations.feeAnalysis.annualFeeImpact}</h4>
               <p>
-                Annual fees are fixed costs that apply regardless of usage.
-                Consider if the card's benefits outweigh this guaranteed
-                expense.
+                {t.components.visualizations.feeAnalysis.annualFeeImpactDesc}
               </p>
             </div>
-            <div className="insight-card">
-              <h4>🌍 Foreign Transaction Fees</h4>
+            <div className="insight">
+              <h4>
+                {t.components.visualizations.feeAnalysis.foreignTransactionFees}
+              </h4>
               <p>
-                These fees add up quickly for international purchases. Look for
-                cards with no foreign transaction fees if you travel frequently.
+                {
+                  t.components.visualizations.feeAnalysis
+                    .foreignTransactionFeesDesc
+                }
               </p>
             </div>
-            <div className="insight-card">
-              <h4>🔄 Balance Transfer Strategy</h4>
+            <div className="insight">
+              <h4>
+                {
+                  t.components.visualizations.feeAnalysis
+                    .balanceTransferStrategy
+                }
+              </h4>
               <p>
-                Calculate if the transfer fee is worth the interest savings.
-                Typically worthwhile if you can pay off the balance during a
-                promotional period.
+                {
+                  t.components.visualizations.feeAnalysis
+                    .balanceTransferStrategyDesc
+                }
               </p>
             </div>
-            <div className="insight-card">
-              <h4>💰 Cash Advance Costs</h4>
+            <div className="insight">
+              <h4>
+                {t.components.visualizations.feeAnalysis.cashAdvanceCosts}
+              </h4>
               <p>
-                Cash advances have both upfront fees and higher APRs. They
-                should be used only in true emergencies.
+                {t.components.visualizations.feeAnalysis.cashAdvanceCostsDesc}
               </p>
             </div>
-            <div className="insight-card">
-              <h4>⚠️ Penalty Fee Avoidance</h4>
+            <div className="insight">
+              <h4>
+                {t.components.visualizations.feeAnalysis.penaltyFeeAvoidance}
+              </h4>
               <p>
-                Late and overlimit fees are easily avoidable with proper account
-                management and automated payments.
+                {
+                  t.components.visualizations.feeAnalysis
+                    .penaltyFeeAvoidanceDesc
+                }
               </p>
             </div>
-            <div className="insight-card">
-              <h4>📊 Total Cost Analysis</h4>
+            <div className="insight">
+              <h4>
+                {t.components.visualizations.feeAnalysis.totalCostAnalysis}
+              </h4>
               <p>
-                Consider all potential fees when comparing credit cards. Your
-                usage patterns determine which fees will impact you most.
+                {t.components.visualizations.feeAnalysis.totalCostAnalysisDesc}
               </p>
             </div>
           </div>
@@ -481,7 +499,7 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
           <h3>{t.visualization.feeAnalysis.charts.customizeFeeStructure}</h3>
           <div className="editor-grid">
             <div className="fee-input">
-              <label>Annual Fee ($)</label>
+              <label>{t.components.visualizations.feeAnalysis.annualFee}</label>
               <input
                 type="number"
                 value={feeStructure.annualFee}
@@ -494,7 +512,9 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
               />
             </div>
             <div className="fee-input">
-              <label>Foreign Transaction Fee (%)</label>
+              <label>
+                {t.components.visualizations.feeAnalysis.foreignTransactionFee}
+              </label>
               <input
                 type="number"
                 step="0.1"
@@ -508,7 +528,9 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
               />
             </div>
             <div className="fee-input">
-              <label>Balance Transfer Fee (%)</label>
+              <label>
+                {t.components.visualizations.feeAnalysis.balanceTransferFee}
+              </label>
               <input
                 type="number"
                 step="0.1"
@@ -522,7 +544,9 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
               />
             </div>
             <div className="fee-input">
-              <label>Cash Advance Fee (%)</label>
+              <label>
+                {t.components.visualizations.feeAnalysis.cashAdvanceFee}
+              </label>
               <input
                 type="number"
                 step="0.1"
@@ -536,7 +560,9 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
               />
             </div>
             <div className="fee-input">
-              <label>Late Payment Fee ($)</label>
+              <label>
+                {t.components.visualizations.feeAnalysis.latePaymentFee}
+              </label>
               <input
                 type="number"
                 value={feeStructure.lateFee}
@@ -549,7 +575,9 @@ const FeeAnalysisDashboard: React.FC<FeeAnalysisDashboardProps> = ({
               />
             </div>
             <div className="fee-input">
-              <label>Overlimit Fee ($)</label>
+              <label>
+                {t.components.visualizations.feeAnalysis.overlimitFee}
+              </label>
               <input
                 type="number"
                 value={feeStructure.overlimitFee}

@@ -67,6 +67,7 @@ export const en = {
     thisMonth: "This Month",
     lastMonth: "Last Month",
     thisYear: "This Year",
+    time: "Time",
 
     // Currency
     currency: "$",
@@ -81,6 +82,11 @@ export const en = {
     invalid: "Invalid",
     tooShort: "Too short",
     tooLong: "Too long",
+
+    // Language
+    languageSelector: "Language / Sprache",
+    englishUS: "English (US)",
+    germanDE: "Deutsch (Deutschland)",
   },
 
   // Authentication
@@ -124,6 +130,7 @@ export const en = {
   // Navigation Component
   navigation: {
     brand: "SJ-CCMS",
+    transactions: "Transactions",
     mobile: {
       menu: "Menu",
       close: "Close",
@@ -517,6 +524,7 @@ export const en = {
     title: "Transactions",
     selectCard: "Select Credit Card",
     addTransaction: "Add Transaction",
+    unknownMerchant: "Unknown Merchant",
 
     // Dashboard
     dashboard: {
@@ -561,6 +569,8 @@ export const en = {
       REFUND: "Refund",
       FEE: "Fee",
       CASH_ADVANCE: "Cash Advance",
+      INTEREST: "Interest",
+      CREDIT: "Credit",
     },
     typeDescriptions: {
       PURCHASE: "Regular purchase transaction",
@@ -580,6 +590,12 @@ export const en = {
       HEALTHCARE: "Healthcare",
       EDUCATION: "Education",
       OTHER: "Other",
+    },
+    statuses: {
+      ACTIVE: "Active",
+      PENDING: "Pending",
+      CANCELLED: "Cancelled",
+      COMPLETED: "Completed",
     },
     history: {
       title: "Transaction History",
@@ -686,6 +702,7 @@ export const en = {
       managingCard: "Managing Card",
       currentBalance: "Current Balance",
       creditLimit: "Credit Limit",
+      utilization: "utilized",
       tabs: {
         overview: "Overview",
         overviewDesc: "Dashboard & quick actions",
@@ -706,6 +723,16 @@ export const en = {
     dashboard: {
       title: "Profile Information",
       editProfile: "Edit Profile",
+      sections: {
+        address: "Address",
+        employment: "Employment",
+        creditInformation: "Credit Information",
+        accountInformation: "Account Information",
+      },
+      labels: {
+        profileCreated: "Profile Created",
+        lastUpdated: "Last Updated",
+      },
       personalInfo: {
         title: "Personal Information",
         firstName: "First Name",
@@ -713,6 +740,9 @@ export const en = {
         email: "Email Address",
         phone: "Phone Number",
         dateOfBirth: "Date of Birth",
+        name: "Name",
+        phoneLabel: "Phone",
+        dateOfBirthLabel: "Date of Birth",
       },
       financialInfo: {
         title: "Financial Information",
@@ -720,6 +750,9 @@ export const en = {
         employmentStatus: "Employment Status",
         creditScore: "Credit Score",
         creditRating: "Credit Rating",
+        statusLabel: "Status",
+        annualIncomeLabel: "Annual Income",
+        creditScoreLabel: "Credit Score",
       },
       addressInfo: {
         title: "Address Information",
@@ -754,9 +787,64 @@ export const en = {
   // Billing Cycle Components
   billingCycle: {
     dashboard: {
-      title: "Billing Cycle Dashboard",
+      title: "💳 Billing Cycle Dashboard",
       description:
         "Track and analyze credit card billing cycles, interest calculations, and fee structures.",
+      generateNewCycle: "Generate New Cycle",
+      billingCycles: "Billing Cycles",
+      cycleNumber: "Cycle #",
+      overview: "Overview",
+      current: "Current",
+      paid: "Paid",
+      overdue: "Overdue",
+      balance: "Balance",
+
+      // No cycles found section
+      noBillingCyclesFound: "No Billing Cycles Found",
+      noBillingCyclesDesc: "No billing cycles exist for this credit card yet.",
+      toGetStarted: "💡 To get started:",
+      getStartedSteps: [
+        "Make sure you have a valid credit card in the system",
+        'Click "Generate New Cycle" to create your first billing cycle',
+        "Add some transactions to see billing cycle calculations",
+      ],
+      noCreditCardsYet: "Don't have any credit cards set up yet?",
+      createDemoData: "🚀 Create Demo Data",
+      createDemoDataDesc:
+        "This will create a demo user, profile, and credit card for testing",
+
+      // Cycle overview cards
+      startingBalance: "Starting Balance",
+      totalPurchases: "Total Purchases",
+      endingBalance: "Ending Balance",
+
+      // Interest & Fees section
+      interestAndFees: "Interest & Fees",
+      averageDailyBalance: "Average Daily Balance",
+      interestCharged: "Interest Charged",
+      feesCharged: "Fees Charged",
+      totalPayments: "Total Payments",
+      minimumPayment: "Minimum Payment",
+      dueDate: "Due Date",
+
+      // Educational section
+      howCalculated: "How This Cycle Was Calculated",
+      interestCalculation: "Interest Calculation",
+      interestCalculationDesc:
+        "Daily interest rate × Average daily balance × Days in cycle = Interest charge",
+      averageDailyBalanceCalc: "Average Daily Balance",
+      averageDailyBalanceDesc:
+        "Sum of daily balances ÷ Number of days in cycle =",
+      minimumPaymentCalc: "Minimum Payment",
+      minimumPaymentDesc:
+        "Typically 2-3% of balance or $35 (whichever is higher), plus interest and fees =",
+
+      // No cycle selected
+      selectBillingCycle: "Select a Billing Cycle",
+      selectBillingCycleDesc:
+        "Choose a billing cycle from the list to view detailed calculations, interest breakdowns, and educational information.",
+
+      // Legacy fields (keeping for compatibility)
       noCreditCards: "No Credit Cards Found",
       noCreditCardsDesc:
         "To use the billing cycle features, you need to have at least one credit card set up. Credit cards are required to generate billing cycles, track spending, and analyze interest calculations.",
@@ -768,17 +856,10 @@ export const en = {
       currentCycle: "Current Cycle",
       previousCycles: "Previous Cycles",
       cycleDetails: "Cycle Details",
-      startingBalance: "Starting Balance",
-      endingBalance: "Ending Balance",
-      totalPurchases: "Total Purchases",
-      totalPayments: "Total Payments",
-      interestCharged: "Interest Charged",
-      feesCharged: "Fees Charged",
-      minimumPayment: "Minimum Payment",
-      dueDate: "Due Date",
-      paid: "Paid",
       unpaid: "Unpaid",
-      overdue: "Overdue",
+      selectCycle: "Select a Billing Cycle",
+      selectCycleDesc:
+        "Choose a billing cycle from the list to view detailed calculations, interest breakdowns, and educational information.",
     },
   },
 
@@ -1075,6 +1156,8 @@ export const en = {
           creditCards: "Credit Cards",
           role: "Role",
           createdAt: "Created At",
+          memberSince: "Member Since",
+          creditScore: "Credit Score",
           lastLogin: "Last Login",
         },
       },
@@ -1366,6 +1449,667 @@ export const en = {
       budget: "Budget",
       goals: "Goals",
       alerts: "Alerts",
+    },
+  },
+
+  // Hardcoded Component Strings
+  components: {
+    // Admin Dashboard
+    adminDashboard: {
+      loadingMessage: "Loading admin dashboard...",
+      retry: "Retry",
+      user: "User",
+      cards: "Cards",
+      actions: "Actions",
+      view: "View",
+      delete: "Delete",
+      cardholder: "Cardholder",
+      limit: "Limit",
+      balance: "Balance",
+      available: "Available",
+      issued: "Issued",
+      recentTransactions: "Recent Transactions",
+      refresh: "Refresh",
+      date: "Date",
+      card: "Card",
+      userDetails: "User Details",
+      personalInformation: "Personal Information",
+      name: "Name",
+      creditLimit: "Credit Limit",
+      currentBalance: "Current Balance",
+      editCreditCard: "Edit Credit Card",
+      cancel: "Cancel",
+      updateCard: "Update Card",
+      cardStatuses: {
+        active: "Active",
+        inactive: "Inactive",
+        suspended: "Suspended",
+        closed: "Closed",
+      },
+    },
+
+    // Navigation
+    navigation: {
+      mobileBrandShort: "💳 SJ",
+      openNavigationMenu: "Open navigation menu",
+    },
+
+    // Visualization Components
+    visualizations: {
+      paymentImpact: {
+        paymentPower: "🚀 Payment Power",
+        timeValue: "⏰ Time Value",
+        compoundEffect: "📈 Compound Effect",
+        strategyTip: "💡 Strategy Tip",
+        paymentPowerDesc:
+          "Every extra dollar you pay dramatically reduces your total interest costs.",
+        timeValueDesc:
+          "The sooner you pay off your balance, the more you save on interest payments.",
+        compoundEffectDesc:
+          "Interest compounds daily. Higher payments break this expensive cycle faster.",
+        strategyTipDesc:
+          "Even small increases in payment amount can save you hundreds or thousands in interest.",
+      },
+      interestGrowth: {
+        doubleMinimum: "2x Minimum",
+        tripleMinimum: "3x Minimum",
+        paymentImpact: "💡 Payment Impact",
+        interestCompounds: "📈 Interest Compounds",
+        timeValue: "⏰ Time Value",
+        paymentImpactDesc:
+          "Small increases in payment amount create dramatic savings in total interest paid.",
+        interestCompoundsDesc:
+          "Credit card interest compounds daily, making small balances grow exponentially.",
+        timeValueDesc:
+          "The longer you carry a balance, the more expensive it becomes due to compounding interest.",
+      },
+      feeAnalysis: {
+        monthly: "Monthly",
+        annual: "Annual",
+        annualFeeImpact: "💳 Annual Fee Impact",
+        foreignTransactionFees: "🌍 Foreign Transaction Fees",
+        balanceTransferStrategy: "🔄 Balance Transfer Strategy",
+        cashAdvanceCosts: "💰 Cash Advance Costs",
+        penaltyFeeAvoidance: "⚠️ Penalty Fee Avoidance",
+        totalCostAnalysis: "📊 Total Cost Analysis",
+        annualFee: "Annual Fee ($)",
+        foreignTransactionFee: "Foreign Transaction Fee (%)",
+        balanceTransferFee: "Balance Transfer Fee (%)",
+        cashAdvanceFee: "Cash Advance Fee (%)",
+        latePaymentFee: "Late Payment Fee ($)",
+        overlimitFee: "Overlimit Fee ($)",
+        annualFeeImpactDesc:
+          "Annual fees reduce your effective rewards rate. Calculate if rewards exceed fees.",
+        foreignTransactionFeesDesc:
+          "Avoid foreign transaction fees when traveling by using the right cards.",
+        balanceTransferStrategyDesc:
+          "Balance transfer fees can be worth it for significant interest savings.",
+        cashAdvanceCostsDesc:
+          "Cash advances are expensive with high fees and immediate interest charges.",
+        penaltyFeeAvoidanceDesc:
+          "Late and overlimit fees are entirely avoidable with proper payment habits.",
+        totalCostAnalysisDesc:
+          "Consider all fees when evaluating the true cost of credit card ownership.",
+      },
+    },
+
+    // Transaction Components
+    transactions: {
+      transactionTypes: {
+        purchase: "Purchase",
+        payment: "Payment",
+        refund: "Refund",
+        fee: "Fee",
+        interest: "Interest",
+        credit: "Credit",
+      },
+      categories: {
+        dining: "Dining",
+        gas: "Gas",
+        groceries: "Groceries",
+        entertainment: "Entertainment",
+        utilities: "Utilities",
+        shopping: "Shopping",
+        travel: "Travel",
+        healthcare: "Healthcare",
+        education: "Education",
+        other: "Other",
+      },
+      messages: {
+        failedToLoad: "Failed to load transactions",
+        confirmCancel: "Are you sure you want to cancel this transaction?",
+        cancelledSuccessfully: "Transaction cancelled successfully",
+        failedToCancel: "Failed to cancel transaction",
+      },
+      search: "Search",
+      type: "Type",
+      category: "Category",
+      cancel: "Cancel",
+      cancelled: "CANCELLED",
+    },
+
+    // Statement Generator
+    statementGenerator: {
+      title: "Credit Card Statement",
+      addTransaction: "Add Transaction",
+      validationError: "Please fill in description and amount",
+      keyMetrics: "Key Metrics",
+      creditUtilization: "Credit Utilization",
+      availableCredit: "Available Credit",
+      interestThisPeriod: "Interest This Period",
+      feesThisPeriod: "Fees This Period",
+      spendingByCategory: "Spending by Category",
+      paymentImpact: "Payment Impact",
+      recommendations: "Recommendations",
+      highCreditUtilization: "High Credit Utilization",
+      editStatement: "Edit Statement",
+      viewAnalysis: "View Analysis",
+      viewStatement: "View Statement",
+      statementAnalysis: "Statement Analysis",
+      creditCardStatement: "CREDIT CARD STATEMENT",
+      accountHolder: "Account Holder",
+      accountNumber: "Account Number",
+      creditLimit: "Credit Limit",
+      statementPeriod: "Statement Period",
+      paymentDueDate: "Payment Due Date",
+      newBalance: "New Balance",
+      minimumPaymentDue: "Minimum Payment Due",
+      accountSummary: "Account Summary",
+      previousBalance: "Previous Balance",
+      paymentsCredits: "Payments & Credits",
+      purchasesAdvances: "Purchases & Advances",
+      feesInterest: "Fees & Interest",
+      creditInformation: "Credit Information",
+      annualPercentageRate: "Annual Percentage Rate",
+      transactionHistory: "Transaction History",
+      date: "Date",
+      description: "Description",
+      category: "Category",
+      amount: "Amount",
+      currentTransactions: "Current Transactions",
+      remove: "Remove",
+      type: "Type",
+      interestCharges: "Interest Charges",
+      feesCharged: "Fees Charged",
+      importantPaymentInformation: "Important Payment Information",
+      minimumPayment: "Minimum Payment",
+      latePaymentFee: "Late Payment Fee",
+      interestCalculation: "Interest Calculation",
+      placeholders: {
+        merchantName: "e.g., AMAZON.COM PURCHASE",
+      },
+      messages: {
+        highCreditUtilizationDesc:
+          "Your utilization is {{utilization}}%. Consider paying down balance to below 30% to improve credit score.",
+        interestChargesDesc:
+          "You paid {{amount}} in interest. Pay your full balance to avoid interest charges.",
+        feesChargedDesc:
+          "You were charged {{amount}} in fees. Review fee policies to avoid future charges.",
+        minimumPaymentDesc:
+          "{{amount}} (or {{percentage}}% of balance, whichever is greater)",
+        latePaymentFeeDesc:
+          "Up to {{amount}} if payment is received after due date",
+        interestCalculationDesc:
+          "Interest is calculated daily on your average daily balance at {{apr}}% APR",
+        statementDescription:
+          "Generate and analyze realistic credit card statements to understand billing cycles, interest calculations, and payment strategies.",
+      },
+    },
+
+    // Scenario Learning
+    scenarioLearning: {
+      title: "🎯 Scenario-Based Learning",
+      description:
+        "Practice real-world financial decision making through interactive scenarios. Test your knowledge and learn from realistic situations.",
+      startScenario: "Start Scenario",
+      learningObjectives: "Learning Objectives:",
+      moreObjectives: "more objectives...",
+      howItWorks: {
+        title: "How Scenario Learning Works",
+        step1: {
+          title: "1. Read the Situation",
+          description:
+            "Each scenario presents a realistic financial situation with specific challenges.",
+        },
+        step2: {
+          title: "2. Make Decisions",
+          description:
+            "Choose from multiple options for each decision point in the scenario.",
+        },
+        step3: {
+          title: "3. Learn from Results",
+          description:
+            "Get immediate feedback and understand the consequences of your choices.",
+        },
+      },
+      difficulties: {
+        beginner: "beginner",
+        intermediate: "intermediate",
+        advanced: "advanced",
+      },
+      categories: {
+        debt_management: "debt management",
+        credit_building: "credit building",
+        payment_strategy: "payment strategy",
+        fee_avoidance: "fee avoidance",
+      },
+      backToScenarios: "← Back to Scenarios",
+      progress: "Progress",
+      score: "Score",
+      points: "points",
+      availableIncome: "Available Income",
+      yourPreviousDecisions: "Your Previous Decisions",
+      decisionAnalysis: "Decision Analysis",
+      situation: "Situation",
+      currentBalance: "Current Balance",
+      apr: "APR",
+      creditScore: "Credit Score",
+      monthlyIncome: "Monthly Income",
+      monthlyExpenses: "Monthly Expenses",
+      decision: "Decision",
+      clickToSelect: "Click to select this option and see the outcome",
+      yourChoice: "Your choice:",
+      impact: "impact",
+      scenarioComplete: "Scenario Complete!",
+      pointsEarned: "Points earned:",
+      tryAgain: "Try Again",
+      chooseNewScenario: "Choose New Scenario",
+      positiveImpact: "positive",
+      negativeImpact: "negative",
+      neutralImpact: "neutral",
+      scenarios: {
+        emergencyDebt: {
+          title: "Emergency Debt Management",
+          description:
+            "Navigate an unexpected financial emergency while managing existing credit card debt.",
+          situation:
+            "You have a $3,500 balance on your credit card (18% APR, $5,000 limit) and have been making $150 monthly payments. Your car suddenly needs $1,200 in repairs. You have $300 in savings and earn $3,200/month with $2,800 in expenses.",
+          objectives: [
+            "Handle the emergency repair without severely damaging your credit",
+            "Minimize long-term interest costs",
+            "Maintain a sustainable payment plan",
+          ],
+          decisions: {
+            emergencyFunding: {
+              question: "How should you fund the $1,200 car repair?",
+              options: [
+                {
+                  text: "Use your credit card ($300 savings + $900 on card)",
+                  explanation:
+                    "This pushes your utilization to 88% and adds high-interest debt.",
+                },
+                {
+                  text: "Use savings + personal loan for remaining amount",
+                  explanation:
+                    "Personal loan likely has lower interest than credit card.",
+                },
+                {
+                  text: "Use savings + negotiate payment plan with mechanic",
+                  explanation:
+                    "Best option - avoids new debt and may be interest-free.",
+                },
+                {
+                  text: "Use payday loan for quick cash",
+                  explanation:
+                    "Payday loans have extremely high interest rates (400%+ APR).",
+                },
+              ],
+            },
+            paymentStrategy: {
+              question:
+                "After handling the emergency, how should you adjust your credit card payments?",
+              options: [
+                {
+                  text: "Reduce to minimum payments temporarily",
+                  explanation:
+                    "Will significantly increase interest costs over time.",
+                },
+                {
+                  text: "Maintain $150/month but cut other expenses",
+                  explanation:
+                    "Good discipline, but may be challenging to sustain.",
+                },
+                {
+                  text: "Increase payments to $200/month by reducing entertainment budget",
+                  explanation:
+                    "Excellent - pays off debt faster and saves interest.",
+                },
+                {
+                  text: "Use debt avalanche method across all debts",
+                  explanation:
+                    "Mathematically optimal approach for multiple debts.",
+                },
+              ],
+            },
+            creditUtilization: {
+              question:
+                "Your credit utilization is now high. What should be your immediate priority?",
+              options: [
+                {
+                  text: "Request a credit limit increase",
+                  explanation:
+                    "May help utilization but could tempt more spending.",
+                },
+                {
+                  text: "Pay down the balance aggressively",
+                  explanation:
+                    "Best long-term strategy for credit score and finances.",
+                },
+                {
+                  text: "Open a new credit card for more available credit",
+                  explanation:
+                    "Hard inquiry hurts score and adds temptation to spend.",
+                },
+                {
+                  text: "Focus on making all payments on time",
+                  explanation:
+                    "Payment history is most important factor in credit score.",
+                },
+              ],
+            },
+          },
+          outcomes: {
+            excellent: {
+              title: "Financial Crisis Averted!",
+              description:
+                "You handled the emergency smartly, minimized debt growth, and created a sustainable recovery plan.",
+            },
+            good: {
+              title: "Managed Well",
+              description:
+                "You made mostly good decisions with minor room for improvement in debt management.",
+            },
+            poor: {
+              title: "Learning Experience",
+              description:
+                "This situation highlighted areas where different choices could lead to better financial outcomes.",
+            },
+          },
+        },
+        creditBuilding: {
+          title: "Building Credit from Scratch",
+          description:
+            "Learn how to responsibly build credit history with your first credit card.",
+          situation:
+            "You're 22 years old and just got your first credit card with a $1,000 limit and 24% APR. You have a steady income of $2,500/month and want to build excellent credit for future goals like buying a car or home.",
+          objectives: [
+            "Establish positive payment history",
+            "Keep utilization low for optimal credit score",
+            "Build credit responsibly without accumulating debt",
+          ],
+          decisions: {
+            spendingStrategy: {
+              question:
+                "How much should you spend on your credit card each month?",
+              options: [
+                {
+                  text: "Use it for everything to build credit quickly ($800-900/month)",
+                  explanation:
+                    "High utilization (80-90%) significantly hurts your credit score.",
+                },
+                {
+                  text: "Use it for small purchases only ($50-100/month)",
+                  explanation:
+                    "Perfect! 5-10% utilization is ideal for credit building.",
+                },
+                {
+                  text: "Max it out and pay minimum payments",
+                  explanation:
+                    "Worst strategy - hurts credit score and creates expensive debt.",
+                },
+                {
+                  text: "Only use it for emergencies",
+                  explanation: "Safe but minimal credit building activity.",
+                },
+              ],
+            },
+            paymentTiming: {
+              question: "When should you pay your credit card bill?",
+              options: [
+                {
+                  text: "Pay the full balance every month before the due date",
+                  explanation:
+                    "Excellent! Avoids interest and builds perfect payment history.",
+                },
+                {
+                  text: "Pay minimum amount to keep a small balance for credit building",
+                  explanation:
+                    "Myth! Carrying a balance doesn't help credit and costs interest.",
+                },
+                {
+                  text: "Pay before the statement date to show $0 balance",
+                  explanation:
+                    "Good for utilization but may not show account activity.",
+                },
+                {
+                  text: "Pay a few days after the due date",
+                  explanation: "Late payments severely damage credit scores.",
+                },
+              ],
+            },
+            creditGrowth: {
+              question:
+                "After 6 months of responsible use, what should you do next?",
+              options: [
+                {
+                  text: "Request a credit limit increase on your current card",
+                  explanation: "Good strategy to lower utilization ratio.",
+                },
+                {
+                  text: "Apply for multiple new cards to increase available credit",
+                  explanation:
+                    "Multiple inquiries in short time can hurt your score.",
+                },
+                {
+                  text: "Continue current strategy and gradually increase usage",
+                  explanation:
+                    "Steady approach - patience builds strong credit.",
+                },
+                {
+                  text: "Apply for one additional card with better rewards",
+                  explanation:
+                    "Reasonable if you maintain low utilization across both cards.",
+                },
+              ],
+            },
+          },
+          outcomes: {
+            excellent: {
+              title: "Credit Building Champion!",
+              description:
+                "You've established excellent habits that will serve you well throughout your financial journey.",
+            },
+            good: {
+              title: "Strong Foundation",
+              description:
+                "You're on the right track with minor adjustments needed for optimization.",
+            },
+            poor: {
+              title: "Course Correction Needed",
+              description:
+                "These insights will help you avoid common credit building mistakes.",
+            },
+          },
+        },
+        balanceTransfer: {
+          title: "Strategic Balance Transfer",
+          description:
+            "Optimize your debt payoff strategy using balance transfer options.",
+          situation:
+            "You have $8,000 in credit card debt across 3 cards with different APRs (Card A: $3,000 at 22%, Card B: $3,500 at 19%, Card C: $1,500 at 25%). You receive a balance transfer offer: 0% APR for 15 months, 3% transfer fee, then 16.99% APR.",
+          objectives: [
+            "Minimize total interest paid",
+            "Create sustainable payoff plan",
+            "Avoid falling back into debt",
+          ],
+          decisions: {
+            transferDecision: {
+              question:
+                "Which balances should you transfer to the 0% APR card?",
+              options: [
+                {
+                  text: "Transfer all $8,000 to maximize 0% period",
+                  explanation:
+                    "Good strategy if you can pay it off within 15 months.",
+                },
+                {
+                  text: "Transfer only the highest APR debt (Card C: $1,500 at 25%)",
+                  explanation: "Conservative but may not maximize the benefit.",
+                },
+                {
+                  text: "Transfer the two highest balances (Cards A & B: $6,500)",
+                  explanation:
+                    "Excellent balance of benefit and manageable payment plan.",
+                },
+                {
+                  text: "Don't transfer - the 3% fee isn't worth it",
+                  explanation:
+                    "Missing a significant opportunity to save on interest.",
+                },
+              ],
+            },
+            payoffStrategy: {
+              question:
+                "What monthly payment should you target for the transferred balance?",
+              options: [
+                {
+                  text: "$400/month (will pay off in ~16 months)",
+                  explanation:
+                    "Risky - you'll barely finish before the promotional rate ends.",
+                },
+                {
+                  text: "$500/month (will pay off in ~13 months)",
+                  explanation:
+                    "Good buffer - finished before promotional rate expires.",
+                },
+                {
+                  text: "$600/month (will pay off in ~11 months)",
+                  explanation:
+                    "Excellent - maximum benefit with comfortable margin.",
+                },
+                {
+                  text: "Minimum payments to stretch it out",
+                  explanation: "Defeats the purpose of the 0% promotion.",
+                },
+              ],
+            },
+            remainingCards: {
+              question: "How should you handle the cards you didn't transfer?",
+              options: [
+                {
+                  text: "Close them to remove temptation",
+                  explanation:
+                    "Closing cards reduces available credit and hurts credit score.",
+                },
+                {
+                  text: "Keep them open but cut up the physical cards",
+                  explanation:
+                    "Smart! Maintains credit history while removing temptation.",
+                },
+                {
+                  text: "Use them for small purchases to keep them active",
+                  explanation: "Good if you can pay them off immediately.",
+                },
+                {
+                  text: "Focus all payments on transfer card and pay minimums on others",
+                  explanation: "Makes sense during the promotional period.",
+                },
+              ],
+            },
+          },
+          outcomes: {
+            excellent: {
+              title: "Transfer Master!",
+              description:
+                "You've maximized the benefit of the balance transfer while avoiding common pitfalls.",
+            },
+            good: {
+              title: "Strategic Thinking",
+              description:
+                "Good use of the transfer option with room for minor optimization.",
+            },
+            poor: {
+              title: "Missed Opportunity",
+              description:
+                "Understanding these strategies better will help with future debt management.",
+            },
+          },
+        },
+      },
+    },
+
+    // Credit Card Details
+    creditCardDetails: {
+      changePIN: "Change PIN",
+      confirmPIN: "Confirm PIN",
+      changingPIN: "Changing PIN...",
+      currentLimitNoLimit: "Current limit: No limit set",
+      placeholders: {
+        pinDefault: "0000",
+        spendingLimit: "1000.00",
+      },
+    },
+
+    // Financial Health Calculator
+    financialHealthCalculator: {
+      placeholders: {
+        creditLimit: "5000",
+        balance: "10000",
+        cardsCount: "2",
+        interestRate: "22.0",
+        creditScore: "700",
+        monthlyIncome: "5000",
+        monthlyExpenses: "3500",
+        monthlyDebtPayments: "500",
+      },
+    },
+
+    // Fee Analysis Dashboard
+    feeAnalysisDashboard: {
+      chartLabels: {
+        annualFees: "Annual Fees",
+        transactionFees: "Transaction Fees",
+        penaltyFees: "Penalty Fees",
+        totalFees: "Total Fees",
+      },
+    },
+
+    // Profile Components
+    profileForm: {
+      editProfile: "Edit Profile",
+      createProfile: "Create Profile",
+      updateProfile: "Update Profile",
+    },
+
+    // Credit Card Profile Builder
+    creditCardProfileBuilder: {
+      benefits: {
+        fraudProtection: "Fraud Protection",
+        priceProtection: "Price Protection",
+        extendedWarranty: "Extended Warranty",
+        purchaseProtection: "Purchase Protection",
+        travelInsurance: "Travel Insurance",
+        roadsideAssistance: "Roadside Assistance",
+        conciergeService: "Concierge Service",
+        baggageInsurance: "Baggage Insurance",
+      },
+      categories: {
+        gasStations: "Gas Stations",
+        onlineShopping: "Online Shopping",
+        departmentStores: "Department Stores",
+        streamingServices: "Streaming Services",
+      },
+    },
+
+    // Budget Planner
+    budgetPlanner: {
+      newCategory: "New Category",
+      newGoal: "New Goal",
+    },
+
+    // Payment Impact Visualizer
+    paymentImpactVisualizer: {
+      minimumPayment: "Minimum Payment",
     },
   },
 };

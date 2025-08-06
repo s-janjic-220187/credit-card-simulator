@@ -193,7 +193,7 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
         <XAxis
           dataKey="month"
           tickFormatter={formatMonth}
-          label={{ value: "Time", position: "insideBottom", offset: -5 }}
+          label={{ value: t.common.time, position: "insideBottom", offset: -5 }}
         />
         <YAxis
           tickFormatter={(value) => formatCurrency(value)}
@@ -238,7 +238,7 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
         <XAxis
           dataKey="month"
           tickFormatter={formatMonth}
-          label={{ value: "Time", position: "insideBottom", offset: -5 }}
+          label={{ value: t.common.time, position: "insideBottom", offset: -5 }}
         />
         <YAxis
           tickFormatter={(value) => formatCurrency(value)}
@@ -303,7 +303,11 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
           <XAxis
             dataKey="month"
             tickFormatter={formatMonth}
-            label={{ value: "Time", position: "insideBottom", offset: -5 }}
+            label={{
+              value: t.common.time,
+              position: "insideBottom",
+              offset: -5,
+            }}
           />
           <YAxis
             tickFormatter={(value) => formatCurrency(value)}
@@ -440,8 +444,12 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
               <option value="custom">
                 {t.visualization.interestGrowth.scenarios.custom}
               </option>
-              <option value="2x">2x Minimum</option>
-              <option value="3x">3x Minimum</option>
+              <option value="2x">
+                {t.components.visualizations.interestGrowth.doubleMinimum}
+              </option>
+              <option value="3x">
+                {t.components.visualizations.interestGrowth.tripleMinimum}
+              </option>
             </select>
           </div>
         )}
@@ -496,25 +504,22 @@ const InterestGrowthCharts: React.FC<InterestGrowthChartsProps> = ({
         <h3>{t.visualization.interestGrowth.summary.keyInsights}</h3>
         <div className="insights-list">
           <div className="insight">
-            <h4>💡 Payment Impact</h4>
+            <h4>{t.components.visualizations.interestGrowth.paymentImpact}</h4>
             <p>
-              Doubling your minimum payment can reduce payoff time by up to 50%
-              and save thousands in interest charges.
+              {t.components.visualizations.interestGrowth.paymentImpactDesc}
             </p>
           </div>
           <div className="insight">
-            <h4>📈 Interest Compounds</h4>
+            <h4>
+              {t.components.visualizations.interestGrowth.interestCompounds}
+            </h4>
             <p>
-              Early in the payoff period, most of your payment goes to interest.
-              Higher payments mean more goes to principal sooner.
+              {t.components.visualizations.interestGrowth.interestCompoundsDesc}
             </p>
           </div>
           <div className="insight">
-            <h4>⏰ Time Value</h4>
-            <p>
-              Every extra dollar paid toward principal today saves you multiple
-              dollars in future interest charges.
-            </p>
+            <h4>{t.components.visualizations.interestGrowth.timeValue}</h4>
+            <p>{t.components.visualizations.interestGrowth.timeValueDesc}</p>
           </div>
         </div>
       </div>

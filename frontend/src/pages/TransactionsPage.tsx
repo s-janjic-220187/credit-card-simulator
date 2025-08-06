@@ -80,16 +80,14 @@ const TransactionsPage: React.FC = () => {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            No Credit Cards Found
+            {t.transactions.hub.noCards}
           </h2>
-          <p className="text-gray-600 mb-6">
-            You need to create a credit card first before managing transactions.
-          </p>
+          <p className="text-gray-600 mb-6">{t.transactions.hub.noCardsDesc}</p>
           <button
             onClick={() => (window.location.href = "/")}
             className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors"
           >
-            Go to Dashboard
+            {t.transactions.hub.goToDashboard}
           </button>
         </div>
       </div>
@@ -101,11 +99,9 @@ const TransactionsPage: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Transaction Management
+            {t.transactions.hub.title}
           </h1>
-          <p className="text-gray-600">
-            Manage your credit card transactions and track spending
-          </p>
+          <p className="text-gray-600">{t.transactions.hub.subtitle}</p>
         </div>
 
         {/* Credit Card Selection */}
@@ -149,7 +145,7 @@ const TransactionsPage: React.FC = () => {
                   {card.cardType}
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Balance:</span>
+                  <span className="text-gray-600">{t.common.balance}:</span>
                   <span
                     className={
                       card.currentBalance > 0
@@ -161,7 +157,9 @@ const TransactionsPage: React.FC = () => {
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Limit:</span>
+                  <span className="text-gray-600">
+                    {t.transactions.hub.creditLimit}:
+                  </span>
                   <span className="text-gray-900">
                     {formatCurrency(card.creditLimit)}
                   </span>
@@ -188,7 +186,7 @@ const TransactionsPage: React.FC = () => {
                     {((card.currentBalance / card.creditLimit) * 100).toFixed(
                       1
                     )}
-                    % utilized
+                    % {t.transactions.hub.utilization}
                   </div>
                 </div>
               </div>
